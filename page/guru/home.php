@@ -54,37 +54,23 @@ $foto=$_SESSION['foto_profil_guru'];
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                                        <span class="nk-menu-text">Manajemen User</span>
+                                        <span class="nk-menu-text">Master</span>
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="./admin/guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
+                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="./admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
+                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
-                                        <span class="nk-menu-text">Pengaturan</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item">
-                                            <a href="./admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="./admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="./admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="./admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
-                                    </li>
-                                </ul>
-                            </li>
                          </div>
                     </div>
                 </div>
