@@ -161,10 +161,10 @@ $foto=$_SESSION['foto_profil_guru'];
         <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
+                    <th>Hari</th>
+                    <th>Kelas</th>
+                    <th>Mata Pelajaran</th>
+                    <th>Waktu Mengajar</th>
                     </tr>
                 </thead>
                 <tbody>
