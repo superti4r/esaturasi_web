@@ -67,7 +67,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                             <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
+                                            <a href="./test.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
                                         </li>
                                     </ul>
                                 </li>
