@@ -192,7 +192,6 @@ $foto=$_SESSION['foto_profil_guru'];
                                                                         <th>NIK</th>
                                                                         <th>Nama</th>
                                                                         <th>Tanggal Lahir</th>
-                                                                        <th></th>
                                                                         <th>Jenis Kelamin</th>
                                                                         <th>Aksi</th>
                                                                     </tr>
@@ -201,7 +200,8 @@ $foto=$_SESSION['foto_profil_guru'];
                                                                     <tr>
                                                                         <td>3509195407000001</td>
                                                                         <td>Dwi Yulianti S.Pd</td>
-                                                                        <td>Perempuan</td>
+                                                                        <td>02-02-2005</td>
+                                                                        <td>Perempuan</td>  
                                                                         <td>
                                                                             <button class="btn btn-primary btn-sm editBtn"><em class="icon ni ni-edit"></em></button>
                                                                             <button class="btn btn-danger btn-sm deleteBtn"><em class="icon ni ni-trash"></em></button>
