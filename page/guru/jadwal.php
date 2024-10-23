@@ -22,6 +22,12 @@ $foto=$_SESSION['foto_profil_guru'];
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.0/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
 
 </head>
 
@@ -150,19 +156,21 @@ $foto=$_SESSION['foto_profil_guru'];
                 <div class="nk-content ">
                 <div class="container mt-5">
     <h2 class="mb-4">Data Jadwal</h2>
+    <div class="container mt-5">
     <div class="table-responsive">
         <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
             <thead>
                 <tr>
-                    <th>Hari</th>
-                    <th>Kelas</th>
-                    <th>Mata Pelajaran</th>
-                    <th>Jam</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -176,6 +184,14 @@ $foto=$_SESSION['foto_profil_guru'];
 <!-- DataTables Responsive JS -->
 <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -187,6 +203,11 @@ $(document).ready(function() {
             { "data": "name" },
             { "data": "email" },
             { "data": "phone" }
+        ],
+        "dom": 'Bfrtip', // Menambahkan elemen export button
+        "buttons": [
+            'excelHtml5',  // Export ke Excel
+            'pdfHtml5'     // Export ke PDF
         ]
     });
 });
