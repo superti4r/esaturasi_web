@@ -26,10 +26,10 @@
             <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
                 <div class="nk-sidebar-element nk-sidebar-head">
                     <div class="nk-sidebar-brand">
-                    <a href="#" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="./img/logo.png" srcset="./img/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="./img/logo-dark.png" srcset="./img/logo-dark2x.png 2x" alt="logo-dark">
-                            <img class="logo-small logo-img logo-img-small" src="./img/logo-small.png" srcset="./img/logo-small2x.png 2x" alt="logo-small">
+                        <a href="html/index.html" class="logo-link nk-sidebar-logo">
+                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            <img class="logo-small logo-img logo-img-small" src="./images/logo-small.png" srcset="./images/logo-small2x.png 2x" alt="logo-small">
                         </a>
                     </div>
                     <div class="nk-menu-trigger me-n2">
@@ -46,7 +46,7 @@
                                     <h6 class="overline-title text-primary-alt">Fitur</h6>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="../guru/index.php" class="nk-menu-link">
+                                    <a href="./guru/index.php" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span>
                                         <span class="nk-menu-text">Dashboard</span>
                                     </a>
@@ -58,16 +58,16 @@
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../guru/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
+                                            <a href="./guru/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
                                             </li>
                                         <li class="nk-menu-item">
-                                            <a href="../guru/tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
+                                            <a href="./guru/tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../guru/materi.php" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
+                                            <a href="./guru/materi.php" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../guru/ujian.php" class="nk-menu-link"><span class="nk-menu-text">Ujian</span></a>
+                                            <a href="./guru/ujian.php" class="nk-menu-link"><span class="nk-menu-text">Ujian</span></a>
                                         </li>
                                 </ul>
                             </li>

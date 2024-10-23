@@ -58,10 +58,10 @@ $foto=$_SESSION['foto_profil_guru'];
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../admin/guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
+                                            <a href="./admin/guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
+                                            <a href="./admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
                                         </li>
                                     </ul>
                                 </li>
@@ -72,16 +72,16 @@ $foto=$_SESSION['foto_profil_guru'];
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
+                                            <a href="./admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
+                                            <a href="./admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
+                                            <a href="./admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
+                                            <a href="./admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
                                     </li>
                                 </ul>
                             </li>
