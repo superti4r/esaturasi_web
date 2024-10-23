@@ -53,6 +53,16 @@ $foto=$_SESSION['foto_profil_guru'];
                 <div class="nk-sidebar-element">
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
+                        <ul class="nk-menu">
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="./home.php" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Beranda</span>
+                                    </a>
+                                </li>
                             <ul class="nk-menu">
                                 </li>
                                 <li class="nk-menu-heading">
@@ -60,7 +70,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                         <span class="nk-menu-text">Master</span>
                                     </a>
                                     <ul class="nk-menu-sub">
@@ -74,7 +84,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                             <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="./test.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
+                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
                                         </li>
                                     </ul>
                                 </li>

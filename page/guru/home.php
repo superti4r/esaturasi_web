@@ -46,6 +46,16 @@ $foto=$_SESSION['foto_profil_guru'];
                 <div class="nk-sidebar-element">
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
+                        <ul class="nk-menu">
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="./home.php" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Beranda</span>
+                                    </a>
+                                </li>
                             <ul class="nk-menu">
                                 </li>
                                 <li class="nk-menu-heading">
@@ -53,7 +63,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                         <span class="nk-menu-text">Master</span>
                                     </a>
                                     <ul class="nk-menu-sub">
@@ -154,16 +164,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                     <div class="nk-block-between">
                                         <div class="nk-block-head-content">
                                             <h3 class="nk-block-title page-title">Dashboard</h3>
-                                        </div><!-- .nk-block-head-content -->
-                                        <div class="nk-block-head-content">
-                                            <div class="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                                <div class="toggle-expand-content" data-content="pageMenu">
-                                                    <ul class="nk-block-tools g-3">
-                                                        <li>
-                                                 </div>
-                                            </div>
-                                        </div><!-- .nk-block-head-content -->
+                                        </div>
                                     </div><!-- .nk-block-between -->
                                 </div><!-- .nk-block-head -->
                                 <div class="nk-block">
