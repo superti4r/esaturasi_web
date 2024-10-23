@@ -5,7 +5,6 @@ if (!isset($_SESSION['nik'])) {
   header('location:index.php?aksi=belum');
 
 }
-$role=$_SESSION['role'];
 $nama=$_SESSION['nama_guru'];
 $email=$_SESSION['email_guru'];
 $foto=$_SESSION['foto_profil_guru'];
