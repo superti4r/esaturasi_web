@@ -22,6 +22,13 @@ $foto=$_SESSION['foto_profil_guru'];
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.0/css/dataTables.bootstrap5.min.css">
+    <!-- DataTables Responsive CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -147,76 +154,203 @@ $foto=$_SESSION['foto_profil_guru'];
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="nk-content ">
-                    <div class="container-fluid">
-                        <div class="nk-content-inner">
-                            <div class="nk-content-body">
-                                <div class="nk-block-head nk-block-head-sm">
-                                    <div class="nk-block-between">
-                                        <div class="nk-block-head-content">
-                                            <h3 class="nk-block-title page-title">Dashboard</h3>
-                                        </div><!-- .nk-block-head-content -->
-                                        <div class="nk-block-head-content">
-                                            <div class="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                                <div class="toggle-expand-content" data-content="pageMenu">
-                                                    <ul class="nk-block-tools g-3">
-                                                        <li>
-                                                 </div>
-                                            </div>
-                                        </div><!-- .nk-block-head-content -->
-                                    </div><!-- .nk-block-between -->
-                                </div><!-- .nk-block-head -->
-                                <div class="nk-block">
-                                    <div class="row g-gs">
-                                        <div class="col-xxl-3 col-sm-6">
-                                            <div class="card">
-                                                <div class="nk-ecwg nk-ecwg6">
-                                                    <div class="card-inner">
-                                                        <div class="card-title-group">
-                                                            <div class="card-title">
-                                                                <h6 class="title">Kelas Yang Diampu</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="data">
-                                                            <div class="data-group">
-                                                                <div class="amount">0</div>
-                                                                <div class="nk-ecwg6-ck">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div><!-- .card-inner -->
-                                                </div><!-- .nk-ecwg -->
-                                            </div><!-- .card -->
-                                        </div><!-- .col -->
-                                        <div class="col-xxl-3 col-sm-6">
-                                            <div class="card">
-                                                <div class="nk-ecwg nk-ecwg6">
-                                                    <div class="card-inner">
-                                                        <div class="card-title-group">
-                                                            <div class="card-title">
-                                                                <h6 class="title">Mata Pelajaran Yang Diampu</h6>
-                                                            </div>
-                                                        </div>
-                                                        <div class="data">
-                                                            <div class="data-group">
-                                                                <div class="amount">0</div>
-                                                                <div class="nk-ecwg6-ck">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div><!-- .card-inner -->
-                                                </div><!-- .nk-ecwg -->
-                                            </div><!-- .card -->
-                                        </div><!-- .col -->
-                                        <div class="col-xxl-6">
-                                            <div class="card card-full">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="container mt-5">
+    <h2 class="mb-4">Data Materi</h2>
+    <div class="mb-3">
+        <button id="uploadMateriButton" class="btn btn-primary">Upload Materi</button>
+    </div>
+    <div class="table-responsive">
+        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Judul Materi</th> 
+                    <th>Kelas</th>
+                    <th>Bab</th> 
+                    <th>Jenis File</th> 
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Panel untuk Upload Materi -->
+<div class="modal fade" id="uploadMateriModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Upload Materi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadMateriForm">
+                    <div class="mb-3">
+                        <label for="upload_judul_materi" class="form-label">Judul Materi</label>
+                        <input type="text" class="form-control" id="upload_judul_materi" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="upload_kelas" class="form-label">Kelas</label>
+                        <input type="text" class="form-control" id="upload_kelas" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="upload_bab" class="form-label">Bab</label>
+                        <input type="text" class="form-control" id="upload_bab" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="upload_jenis_file" class="form-label">Jenis File</label>
+                        <select class="form-select" id="upload_jenis_file" required>
+                            <option value="" disabled selected>Pilih jenis file</option>
+                            <option value="RAR">RAR</option>
+                            <option value="ZIP">ZIP</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="upload_file" class="form-label">Pilih File (RAR/ZIP)</label>
+                        <input type="file" class="form-control" id="upload_file" accept=".rar,.zip" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="uploadSaveButton">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.0/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Inisialisasi DataTable
+    var table = $('#example').DataTable({
+        "responsive": true,
+        "ajax": "data.php", // URL untuk mengambil data dari database
+        "columns": [
+            { "data": "judul_materi" },
+            { "data": "kelas" },
+            { "data": "bab" },
+            { "data": "jenis_file" },
+            { 
+                "data": null,
+                "render": function (data, type, row) {
+                    return `
+                        <button class="btn btn-sm btn-warning edit-btn" data-id="${row.id}" data-judul="${row.judul_materi}" data-kelas="${row.kelas}" data-bab="${row.bab}" data-jenis="${row.jenis_file}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Delete</button>
+                    `;
+                }
+            }
+        ],
+        "dom": 'Bfrtip',
+        "buttons": [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+    });
+
+    // Fungsi untuk membuka modal upload materi
+    $('#uploadMateriButton').on('click', function() {
+        $('#uploadMateriModal').modal('show');
+    });
+
+    // Fungsi untuk menyimpan data upload materi
+    $('#uploadSaveButton').on('click', function() {
+        var judulMateri = $('#upload_judul_materi').val();
+        var kelas = $('#upload_kelas').val();
+        var bab = $('#upload_bab').val();
+        var jenisFile = $('#upload_jenis_file').val();
+        var fileInput = $('#upload_file')[0].files[0];
+        var allowedExtensions = /(\.rar|\.zip)$/i;
+
+        if (!judulMateri || !kelas || !bab || !jenisFile || !fileInput) {
+            alert('Semua field wajib diisi!');
+            return;
+        }
+
+        if (!allowedExtensions.test(fileInput.name)) {
+            alert('Hanya file RAR atau ZIP yang diperbolehkan.');
+            return;
+        }
+
+        // Simulasi upload file (gunakan AJAX untuk upload nyata)
+        alert('Materi "' + judulMateri + '" berhasil diunggah dengan file: ' + fileInput.name);
+
+        // Tambahkan data ke DataTable (simulasi server-side)
+        table.row.add({
+            "judul_materi": judulMateri,
+            "kelas": kelas,
+            "bab": bab,
+            "jenis_file": jenisFile
+        }).draw();
+
+        // Tutup modal
+        $('#uploadMateriModal').modal('hide');
+        $('#uploadMateriForm')[0].reset();
+    });
+
+    // Fungsi Edit (membuka modal panel)
+    $('#example tbody').on('click', '.edit-btn', function() {
+        var dataId = $(this).data('id');
+        var judul = $(this).data('judul');
+        var kelas = $(this).data('kelas');
+        var bab = $(this).data('bab');
+        var jenisFile = $(this).data('jenis');
+        
+        // Set data ke dalam modal
+        $('#recordId').val(dataId);
+        $('#judul_materi').val(judul);
+        $('#kelas').val(kelas);
+        $('#bab').val(bab);
+        $('#jenis_file').val(jenisFile);
+
+        // Buka modal
+        $('#modalPanel').modal('show');
+    });
+
+    // Fungsi Save dari modal
+    $('#saveButton').on('click', function() {
+        var id = $('#recordId').val();
+        var judulMateri = $('#judul_materi').val();
+        var kelas = $('#kelas').val();
+        var bab = $('#bab').val();
+        var jenisFile = $('#jenis_file').val();
+
+        alert('Data updated for ID: ' + id);
+        // Tambahkan logika penyimpanan edit (AJAX) di sini
+
+        // Tutup modal
+        $('#modalPanel').modal('hide');
+    });
+
+    // Fungsi Delete
+    $('#example tbody').on('click', '.delete-btn', function() {
+        var dataId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this record?')) {
+            // Tambahkan logika delete di sini, misal via AJAX untuk menghapus data di server
+            alert('Data deleted with ID: ' + dataId);
+        }
+    });
+});
+</script>
                 </div>
                 <!-- content @e -->
                 <!-- footer @s -->
