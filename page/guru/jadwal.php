@@ -84,14 +84,23 @@ $foto=$_SESSION['foto_profil_guru'];
                                             <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
+                                            <a href="./test.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
                                         </li>
                                     </ul>
                                 </li>
-                         </div>
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Session</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="./logout.php" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-signout"></em></span>
+                                        <span class="nk-menu-text">Log Out</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
             <!-- sidebar @e -->
             <!-- wrap @s -->
             <div class="nk-wrap ">
