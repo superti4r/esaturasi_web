@@ -57,17 +57,17 @@ $foto=$_SESSION['foto_profil_guru'];
                                         <span class="nk-menu-text">Master</span>
                                     </a>
                                     <ul class="nk-menu-sub">
-                                        <li class="nk-menu-item">
-                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
+                                    <li class="nk-menu-item">
+                                            <a href="./jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
+                                            <a href="./materi.php" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
+                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="#" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
+                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
                                         </li>
                                     </ul>
                                 </li>
