@@ -53,7 +53,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
                                         <span class="nk-menu-text">Master</span>
                                     </a>
                                     <ul class="nk-menu-sub">
