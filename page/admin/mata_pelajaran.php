@@ -42,9 +42,18 @@
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
                             <ul class="nk-menu">
+                            <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="./home.php" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
+                                        <span class="nk-menu-text">Beranda</span>
+                                    </a>
+                                </li>
                                 </li>
                                 <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Fitur</h6>
+                                    <h6 class="overline-title text-primary-alt">Master</h6>
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -53,32 +62,41 @@
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../admin/guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
+                                            <a href="./guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
+                                            <a href="./siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
-                                        <span class="nk-menu-text">Pengaturan</span>
+                                        <span class="nk-menu-text">Data</span>
                                     </a>
                                     <ul class="nk-menu-sub">
                                         <li class="nk-menu-item">
-                                            <a href="../admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
+                                            <a href="./jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
+                                            <a href="./kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
+                                            <a href="./mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="../admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
+                                            <a href="./jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
                                     </li>
                                 </ul>
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Session</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="./logout.php" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-signout"></em></span>
+                                        <span class="nk-menu-text">Log Out</span>
+                                    </a>
+                                </li>
                             </li>
                          </div>
                     </div>
@@ -100,48 +118,6 @@
                                     <img class="logo-dark logo-img" src="/images/logo-dark.png" srcset="/images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
-                            <div class="nk-header-search ms-3 ms-xl-0">
-                                <em class="icon ni ni-search"></em>
-                                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Cari...">
-                            </div>
-                            <div class="nk-header-tools">
-                                    <li class="dropdown user-dropdown">
-                                        <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
-                                            <div class="user-toggle">
-                                                <div class="user-avatar sm">
-                                                    <em class="icon ni ni-user-alt"></em>
-                                                </div>
-                                                <div class="user-info d-none d-xl-block">
-                                                    <div class="user-name dropdown-indicator">Bachtiar Dwi Pramudi</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
-                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
-                                                <div class="user-card">
-                                                    <div class="user-avatar">
-                                                        <span>#</span>
-                                                    </div>
-                                                    <div class="user-info">
-                                                        <span class="lead-text">Bachtiar Dwi Pramudi</span>
-                                                        <span class="sub-text">root@mail.id</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="dropdown-inner">
-                                                <ul class="link-list">
-                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Mode Gelap</span></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="dropdown-inner">
-                                                <ul class="link-list">
-                                                    <li><a href="#"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
                         </div><!-- .nk-header-wrap -->
                     </div><!-- .container-fliud -->
                 </div>
