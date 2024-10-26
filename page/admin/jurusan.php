@@ -3,11 +3,59 @@ include '../../config.php';
 session_start();
 if (!isset($_SESSION['nik'])) {
   header('location:index.php?aksi=belum');
+}
+
+$katakunci = "";
+if (isset($_POST['cari'])) {
+  $katakunci = $_POST['kata_kunci'];
+  $sql = mysqli_query($koneksi, "SELECT * FROM jurusan WHERE kd_jurusan LIKE '%".$katakunci."%' OR nama_jurusan LIKE '%".$katakunci."%' ORDER BY kd_jurusan ASC");
+} else {
+  $sql = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY kd_jurusan ASC");
+}
+if ($sql) {
+    $row = mysqli_num_rows($sql);
+  } else {
+    echo "Error: " . mysqli_error($koneksi); 
+  }
+//pesan berhasil tambah data
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksestambah") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil ditambahkan');
+    </script>
+    ";
+  }
+} 
+
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksesedit") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil diubah');
+    </script>
+    ";
+  }elseif ($aksi=="hapusok") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil hapus');
+    </script>
+    ";
+  }
 
 }
-$nama=$_SESSION['nama_guru'];
-$email=$_SESSION['email_guru'];
-$foto=$_SESSION['foto_profil_guru'];
+//hapus data 
+if (isset($_GET['pesan'])) {
+  $kd_jurusan = $_GET['kd_jurusan'];
+  mysqli_query($koneksi, "DELETE FROM jurusan WHERE kd_jurusan='$kd_jurusan'");
+  header("Location:jurusan.php?aksi=hapusok");
+}
+
+$nama = $_SESSION['nama_guru'];
+$email = $_SESSION['email_guru'];
+$foto = $_SESSION['foto_profil_guru'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -126,8 +174,8 @@ $foto=$_SESSION['foto_profil_guru'];
             <!-- wrap @s -->
             <div class="nk-wrap ">
                 <!-- main header @s -->
-                <div class="nk-header nk-header-fixed is-light">
-                    <div class="container-fluid">
+                <div class="nk-header nk-header-fixed is-light mb-5">
+                    <div class="container-fluid ">
                         <div class="nk-header-wrap">
                             <div class="nk-menu-trigger d-xl-none ms-n1">
                                 <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
@@ -143,56 +191,50 @@ $foto=$_SESSION['foto_profil_guru'];
                 </div>
                 <!-- main header @e -->
                 <!-- content @s -->
-                <div class="nk-content ">
                 <div class="container mt-5">
-    <h2 class="text-center">Data Jurusan</h2>
-    <div class="mb-3 text-end">
-        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#modalForm">
-        Tambah Data
-    </button>
+    <h3 class="text-center mt-3" >Data Mata Jurusan</h3>
+    <div class="d-flex justify-content-between mt-4 mb-1">
+    <a href="tambah_jurusan.php"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm"> Tambah Data </button></a>
+        <!-- Form Pencarian -->
+        <form class="form-inline" action="jurusan.php" method="POST">
+            <div class="input-group input-group-sm">
+                <input type="text" name="kata_kunci" class="form-control" placeholder="Cari"  aria-label="Cari">
+                 <button type="submit" class="btn btn-primary icon ni ni-search" name="cari">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
     </div>
-    <table id="jurusanTable" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Kode Jurusan</th>
-                <th>Nama Jurusan</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data will be populated via JavaScript -->
-        </tbody>
-    </table>
+  <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+      <tr>
+        <th>Kode Jurusan</th>
+        <th>Nama Jurusan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+        for ($i=0; $i < $row ; $i++) { 
+            $data = mysqli_fetch_array($sql);
+              ?>
+        <tr>
+           <td><?php echo $data['kd_jurusan'] ?></td>
+            <td><?php echo $data['nama_jurusan'] ?></td>
+        <td>
+          <a href="edit_jurusan.php?kd_jurusan=<?php echo $data['kd_jurusan'] ?>"><button class="btn btn-warning btn-sm" >Edit</button></a>
+          <a href="jurusan.php?kd_jurusan=<?php echo $data['kd_jurusan'] ?>&pesan=hapus" onClick ="return confirm ('Apakah data yang anda pilih akan di hapus')"><button class="btn btn-danger btn-sm" >Delete</button> </a>
+        </td>
+      </tr>
+     
+    </tbody>
+    <?php 
+                   } 
+                 ?>
+  </table>
 </div>
 
-<!-- Modal Form -->
-<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="jurusanForm">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalFormLabel">Tambah Data Jurusan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="kodeJurusan" name="kodeJurusan">
-                    <div class="mb-3">
-                        <label for="kode" class="form-label">Kode Jurusan</label>
-                        <input type="text" class="form-control" id="kode" name="kode" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nama" class="form-label">Nama Jurusan</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -213,84 +255,7 @@ $foto=$_SESSION['foto_profil_guru'];
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        // Inisialisasi DataTables
-        var table = $('#jurusanTable').DataTable({
-            data: [],
-            columns: [
-                { data: 'kode' },
-                { data: 'nama' },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `
-                            <button class="btn btn-warning btn-sm btn-edit" data-kode="${row.kode}">Edit</button>
-                            <button class="btn btn-danger btn-sm btn-delete" data-kode="${row.kode}">Delete</button>
-                        `;
-                    }
-                }
-            ]
-        });
 
-        // Fungsi untuk menambah atau mengedit data
-        $('#jurusanForm').submit(function (e) {
-            e.preventDefault();
-            var kode = $('#kode').val();
-            var nama = $('#nama').val();
-            var kodeJurusan = $('#kodeJurusan').val();
-
-            if (kodeJurusan) {
-                // Edit data
-                table.rows().every(function () {
-                    var data = this.data();
-                    if (data.kode === kodeJurusan) {
-                        data.kode = kode;
-                        data.nama = nama;
-                        this.invalidate();
-                    }
-                });
-            } else {
-                // Tambah data
-                table.row.add({ kode: kode, nama: nama }).draw(false);
-            }
-
-            $('#modalForm').modal('hide');
-            $('#jurusanForm')[0].reset();
-            $('#kodeJurusan').val('');
-        });
-
-        // Event handler untuk tombol Edit
-        $('#jurusanTable tbody').on('click', '.btn-edit', function () {
-            var kode = $(this).data('kode');
-            var data = table.rows().data().toArray().find(item => item.kode === kode);
-
-            $('#kode').val(data.kode);
-            $('#nama').val(data.nama);
-            $('#kodeJurusan').val(data.kode);
-            $('#modalFormLabel').text('Edit Data Jurusan');
-            $('#modalForm').modal('show');
-        });
-
-        // Event handler untuk tombol Delete
-        $('#jurusanTable tbody').on('click', '.btn-delete', function () {
-            var kode = $(this).data('kode');
-            table.rows().every(function () {
-                if (this.data().kode === kode) {
-                    this.remove();
-                }
-            });
-            table.draw();
-        });
-
-        // Reset form saat modal ditutup
-        $('#modalForm').on('hidden.bs.modal', function () {
-            $('#jurusanForm')[0].reset();
-            $('#kodeJurusan').val('');
-            $('#modalFormLabel').text('Tambah Data Jurusan');
-        });
-    });
-</script>
                 </div>
                 <!-- content @e -->
                 <!-- footer @s -->

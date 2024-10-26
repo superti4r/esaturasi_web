@@ -18,7 +18,7 @@ if (isset($_POST['kirim'])) {
         $_SESSION['email_guru'] = $data['email_guru'];
         $_SESSION['nama_guru'] = $data['nama_guru'];
 		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
-        header("location:page/admin/home.php");
+        header("location:page/admin/page.php");
     } else {
         header("location:login-admin.php?aksi=eror");
     }
@@ -40,6 +40,7 @@ if (isset($_GET['aksi'])) {
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<meta name="description" content="This is a login page template based on Bootstrap 5">
 	<title>Admin | E-Saturasi</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 	<link rel="icon" type="image/x-icon" href="assets/favicon.png" />
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
@@ -65,14 +66,19 @@ if (isset($_GET['aksi'])) {
 								</div>
 
 								<div class="mb-3">
-									<div class="mb-2 w-100">
-										<label class="text-muted" for="password">Password</label>
-									</div>
-									<input id="password" type="password" class="form-control" name="password" required>
-								    <div class="invalid-feedback">
-								    	Password is required
-							    	</div>
-								</div>
+	<div class="mb-2 w-100 d-flex align-items-center">
+		<label class="text-muted" for="password">Password</label>
+	</div>
+	<div class="input-group">
+		<input id="password" type="password" class="form-control" name="password" required>
+		<span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+			<i class="fas fa-eye"></i>
+		</span>
+		<div class="invalid-feedback">
+			Password is required
+		</div>
+	</div>
+</div>
 
 								<div class="d-flex align-items-center">
 									
@@ -102,5 +108,13 @@ if (isset($_GET['aksi'])) {
 	</section>
 
 	<script src="js/login.js"></script>
+	<script>
+		document.getElementById("togglePassword").addEventListener("click", function () {
+	const passwordInput = document.getElementById("password");
+	const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+	passwordInput.setAttribute("type", type);
+	this.querySelector("i").classList.toggle("fa-eye-slash");
+});
+	</script>
 </body>
 </html>

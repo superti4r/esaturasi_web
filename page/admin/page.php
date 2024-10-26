@@ -16,10 +16,8 @@ $foto=$_SESSION['foto_profil_guru'];
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Guru | E-Saturasi</title>
+        <title>Admin | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
-
-    <!-- StyleSheets  -->
     <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
     <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
 </head>
@@ -46,16 +44,6 @@ $foto=$_SESSION['foto_profil_guru'];
                 <div class="nk-sidebar-element">
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
-                        <ul class="nk-menu">
-                                <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="./home.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
-                                        <span class="nk-menu-text">Beranda</span>
-                                    </a>
-                                </li>
                             <ul class="nk-menu">
                                 </li>
                                 <li class="nk-menu-heading">
@@ -63,39 +51,42 @@ $foto=$_SESSION['foto_profil_guru'];
                                 </li>
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
-                                        <span class="nk-menu-text">Master</span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                        <span class="nk-menu-text">Manajemen User</span>
                                     </a>
                                     <ul class="nk-menu-sub">
-                                    <li class="nk-menu-item">
-                                            <a href="./jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Jadwal</span></a>
+                                        <li class="nk-menu-item">
+                                            <a href="guru.php" class="nk-menu-link"><span class="nk-menu-text">Guru</span></a>
                                         </li>
                                         <li class="nk-menu-item">
-                                            <a href="./materi.php" class="nk-menu-link"><span class="nk-menu-text">Materi</span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="./tugas.php" class="nk-menu-link"><span class="nk-menu-text">Tugas</span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="./test.php" class="nk-menu-link"><span class="nk-menu-text">Test</span></a>
+                                            <a href="../admin/siswa.php" class="nk-menu-link"><span class="nk-menu-text">Siswa</span></a>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Session</h6>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="./logout.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-signout"></em></span>
-                                        <span class="nk-menu-text">Log Out</span>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
+                                        <span class="nk-menu-text">Pengaturan</span>
                                     </a>
-                                </li>
-                            </div>
-                        </div>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/jurusan.php" class="nk-menu-link"><span class="nk-menu-text">Data Jurusan</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/kelas.php" class="nk-menu-link"><span class="nk-menu-text">Data Kelas</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/mata_pelajaran.php" class="nk-menu-link"><span class="nk-menu-text">Data Mata Pelajaran</span></a>
+                                        </li>
+                                        <li class="nk-menu-item">
+                                            <a href="../admin/jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                         </div>
                     </div>
                 </div>
-            <!-- sidebar @e -->
-            <!-- wrap @s -->
+            </div>
             <div class="nk-wrap ">
                 <!-- main header @s -->
                 <div class="nk-header nk-header-fixed is-light">

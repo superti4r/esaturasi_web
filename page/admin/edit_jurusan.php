@@ -1,64 +1,23 @@
-<?php 
-include '../../config.php';
+<?php
+include '../../config.php'; 
 session_start();
-if (!isset($_SESSION['nik'])) {
-  header('location:index.php?aksi=belum');
-}
 
-$katakunci = "";
-if (isset($_POST['cari'])) {
-  $katakunci = $_POST['kata_kunci'];
-  
-  $sql = mysqli_query($koneksi, "SELECT * FROM mapel WHERE kd_mapel LIKE '%".$katakunci."%' OR nama_mapel LIKE '%".$katakunci."%' ORDER BY kd_mapel ASC");
-} else {
-  $sql = mysqli_query($koneksi, "SELECT * FROM mapel ORDER BY kd_mapel ASC");
-}
-if ($sql) {
-  $row = mysqli_num_rows($sql);
-} else {
-  echo "Error: " . mysqli_error($koneksi); 
-}
-//pesan berhasil tambah data
-if (isset($_GET['aksi'])) {
-  $aksi=$_GET['aksi'];
-  if ($aksi=="suksestambah") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil ditambahkan');
-    </script>
-    ";
-  }
-} 
+$id_jurusan = $_GET['kd_jurusan'];
+$sql = mysqli_query($koneksi, "SELECT * FROM jurusan WHERE kd_jurusan='$id_jurusan'");
+$data = mysqli_fetch_array($sql);
 
-if (isset($_GET['aksi'])) {
-  $aksi=$_GET['aksi'];
-  if ($aksi=="suksesedit") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil diubah');
-    </script>
-    ";
-  }elseif ($aksi=="hapusok") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil hapus');
-    </script>
-    ";
-  }
+if (isset($_POST['kirim'])) {
+  $kd_jurusan=$_POST['kd_jurusan'];
+  $nama_jurusan=$_POST['nama_jurusan'];
 
+  mysqli_query($koneksi, "UPDATE jurusan SET 
+    nama_jurusan = '$nama_jurusan'
+    WHERE 
+    kd_jurusan ='$kd_jurusan'
+");
+  header("Location:jurusan.php?aksi=suksesedit");
 }
-//hapus data mapel
-if (isset($_GET['pesan'])) {
-  $kd_mapel = $_GET['kd_mapel'];
-  mysqli_query($koneksi, "DELETE FROM mapel WHERE kd_mapel='$kd_mapel'");
-  header("Location:mata_pelajaran.php?aksi=hapusok");
-}
-
-$nama = $_SESSION['nama_guru'];
-$email = $_SESSION['email_guru'];
-$foto = $_SESSION['foto_profil_guru'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -194,47 +153,28 @@ $foto = $_SESSION['foto_profil_guru'];
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="container mt-5">
-    <h3 class="text-center mt-3" >Data Mata Pelajaran</h3>
-    <div class="d-flex justify-content-between mt-4 mb-1">
-    <a href="tambah_mapel.php"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm"> Tambah Data </button></a>
-        <!-- Form Pencarian -->
-        <form class="form-inline" action="mata_pelajaran.php" method="POST">
-            <div class="input-group input-group-sm">
-                <input type="text" name="kata_kunci" class="form-control" placeholder="Cari"  aria-label="Cari">
-                 <button type="submit" class="btn btn-primary icon ni ni-search" name="cari">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-  <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
-    <thead>
-      <tr>
-        <th>Kode Mata Pelajaran</th>
-        <th>Nama Pelajaran</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        for ($i=0; $i < $row ; $i++) { 
-            $data = mysqli_fetch_array($sql);
-              ?>
-        <tr>
-           <td><?php echo $data['kd_mapel'] ?></td>
-            <td><?php echo $data['nama_mapel'] ?></td>
-        <td>
-          <a href="edit_mapel.php?kd_mapel=<?php echo $data['kd_mapel'] ?>"><button class="btn btn-warning btn-sm" >Edit</button></a>
-          <a href="mata_pelajaran.php?kd_mapel=<?php echo $data['kd_mapel'] ?>&pesan=hapus" onClick ="return confirm ('Apakah data yang anda pilih akan di hapus')"><button class="btn btn-danger btn-sm" >Delete</button> </a>
-        </td>
-      </tr>
+    <h3 class="text-center mt-3 mb-3">Edit Mata Pelajaran</h3>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFormLabel">Tambah Data</h5>
      
-    </tbody>
-    <?php 
-                   } 
-                 ?>
-  </table>
+      </div>
+      <div class="modal-body">
+        <form id="formData" action="edit_jurusan.php" method="POST">
+          <div class="mb-3">
+            <label for="kode" class="form-label">Kode Mata Pelajaran</label>
+            <input type="text" class="form-control" name="kd_jurusan" id="kode" value="<?php  echo $data['kd_jurusan'] ?>" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="nama" class="form-label">Nama Pelajaran</label>
+            <input type="text" class="form-control" name="nama_jurusan" id="nama" value="<?php  echo $data['nama_jurusan'] ?>" required>
+          </div>
+          <button type="sumbit" class="btn btn-primary" name="kirim">Simpan</button>
+        </form>
+      </div>
+    </div>
 </div>
+
 
 
 <!-- jQuery -->

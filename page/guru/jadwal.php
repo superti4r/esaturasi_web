@@ -52,10 +52,10 @@ $foto=$_SESSION['foto_profil_guru'];
                 </div><!-- .nk-sidebar-element -->
                 <div class="nk-sidebar-element">
                     <div class="nk-sidebar-content">
-                        <div class="nk-sidebar-menu" data-simplebar>
+                       
                         <ul class="nk-menu">
                                 <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Dashboard</h6>
+                                    <h6 class="overline-title ">Dashboard</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
                                     <a href="./home.php" class="nk-menu-link">
@@ -69,7 +69,7 @@ $foto=$_SESSION['foto_profil_guru'];
                                     <h6 class="overline-title text-primary-alt">Fitur</h6>
                                 </li>
                                 <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                    <a href="#" class="nk-menu-link nk-menu-togge">
                                         <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                         <span class="nk-menu-text">Master</span>
                                     </a>
@@ -113,35 +113,71 @@ $foto=$_SESSION['foto_profil_guru'];
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="./images/icon.png" srcset="./images/icon.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="./images/icon.png" srcset="./images/icon.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
+                            <div class="nk-header-search ms-3 ms-xl-0">
+                                <em class="icon ni ni-search"></em>
+                                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Cari...">
+                            </div>
+                            <div class="nk-header-tools">
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                            <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="user-info d-none d-xl-block">
+                                                    <div class="user-name dropdown-indicator"><?php echo $_SESSION['nama_guru']?></div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text"><?php echo $_SESSION['nama_guru']?></span>
+                                                        <span class="sub-text"><?php echo $_SESSION['email_guru']?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Mode Gelap</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="logout.php"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div><!-- .nk-header-wrap -->
                     </div><!-- .container-fliud -->
                 </div>
                 <!-- main header @e -->
                 <!-- content @s -->
-                <div class="nk-content ">
-                <div class="container mt-5">
-    <h2 class="mb-4">Data Jadwal</h2>
-    <div class="container mt-5">
-    <div class="table-responsive">
-        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Hari</th>
-                    <th>Kelas</th>
-                    <th>Mata Pelajaran</th>
-                    <th>Waktu Mengajar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

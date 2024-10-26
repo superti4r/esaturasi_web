@@ -1,0 +1,18 @@
+<?php
+if (isset($_POST['kirim'])) {
+  $kode_pegawai=$_POST['kode_pegawai'];
+  $nama_pegawai=$_POST['nama_pegawai'];
+  $username=$_POST['username'];
+  $password=$_POST['password'];
+  $level=$_POST['level'];
+  mysqli_query($koneksi, "INSERT INTO pegawai VALUES ('$kode_pegawai','$username','$password','$nama_pegawai','$level')");
+  header("Location:pegawai.php?aksi=suksestambah");
+}
+$sql = mysqli_query($koneksi, "SELECT * FROM pegawai ORDER BY id_pegawai DESC");
+$row = mysqli_num_rows($sql);
+$data = mysqli_fetch_array($sql);
+$kd=$data['id_pegawai'];
+$kd=(int)substr($kd, 2,3);
+$kd=$kd+1;
+$kd="PG".sprintf("%03s", $kd);
+ ?>

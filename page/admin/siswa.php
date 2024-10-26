@@ -144,8 +144,8 @@ $foto=$_SESSION['foto_profil_guru'];
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="nk-content ">
-                <div class="container mt-5">
-    <h2 class="text-center mb-4">Data Siswa</h2>
+                <div class="container mt-0">
+    <h2 class="text-left mb-2">Data Siswa</h2>
     <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">Tambah Data</button>
     </div>
