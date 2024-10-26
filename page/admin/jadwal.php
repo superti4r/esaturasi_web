@@ -186,7 +186,11 @@ $foto=$_SESSION['foto_profil_guru'];
                     
                     <div class="mb-3">
                         <label for="mataPelajaran" class="form-label">Mata Pelajaran</label>
-                        <input type="text" class="form-control" id="mataPelajaran" name="mataPelajaran" required>
+                        <select class="form-select" id="mapel" name="mapel" required>
+                            <option value="" disabled selected>Pilih Mata Pelajaran</option>
+                            <option value="Senin">Mapel 1</option>
+                            <option value="Selasa">Mapel 2</option>
+                        </select>
                     </div>
                     
                     <div class="mb-3">
@@ -207,6 +211,7 @@ $foto=$_SESSION['foto_profil_guru'];
                         <label for="namaGuru" class="form-label">Nama Guru</label>
                         <select class="form-select" id="namaGuru" name="namaGuru" required>
                             <!-- Populate this list with data from your database -->
+                            <option value="" disabled selected>Pilih Guru</option>
                             <option value="Guru 1">Guru 1</option>
                             <option value="Guru 2">Guru 2</option>
                         </select>
@@ -216,6 +221,7 @@ $foto=$_SESSION['foto_profil_guru'];
                         <label for="namaKelas" class="form-label">Nama Kelas</label>
                         <select class="form-select" id="namaKelas" name="namaKelas" required>
                             <!-- Populate this list with data from your database -->
+                            <option value="" disabled selected>Pilih Kelas</option>
                             <option value="Kelas 1">Kelas 1</option>
                             <option value="Kelas 2">Kelas 2</option>
                         </select>
