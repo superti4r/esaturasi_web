@@ -147,7 +147,7 @@ $foto=$_SESSION['foto_profil_guru'];
                 <div class="container mt-5">
     <h2 class="text-center">Data Jurusan</h2>
     <div class="mb-3 text-end">
-        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#jadwalModal">
+        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#modalForm">
         Tambah Data
     </button>
     </div>
