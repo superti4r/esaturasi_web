@@ -1,9 +1,14 @@
-<?php
+<?php 
+include '../../config.php';
+session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:index.php?aksi=belum');
 
-
+}
+$nama=$_SESSION['nama_guru'];
+$email=$_SESSION['email_guru'];
+$foto=$_SESSION['foto_profil_guru'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,12 +16,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin | E-Saturasi</title>
+        <title>Guru | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
 
     <!-- StyleSheets  -->
-    <link rel="stylesheet" href="./assets/css/dashlite.css">
-    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css">
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
+     <!-- Datepicker -->
+     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- jQuery, DataTables JS, and Buttons plugin -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -114,8 +134,8 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/images/logo.png" srcset="/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/images/logo-dark.png" srcset="/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                         </div><!-- .nk-header-wrap -->
@@ -124,34 +144,167 @@
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="nk-content ">
-                    <div class="container-fluid">
-                        <div class="nk-content-inner">
-                            <div class="nk-content-body">
-                                <div class="nk-block-head nk-block-head-sm">
-                                    <div class="nk-block-between">
-                                        <div class="nk-block-head-content">
-                                            <h3 class="nk-block-title page-title">Data Kelas</h3>
-                                        </div><!-- .nk-block-head-content -->
-                                        <div class="nk-block-head-content">
-                                            <div class="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                                <div class="toggle-expand-content" data-content="pageMenu">
-                                                    <ul class="nk-block-tools g-3">
-                                                        <li>
-                                                 </div>
-                                            </div>
-                                        </div><!-- .nk-block-head-content -->
-                                    </div><!-- .nk-block-between -->
-                                </div><!-- .nk-block-head -->
-                                        <div class="col-xxl-6">
-                                            <div class="card card-full">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="container mt-5">
+    <h2 class="text-center">Data Kelas</h2>
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#kelasModal" onclick="clearForm()">Tambah Data</button>
+    <table id="kelasTable" class="display table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Kode Kelas</th>
+                <th>Nama Kelas</th>
+                <th>Tingkatan Kelas</th>
+                <th>Jurusan</th>
+                <th>Nomor Kelas</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data akan diisi dengan JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Tambah/Edit Data -->
+<div class="modal fade" id="kelasModal" tabindex="-1" aria-labelledby="kelasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kelasModalLabel">Tambah Data Kelas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="kelasForm">
+                    <div class="mb-3">
+                        <label for="kodeKelas" class="form-label">Kode Kelas</label>
+                        <input type="text" class="form-control" id="kodeKelas" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="namaKelas" class="form-label">Nama Kelas</label>
+                        <input type="text" class="form-control" id="namaKelas" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tingkatanKelas" class="form-label">Tingkatan Kelas</label>
+                        <select class="form-select" id="tingkatanKelas" required>
+                            <option value="">Pilih Tingkatan</option>
+                            <option value="X">X</option>
+                            <option value="XI">XI</option>
+                            <option value="XII">XII</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jurusan" class="form-label">Jurusan</label>
+                        <select class="form-select" id="jurusan" required>
+                            <option value="">Pilih Jurusan</option>
+                            <option value="Teknik Komputer & Jaringan">Teknik Komputer & Jaringan</option>
+                            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                            <option value="Teknik Kendaraan Ringan">Teknik Kendaraan Ringan</option>
+                            <option value="Teknik Dan Bisnis Sepeda Motor">Teknik Dan Bisnis Sepeda Motor</option>
+                            <option value="Akuntansi">Akuntansi</option>
+                            <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nomorKelas" class="form-label">Nomor Kelas</label>
+                        <input type="number" class="form-control" id="nomorKelas" required>
+                    </div>
+                    <input type="hidden" id="editIndex">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="saveButton" onclick="saveData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.0/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#kelasTable').DataTable();
+    });
+
+    const kelasData = [];
+
+    function renderTable() {
+        const table = $('#kelasTable').DataTable();
+        table.clear();
+        kelasData.forEach((data, index) => {
+            table.row.add([
+                data.kodeKelas,
+                data.namaKelas,
+                data.tingkatanKelas,
+                data.jurusan,
+                data.nomorKelas,
+                `<button class="btn btn-warning btn-sm" onclick="editData(${index})">Edit</button>
+                 <button class="btn btn-danger btn-sm" onclick="deleteData(${index})">Delete</button>`
+            ]).draw();
+        });
+    }
+
+    function clearForm() {
+        $('#kodeKelas').val('');
+        $('#namaKelas').val('');
+        $('#tingkatanKelas').val('');
+        $('#jurusan').val('');
+        $('#nomorKelas').val('');
+        $('#editIndex').val('');
+        $('#kelasModalLabel').text('Tambah Data Kelas');
+    }
+
+    function saveData() {
+        const kodeKelas = $('#kodeKelas').val();
+        const namaKelas = $('#namaKelas').val();
+        const tingkatanKelas = $('#tingkatanKelas').val();
+        const jurusan = $('#jurusan').val();
+        const nomorKelas = $('#nomorKelas').val();
+        const editIndex = $('#editIndex').val();
+
+        if (editIndex) {
+            kelasData[editIndex] = { kodeKelas, namaKelas, tingkatanKelas, jurusan, nomorKelas };
+        } else {
+            kelasData.push({ kodeKelas, namaKelas, tingkatanKelas, jurusan, nomorKelas });
+        }
+
+        renderTable();
+        $('#kelasModal').modal('hide');
+    }
+
+    function editData(index) {
+        const data = kelasData[index];
+        $('#kodeKelas').val(data.kodeKelas);
+        $('#namaKelas').val(data.namaKelas);
+        $('#tingkatanKelas').val(data.tingkatanKelas);
+        $('#jurusan').val(data.jurusan);
+        $('#nomorKelas').val(data.nomorKelas);
+        $('#editIndex').val(index);
+        $('#kelasModalLabel').text('Edit Data Kelas');
+        $('#kelasModal').modal('show');
+    }
+
+    function deleteData(index) {
+        kelasData.splice(index, 1);
+        renderTable();
+    }
+</script>
                 </div>
                 <!-- content @e -->
                 <!-- footer @s -->

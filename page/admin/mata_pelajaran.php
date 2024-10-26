@@ -1,9 +1,14 @@
-<?php
+<?php 
+include '../../config.php';
+session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:index.php?aksi=belum');
 
-
+}
+$nama=$_SESSION['nama_guru'];
+$email=$_SESSION['email_guru'];
+$foto=$_SESSION['foto_profil_guru'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,12 +16,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin | E-Saturasi</title>
+        <title>Guru | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
 
     <!-- StyleSheets  -->
-    <link rel="stylesheet" href="./assets/css/dashlite.css">
-    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css">
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
+     <!-- Datepicker -->
+     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- jQuery, DataTables JS, and Buttons plugin -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -114,8 +134,8 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/images/logo.png" srcset="/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/images/logo-dark.png" srcset="/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                         </div><!-- .nk-header-wrap -->
@@ -124,34 +144,121 @@
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="nk-content ">
-                    <div class="container-fluid">
-                        <div class="nk-content-inner">
-                            <div class="nk-content-body">
-                                <div class="nk-block-head nk-block-head-sm">
-                                    <div class="nk-block-between">
-                                        <div class="nk-block-head-content">
-                                            <h3 class="nk-block-title page-title">Data Mata Pelajaran</h3>
-                                        </div><!-- .nk-block-head-content -->
-                                        <div class="nk-block-head-content">
-                                            <div class="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                                <div class="toggle-expand-content" data-content="pageMenu">
-                                                    <ul class="nk-block-tools g-3">
-                                                        <li>
-                                                 </div>
-                                            </div>
-                                        </div><!-- .nk-block-head-content -->
-                                    </div><!-- .nk-block-between -->
-                                </div><!-- .nk-block-head -->
-                                        <div class="col-xxl-6">
-                                            <div class="card card-full">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="container mt-5">
+    <h2 class="text-center">Data Mata Pelajaran</h2>
+  <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalForm">Tambah Data</button>
+  <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+      <tr>
+        <th>Kode Mata Pelajaran</th>
+        <th>Nama Pelajaran</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Contoh data, bisa diganti dengan data dari database -->
+      <tr>
+        <td>MP001</td>
+        <td>Matematika</td>
+        <td>
+          <button class="btn btn-warning btn-sm" onclick="editData('MP001', 'Matematika')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteData('MP001')">Delete</button>
+        </td>
+      </tr>
+      <tr>
+        <td>MP002</td>
+        <td>Bahasa Indonesia</td>
+        <td>
+          <button class="btn btn-warning btn-sm" onclick="editData('MP002', 'Bahasa Indonesia')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteData('MP002')">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Form -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFormLabel">Tambah/Edit Data Mata Pelajaran</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formData">
+          <div class="mb-3">
+            <label for="kode" class="form-label">Kode Mata Pelajaran</label>
+            <input type="text" class="form-control" id="kode" required>
+          </div>
+          <div class="mb-3">
+            <label for="nama" class="form-label">Nama Pelajaran</label>
+            <input type="text" class="form-control" id="nama" required>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="saveData()">Simpan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.0/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $('#dataTable').DataTable();
+});
+
+// Function untuk menyimpan data
+function saveData() {
+  const kode = $('#kode').val();
+  const nama = $('#nama').val();
+  
+  // Tambahkan data baru ke tabel
+  $('#dataTable').DataTable().row.add([
+    kode,
+    nama,
+    `<button class="btn btn-warning btn-sm" onclick="editData('${kode}', '${nama}')">Edit</button>
+     <button class="btn btn-danger btn-sm" onclick="deleteData('${kode}')">Delete</button>`
+  ]).draw(false);
+
+  $('#modalForm').modal('hide');
+  $('#formData')[0].reset();
+}
+
+// Function untuk mengedit data
+function editData(kode, nama) {
+  $('#kode').val(kode);
+  $('#nama').val(nama);
+  $('#modalForm').modal('show');
+}
+
+// Function untuk menghapus data
+function deleteData(kode) {
+  $('#dataTable').DataTable().rows().every(function() {
+    if (this.data()[0] === kode) {
+      this.remove();
+    }
+  }).draw();
+}
+</script>
                 </div>
                 <!-- content @e -->
                 <!-- footer @s -->

@@ -1,9 +1,14 @@
-<?php
+<?php 
+include '../../config.php';
+session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:index.php?aksi=belum');
 
-
+}
+$nama=$_SESSION['nama_guru'];
+$email=$_SESSION['email_guru'];
+$foto=$_SESSION['foto_profil_guru'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -11,12 +16,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Admin | E-Saturasi</title>
+        <title>Guru | E-Saturasi</title>
         <link rel="icon" type="image/x-icon" href="./images/icon.png" />
 
     <!-- StyleSheets  -->
-    <link rel="stylesheet" href="./assets/css/dashlite.css">
-    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css">
+    <link rel="stylesheet" href="./assets/css/dashlite.css?ver=3.2.2">
+    <link id="skin-default" rel="stylesheet" href="./assets/css/theme.css?ver=3.2.2">
+     <!-- Datepicker -->
+     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- jQuery, DataTables JS, and Buttons plugin -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -114,8 +134,8 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/images/logo.png" srcset="/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/images/logo-dark.png" srcset="/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                         </div><!-- .nk-header-wrap -->
@@ -124,34 +144,153 @@
                 <!-- main header @e -->
                 <!-- content @s -->
                 <div class="nk-content ">
-                    <div class="container-fluid">
-                        <div class="nk-content-inner">
-                            <div class="nk-content-body">
-                                <div class="nk-block-head nk-block-head-sm">
-                                    <div class="nk-block-between">
-                                        <div class="nk-block-head-content">
-                                            <h3 class="nk-block-title page-title">Data Jurusan</h3>
-                                        </div><!-- .nk-block-head-content -->
-                                        <div class="nk-block-head-content">
-                                            <div class="toggle-wrap nk-block-tools-toggle">
-                                                <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                                <div class="toggle-expand-content" data-content="pageMenu">
-                                                    <ul class="nk-block-tools g-3">
-                                                        <li>
-                                                 </div>
-                                            </div>
-                                        </div><!-- .nk-block-head-content -->
-                                    </div><!-- .nk-block-between -->
-                                </div><!-- .nk-block-head -->
-                                        <div class="col-xxl-6">
-                                            <div class="card card-full">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="container mt-5">
+    <h2 class="text-center">Data Jurusan</h2>
+    <div class="mb-3 text-end">
+        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#jadwalModal">
+        Tambah Data
+    </button>
+    </div>
+    <table id="jurusanTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Kode Jurusan</th>
+                <th>Nama Jurusan</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated via JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="jurusanForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFormLabel">Tambah Data Jurusan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="kodeJurusan" name="kodeJurusan">
+                    <div class="mb-3">
+                        <label for="kode" class="form-label">Kode Jurusan</label>
+                        <input type="text" class="form-control" id="kode" name="kode" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama Jurusan</label>
+                        <input type="text" class="form-control" id="nama" name="nama" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.0/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.0/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Inisialisasi DataTables
+        var table = $('#jurusanTable').DataTable({
+            data: [],
+            columns: [
+                { data: 'kode' },
+                { data: 'nama' },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `
+                            <button class="btn btn-warning btn-sm btn-edit" data-kode="${row.kode}">Edit</button>
+                            <button class="btn btn-danger btn-sm btn-delete" data-kode="${row.kode}">Delete</button>
+                        `;
+                    }
+                }
+            ]
+        });
+
+        // Fungsi untuk menambah atau mengedit data
+        $('#jurusanForm').submit(function (e) {
+            e.preventDefault();
+            var kode = $('#kode').val();
+            var nama = $('#nama').val();
+            var kodeJurusan = $('#kodeJurusan').val();
+
+            if (kodeJurusan) {
+                // Edit data
+                table.rows().every(function () {
+                    var data = this.data();
+                    if (data.kode === kodeJurusan) {
+                        data.kode = kode;
+                        data.nama = nama;
+                        this.invalidate();
+                    }
+                });
+            } else {
+                // Tambah data
+                table.row.add({ kode: kode, nama: nama }).draw(false);
+            }
+
+            $('#modalForm').modal('hide');
+            $('#jurusanForm')[0].reset();
+            $('#kodeJurusan').val('');
+        });
+
+        // Event handler untuk tombol Edit
+        $('#jurusanTable tbody').on('click', '.btn-edit', function () {
+            var kode = $(this).data('kode');
+            var data = table.rows().data().toArray().find(item => item.kode === kode);
+
+            $('#kode').val(data.kode);
+            $('#nama').val(data.nama);
+            $('#kodeJurusan').val(data.kode);
+            $('#modalFormLabel').text('Edit Data Jurusan');
+            $('#modalForm').modal('show');
+        });
+
+        // Event handler untuk tombol Delete
+        $('#jurusanTable tbody').on('click', '.btn-delete', function () {
+            var kode = $(this).data('kode');
+            table.rows().every(function () {
+                if (this.data().kode === kode) {
+                    this.remove();
+                }
+            });
+            table.draw();
+        });
+
+        // Reset form saat modal ditutup
+        $('#modalForm').on('hidden.bs.modal', function () {
+            $('#jurusanForm')[0].reset();
+            $('#kodeJurusan').val('');
+            $('#modalFormLabel').text('Tambah Data Jurusan');
+        });
+    });
+</script>
                 </div>
                 <!-- content @e -->
                 <!-- footer @s -->
