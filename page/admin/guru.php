@@ -25,14 +25,17 @@ $foto=$_SESSION['foto_profil_guru'];
      <!-- Datepicker -->
      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- jsPDF for PDF Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <!-- DataTables Buttons for Export -->
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.bootstrap5.min.css">
+    <!-- jQuery, DataTables JS, and Buttons plugin -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
 
@@ -140,89 +143,97 @@ $foto=$_SESSION['foto_profil_guru'];
                 </div>
                 <!-- main header @e -->
                 <!-- content @s -->
-                                                <div class="nk-content ">
-                                                <div class="container mt-5">
-                                    <h2 class="mb-4">Data Guru</h2>
-                                    <div class="mb-3">
-
-                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#dataModal">
-                                        Tambah Data
-                                    </button>
-                                    <div class="table-responsive">
-        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-            <thead>
-                            <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Tanggal Lahir</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Aksi</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                             <td>{$no}</td>
-                             <td>{$row['nama']}</td>
-                             <td>{$row['tanggal_lahir']}</td>
-                             <td>{$row['jenis_kelamin']}</td>
-                             <td>
-                             <button class='btn btn-success btn-sm editBtn' data-bs-toggle="modal" data-bs-target="#dataModal">Edit</button>
-                             <button class='btn btn-danger btn-sm deleteBtn' data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                <div class="nk-content ">
+                <div class="container mt-5">
+    <h2 class="text-center">Data Guru</h2>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalForm" onclick="resetForm()">Tambah Data</button>
+    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>Jenis Kelamin</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data akan dimasukkan melalui JavaScript -->
+        </tbody>
+    </table>
 </div>
 
-<!-- Modal Tambah/Edit -->
-<div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Menambahkan modal-lg agar modal tampil lebih lebar di layar besar -->
+<!-- Modal Form -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="dataModalLabel">Tambah/Edit Data</h5>
+                <h5 class="modal-title" id="modalFormLabel">Form Data Guru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="dataForm">
+                <form id="guruForm">
+                    <input type="hidden" id="index">
+                    <div class="mb-3">
+                        <label for="nik" class="form-label">NIK</label>
+                        <input type="text" class="form-control" id="nik" required>
+                    </div>
                     <div class="mb-3">
                         <label for="nama" class="form-label">Nama</label>
-                        <input type="text" class="form-control" id="nama" name="nama">
+                        <input type="text" class="form-control" id="nama" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                        <input type="text" class="form-control" id="tempat_lahir" required>
                     </div>
                     <div class="mb-3">
                         <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                        <input type="text" class="form-control datepicker" id="tanggal_lahir" name="tanggal_lahir">
+                        <input type="date" class="form-control" id="tanggal_lahir" required>
                     </div>
                     <div class="mb-3">
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                        <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
+                        <select class="form-select" id="jenis_kelamin" required>
+                            <option value="">Pilih Jenis Kelamin</option>
                             <option value="Laki-laki">Laki-laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <div class="mb-3">
+                        <label for="nip" class="form-label">NIP</label>
+                        <input type="text" class="form-control" id="nip" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status_kepegawaian" class="form-label">Status Kepegawaian</label>
+                        <select class="form-select" id="status_kepegawaian" required>
+                            <option value="">Pilih Status</option>
+                            <option value="PNS">PNS</option>
+                            <option value="Honorer">Honorer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <input type="text" class="form-control" id="alamat" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="no_telpon" class="form-label">No Telpon</label>
+                        <input type="text" class="form-control" id="no_telpon" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
                 </form>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Delete Confirmation -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus data ini?</p>
-                <input type="hidden" id="deleteId" name="deleteId">
-            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="saveData()">Simpan</button>
             </div>
         </div>
     </div>
@@ -248,122 +259,98 @@ $foto=$_SESSION['foto_profil_guru'];
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
 <script>
-$(document).ready(function() {
+    let guruData = [];
 
-            // Datepicker
-            $(".datepicker").datepicker({
-            dateFormat: "yy-mm-dd"
-        });
-
-    // Inisialisasi DataTable
-    var table = $('#example').DataTable({
-        "responsive": true,
-        "ajax": "data.php", // URL untuk mengambil data dari database
-        "columns": [
-            { "data": "judul_materi" },
-            { "data": "kelas" },
-            { "data": "bab" },
-            { "data": "jenis_file" },
-            { 
-                "data": null,
-                "render": function (data, type, row) {
-                    return `
-                        <button class="btn btn-sm btn-warning edit-btn" data-id="${row.id}" data-judul="${row.judul_materi}" data-kelas="${row.kelas}" data-bab="${row.bab}" data-jenis="${row.jenis_file}">Edit</button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}">Delete</button>
-                    `;
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdfHtml5',
+                    text: 'Export PDF',
+                    title: 'Data Guru',
+                    className: 'btn btn-success'
                 }
-            }
-        ],
-        "dom": 'Bfrtip',
-        "buttons": [
-            'excelHtml5',
-            'pdfHtml5'
-        ]
+            ]
+        });
     });
 
-    // Fungsi untuk membuka modal upload materi
-    $('#uploadMateriButton').on('click', function() {
-        $('#uploadMateriModal').modal('show');
-    });
+    function resetForm() {
+        $('#guruForm')[0].reset();
+        $('#index').val('');
+    }
 
-    // Fungsi untuk menyimpan data upload materi
-    $('#uploadSaveButton').on('click', function() {
-        var judulMateri = $('#upload_judul_materi').val();
-        var kelas = $('#upload_kelas').val();
-        var bab = $('#upload_bab').val();
-        var jenisFile = $('#upload_jenis_file').val();
-        var fileInput = $('#upload_file')[0].files[0];
-        var allowedExtensions = /(\.rar|\.zip)$/i;
+    function saveData() {
+        let index = $('#index').val();
+        let data = {
+            nik: $('#nik').val(),
+            nama: $('#nama').val(),
+            tempat_lahir: $('#tempat_lahir').val(),
+            tanggal_lahir: $('#tanggal_lahir').val(),
+            jenis_kelamin: $('#jenis_kelamin').val(),
+            nip: $('#nip').val(),
+            status_kepegawaian: $('#status_kepegawaian').val(),
+            alamat: $('#alamat').val(),
+            no_telpon: $('#no_telpon').val(),
+            email: $('#email').val(),
+            username: $('#username').val(),
+            password: $('#password').val()
+        };
 
-        if (!judulMateri || !kelas || !bab || !jenisFile || !fileInput) {
-            alert('Semua field wajib diisi!');
-            return;
+        if (index === '') {
+            guruData.push(data);
+        } else {
+            guruData[index] = data;
         }
+        $('#modalForm').modal('hide');
+        loadTable();
+    }
 
-        if (!allowedExtensions.test(fileInput.name)) {
-            alert('Hanya file RAR atau ZIP yang diperbolehkan.');
-            return;
-        }
+    function loadTable() {
+        let table = $('#dataTable').DataTable();
+        table.clear();
+        guruData.forEach((item, index) => {
+            table.row.add([
+                item.nik,
+                item.nama,
+                item.tempat_lahir,
+                item.tanggal_lahir,
+                item.jenis_kelamin,
+                item.nip,
+                item.status_kepegawaian,
+                item.alamat,
+                item.no_telpon,
+                item.email,
+                item.username,
+                `<button class="btn btn-warning btn-sm" onclick="editData(${index})">Edit</button> 
+                 <button class="btn btn-danger btn-sm" onclick="deleteData(${index})">Hapus</button>`
+            ]).draw(false);
+        });
+    }
 
-        // Simulasi upload file (gunakan AJAX untuk upload nyata)
-        alert('Materi "' + judulMateri + '" berhasil diunggah dengan file: ' + fileInput.name);
+    function editData(index) {
+        let data = guruData[index];
+        $('#index').val(index);
+        $('#nik').val(data.nik);
+        $('#nama').val(data.nama);
+        $('#tempat_lahir').val(data.tempat_lahir);
+        $('#tanggal_lahir').val(data.tanggal_lahir);
+        $('#jenis_kelamin').val(data.jenis_kelamin);
+        $('#nip').val(data.nip);
+        $('#status_kepegawaian').val(data.status_kepegawaian);
+        $('#alamat').val(data.alamat);
+        $('#no_telpon').val(data.no_telpon);
+        $('#email').val(data.email);
+        $('#username').val(data.username);
+        $('#password').val(data.password);
+        $('#modalForm').modal('show');
+    }
 
-        // Tambahkan data ke DataTable (simulasi server-side)
-        table.row.add({
-            "judul_materi": judulMateri,
-            "kelas": kelas,
-            "bab": bab,
-            "jenis_file": jenisFile
-        }).draw();
-
-        // Tutup modal
-        $('#uploadMateriModal').modal('hide');
-        $('#uploadMateriForm')[0].reset();
-    });
-
-    // Fungsi Edit (membuka modal panel)
-    $('#example tbody').on('click', '.edit-btn', function() {
-        var dataId = $(this).data('id');
-        var judul = $(this).data('judul');
-        var kelas = $(this).data('kelas');
-        var bab = $(this).data('bab');
-        var jenisFile = $(this).data('jenis');
-        
-        // Set data ke dalam modal
-        $('#recordId').val(dataId);
-        $('#judul_materi').val(judul);
-        $('#kelas').val(kelas);
-        $('#bab').val(bab);
-        $('#jenis_file').val(jenisFile);
-
-        // Buka modal
-        $('#modalPanel').modal('show');
-    });
-
-    // Fungsi Save dari modal
-    $('#saveButton').on('click', function() {
-        var id = $('#recordId').val();
-        var judulMateri = $('#judul_materi').val();
-        var kelas = $('#kelas').val();
-        var bab = $('#bab').val();
-        var jenisFile = $('#jenis_file').val();
-
-        alert('Data updated for ID: ' + id);
-        // Tambahkan logika penyimpanan edit (AJAX) di sini
-
-        // Tutup modal
-        $('#modalPanel').modal('hide');
-    });
-
-    // Fungsi Delete
-    $('#example tbody').on('click', '.delete-btn', function() {
-        var dataId = $(this).data('id');
-        if (confirm('Are you sure you want to delete this record?')) {
-            // Tambahkan logika delete di sini, misal via AJAX untuk menghapus data di server
-            alert('Data deleted with ID: ' + dataId);
-        }
-    });
-});
+    function deleteData(index) {
+        guruData.splice(index, 1);
+        loadTable();
+    }
 </script>
                 </div>
                 <!-- content @e -->
