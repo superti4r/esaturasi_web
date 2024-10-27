@@ -191,16 +191,7 @@ $foto = $_SESSION['foto_profil_guru'];
                                             <a href="./jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
                                     </li>
                                 </ul>
-                                <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Session</h6>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="./logout.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-signout"></em></span>
-                                        <span class="nk-menu-text">Log Out</span>
-                                    </a>
-                                </li>
-                            </li>
+                              
                          </div>
                     </div>
                 </div>
@@ -277,7 +268,7 @@ $foto = $_SESSION['foto_profil_guru'];
  
                 <div class="container mt-5">
     <h3 class="text-center mt-5 mb-4" >Data Guru</h3>
-    <div class="d-flex justify-content-between mt-4 mb-1">
+    <div class="d-flex justify-content-between mt-4 mb-1 ">
     <a href="tambah_guru.php"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm"> Tambah Data </button></a>
         <!-- Form Pencarian -->
         <form class="form-inline" action="guru.php" method="POST">
@@ -293,14 +284,14 @@ $foto = $_SESSION['foto_profil_guru'];
     <thead>
       <tr>
         <th>Foto</th>
-        <th>Nik</th>
-        <th>Nip</th>
         <th>Nama</th>
+        <th>Nik</th>
         <th>Tanggal Lahir</th>
         <th>Jenis Kelamin</th>
         <th>Email</th>
-        <th>Alamat</th>
         <th>No Telepon</th>
+        <th>Nip</th>
+        <th>Alamat</th>
         <th>Role</th>
         <th>Aksi</th>
       </tr>
@@ -314,9 +305,8 @@ $foto = $_SESSION['foto_profil_guru'];
         <td>
         <img src="<?php echo !empty($data['foto_profil_guru']) ? $data['foto_profil_guru'] : 'profile/default_profile.png'; ?>" alt="Foto Profil Guru" class="foto-profil">
         </td>
-        <td><?php echo $data['nik']; ?></td>
-        <td><?php echo $data['nip']; ?></td>
         <td><?php echo $data['nama_guru']; ?></td>
+        <td><?php echo $data['nik']; ?></td>
         <td>
     <?php 
     $tanggalLahir = strtotime($data['tanggal_lahir_guru']); 
@@ -325,8 +315,9 @@ $foto = $_SESSION['foto_profil_guru'];
     </td>
         <td><?php echo $data['jekel_guru']; ?></td>
         <td><?php echo $data['email_guru']; ?></td>
-        <td><?php echo $data['alamat']; ?></td>
         <td><?php echo $data['no_telepon_guru']; ?></td>
+        <td><?php echo !empty($data['nip']) ? $data['nip'] : '-'; ?></td>
+        <td><?php echo $data['alamat']; ?></td>
         <td><?php echo $data['role']; ?></td>
         <td>
                 <?php if ($data['nik'] == $loggedInNik) { // Cek apakah NIK data sama dengan NIK yang login ?>

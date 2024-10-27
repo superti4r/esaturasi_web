@@ -21,24 +21,36 @@ if (isset($_POST['kirim'])) {
     // Validasi Input
     $errors = [];
 
+    // Validasi NIK
     if (!preg_match('/^[0-9]{16}$/', $nik)) {
         $errors[] = "NIK harus terdiri dari 16 angka.";
     }
-    if (!preg_match('/^[0-9]{18}$/', $nip)) {
+    
+    // Validasi NIP, hanya jika diisi
+    if (!empty($nip) && !preg_match('/^[0-9]{18}$/', $nip)) {
         $errors[] = "NIP harus terdiri dari 18 angka.";
     }
+    
+    // Validasi Nama Guru
     if (!preg_match('/^[a-zA-Z\s]+$/', $nama_guru)) {
         $errors[] = "Nama guru tidak boleh mengandung angka atau simbol.";
     }
+    
+    // Validasi Email
     if (!filter_var($email_guru, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Email tidak valid.";
     }
+    
+    // Validasi No Telepon
     if (!preg_match('/^[0-9]{10,13}$/', $no_telepon_guru)) {
         $errors[] = "No telepon harus terdiri dari 10 hingga 13 angka.";
     }
+    
+    // Validasi Password
     if (strlen($password) < 6 || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
         $errors[] = "Password harus minimal 6 karakter dan mengandung angka serta simbol.";
     }
+    
 
     // Jika terdapat error, tampilkan pesan kesalahan
     if (!empty($errors)) {
@@ -301,7 +313,7 @@ $foto = $_SESSION['foto_profil_guru'];
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">NIP</label>
-                                                            <input type="text" class="form-control" name="nip"  placeholder="18 Digit" required>
+                                                            <input type="text" class="form-control" name="nip"  placeholder="18 Digit (Kosongkan Jika Tidak Ada NIP)">
                                                         </div>
                                                     </div>
                                                     
@@ -354,7 +366,7 @@ $foto = $_SESSION['foto_profil_guru'];
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Foto Profil (MAX : 2MB)</label>
-                                                            <input type="file" class="form-control" name="foto_profil" required>
+                                                            <input type="file" class="form-control" name="foto_profil">
                                                         </div>
                                                     </div>
                                                    

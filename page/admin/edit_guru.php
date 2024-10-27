@@ -10,7 +10,7 @@ $current_date = date("Y-m-d");
 
 if (isset($_POST['kirim'])) {
     $nik = $_POST['nik'];
-    $nip = $_POST['nip'];
+    $nip = $_POST['nip'] ?: '-'; // Jika NIP kosong, set menjadi "-"
     $nama_guru = $_POST['nama_guru'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
     $email_guru = $_POST['email_guru'];
@@ -27,8 +27,8 @@ if (isset($_POST['kirim'])) {
     if (!preg_match('/^[0-9]{16}$/', $nik)) {
         $errors[] = "NIK harus terdiri dari 16 angka.";
     }
-    if (!preg_match('/^[0-9]{18}$/', $nip)) {
-        $errors[] = "NIP harus terdiri dari 18 angka.";
+    if (!empty($nip) && $nip !== '-' && !preg_match('/^[0-9]{18}$/', $nip)) {
+        $errors[] = "NIP harus terdiri dari 18 angka atau '-'.";
     }
     if (!preg_match('/^[a-zA-Z\s]+$/', $nama_guru)) {
         $errors[] = "Nama guru tidak boleh mengandung angka atau simbol.";
@@ -89,9 +89,19 @@ if (isset($_POST['kirim'])) {
     }
 
     // Update data guru di database
-    $sql = mysqli_query($koneksi, "UPDATE guru SET nik='$nik', nip='$nip', nama_guru='$nama_guru', tanggal_lahir_guru='$tanggal_lahir', email_guru='$email_guru', jekel_guru='$jekel', no_telepon_guru='$no_telepon_guru', foto_profil_guru='$upload_file', alamat='$alamat', role='$role' WHERE nip='$nip'");
+    $sql = "UPDATE guru SET nik='$nik', nama_guru='$nama_guru', tanggal_lahir_guru='$tanggal_lahir', email_guru='$email_guru', jekel_guru='$jekel', no_telepon_guru='$no_telepon_guru', foto_profil_guru='$upload_file', alamat='$alamat', role='$role'";
 
-    if ($sql) {
+    // Jika NIP tidak kosong, tambahkan ke query
+    if ($nip !== '-') {
+        $sql .= ", nip='$nip'"; // Tambahkan NIP hanya jika tidak "-"
+    }
+
+    $sql .= " WHERE nik='$nik'"; // Menggunakan nik untuk identifikasi
+
+    // Eksekusi query
+    $sql_query = mysqli_query($koneksi, $sql);
+
+    if ($sql_query) {
         header("Location: guru.php?aksi=suksesedit");
         exit();
     } else {
@@ -304,11 +314,11 @@ $foto = $_SESSION['foto_profil_guru'];
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
+    <div class="form-group">
         <label class="form-label">NIP</label>
-        <input type="text" class="form-control" name="nip" value="<?php echo $data['nip']; ?>" required>
-      </div>
+        <input type="text" class="form-control" name="nip" value="<?php echo !empty($data['nip']) ? $data['nip'] : '-'; ?>">
     </div>
+</div>
     <div class="col-md-6">
       <div class="form-group">
         <label class="form-label">Nama Lengkap</label>
