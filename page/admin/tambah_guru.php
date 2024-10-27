@@ -3,6 +3,7 @@ include '../../config.php';
 session_start();
 //tanggal hari ini
 $current_date = date('Y-m-d');
+
 if (isset($_POST['kirim'])) {
     $nik = $_POST['nik'];
     $nip = $_POST['nip'];
@@ -55,6 +56,13 @@ if (isset($_POST['kirim'])) {
         exit();
     }
 
+    // Cek apakah NIP sudah terdaftar
+    $cek_nip = mysqli_query($koneksi, "SELECT * FROM guru WHERE nip='$nip'");
+    if (mysqli_num_rows($cek_nip) > 0) {
+        echo "<script>alert('NIP sudah terdaftar. Mohon masukkan NIP yang berbeda.'); window.history.back();</script>";
+        exit();
+    }
+
     // Simpan foto profil
     $upload_dir = 'profile/';
     $file_extension = strtolower(pathinfo($foto_profil, PATHINFO_EXTENSION));
@@ -68,11 +76,9 @@ if (isset($_POST['kirim'])) {
     if (in_array($file_extension, $allowed_extensions) && in_array($file_type, $allowed_types)) {
         if ($_FILES['foto_profil']['size'] < 2 * 1024 * 1024) { // Maks 2MB
             if (move_uploaded_file($tmp_name, $upload_file)) {
-                // Hash password sebelum disimpan
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
                 // Simpan data guru ke database
-                $sql = mysqli_query($koneksi, "INSERT INTO guru (nik, nip, nama_guru, tanggal_lahir_guru, email_guru, jekel_guru, no_telepon_guru, foto_profil_guru, alamat, role, password_guru) VALUES ('$nik', '$nip', '$nama_guru', '$tanggal_lahir', '$email_guru', '$jekel', '$no_telepon_guru', '$upload_file', '$alamat', '$role', '$hashed_password')");
+                $sql = mysqli_query($koneksi, "INSERT INTO guru (nik, nip, nama_guru, tanggal_lahir_guru, email_guru, jekel_guru, no_telepon_guru, foto_profil_guru, alamat, role, password_guru) VALUES ('$nik', '$nip', '$nama_guru', '$tanggal_lahir', '$email_guru', '$jekel', '$no_telepon_guru', '$upload_file', '$alamat', '$role', '$password')");
+
                 if ($sql) {
                     header("Location: guru.php?aksi=suksestambah");
                     exit();
@@ -96,6 +102,7 @@ $nama = $_SESSION['nama_guru'];
 $email = $_SESSION['email_guru'];
 $foto = $_SESSION['foto_profil_guru'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -279,24 +286,25 @@ $foto = $_SESSION['foto_profil_guru'];
       <div class="modal-body">
       <form action="" method="POST" enctype="multipart/form-data">
                                                 <div class="row g-gs">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">NIK</label>
-                                                            <input type="text" class="form-control" name="nik" placeholder="16 Karakter" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">NIP</label>
-                                                            <input type="text" class="form-control" name="nip"  placeholder="16 Karakter" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label">Nama Lengkap</label>
                                                             <input type="text" class="form-control" name="nama_guru" placeholder="Tidak Boleh Mengandung Angka/Simbo/Angka" required>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">NIK</label>
+                                                            <input type="text" class="form-control" name="nik" placeholder="16 Digit" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label">NIP</label>
+                                                            <input type="text" class="form-control" name="nip"  placeholder="18 Digit" required>
+                                                        </div>
+                                                    </div>
+                                                    
                                                     <div class="col-md-6">
                                                         <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
                                                         <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir"  max="<?= $current_date ?>" required>
@@ -345,7 +353,7 @@ $foto = $_SESSION['foto_profil_guru'];
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label class="form-label">Foto Profil</label>
+                                                            <label class="form-label">Foto Profil (MAX : 2MB)</label>
                                                             <input type="file" class="form-control" name="foto_profil" required>
                                                         </div>
                                                     </div>

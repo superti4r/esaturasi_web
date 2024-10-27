@@ -1,7 +1,10 @@
 <?php
 include '../../config.php'; 
 session_start();
+if (!isset($_SESSION['nik'])) {
+  header('location:home.php?aksi=belum');
 
+}
 $id_jurusan = $_GET['kd_jurusan'];
 $sql = mysqli_query($koneksi, "SELECT * FROM jurusan WHERE kd_jurusan='$id_jurusan'");
 $data = mysqli_fetch_array($sql);

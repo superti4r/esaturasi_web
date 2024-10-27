@@ -1,8 +1,13 @@
 <?php
 include '../../config.php'; 
 session_start();
-//tanggal hari ini
-$current_date = date('Y-m-d');
+if (!isset($_SESSION['nik'])) {
+    header('location:../index.php?aksi=belum');
+}
+
+// Mendapatkan tanggal saat ini untuk batas maksimum tanggal lahir
+$current_date = date("Y-m-d");
+
 if (isset($_POST['kirim'])) {
     $nik = $_POST['nik'];
     $nip = $_POST['nip'];
@@ -13,12 +18,12 @@ if (isset($_POST['kirim'])) {
     $jekel = $_POST['jekel'];
     $alamat = $_POST['alamat'];
     $role = $_POST['role'];
-    $password = $_POST['password'];
     $foto_profil = $_FILES['foto_profil']['name'];
     $tmp_name = $_FILES['foto_profil']['tmp_name'];
 
-    // Validasi inputan setiap el
+    // Validasi Input
     $errors = [];
+
     if (!preg_match('/^[0-9]{16}$/', $nik)) {
         $errors[] = "NIK harus terdiri dari 16 angka.";
     }
@@ -34,9 +39,7 @@ if (isset($_POST['kirim'])) {
     if (!preg_match('/^[0-9]{10,13}$/', $no_telepon_guru)) {
         $errors[] = "No telepon harus terdiri dari 10 hingga 13 angka.";
     }
-    if (strlen($password) < 6 || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
-        $errors[] = "Password harus minimal 6 karakter dan mengandung angka serta simbol.";
-    }
+
     // Jika terdapat error, tampilkan pesan kesalahan
     if (!empty($errors)) {
         foreach ($errors as $error) {
@@ -45,50 +48,66 @@ if (isset($_POST['kirim'])) {
         echo "<script>window.history.back();</script>";
         exit();
     }
-    // Cek apakah NIK sudah terdaftar
-    $cek_nik = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik'");
-    if (mysqli_num_rows($cek_nik) > 0) {
-        echo "<script>alert('NIK sudah terdaftar. Mohon masukkan NIK yang berbeda.'); window.history.back();</script>";
-        exit();
-    }
 
-    // Simpan foto profil
+    // Simpan foto profil jika ada
     $upload_dir = 'profile/';
-    $file_extension = strtolower(pathinfo($foto_profil, PATHINFO_EXTENSION));
-    $file_type = mime_content_type($tmp_name);
-    $allowed_extensions = ['jpg', 'jpeg', 'png'];
-    $allowed_types = ['image/jpeg', 'image/png'];
-    $new_file_name = uniqid() . '.' . $file_extension;
-    $upload_file = $upload_dir . $new_file_name;
+    $upload_file = ''; // Initialize upload_file variable
 
-    // Validasi dan proses upload gambar
-    if (in_array($file_extension, $allowed_extensions) && in_array($file_type, $allowed_types)) {
-        if ($_FILES['foto_profil']['size'] < 2 * 1024 * 1024) { // Maks 2MB
-            if (move_uploaded_file($tmp_name, $upload_file)) {
-                // Hash password sebelum disimpan, password acak
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    if (!empty($foto_profil)) {
+        $file_extension = strtolower(pathinfo($foto_profil, PATHINFO_EXTENSION));
+        
+        // Check if the temporary file exists
+        if (is_uploaded_file($tmp_name)) {
+            $file_type = mime_content_type($tmp_name);
+            $allowed_extensions = ['jpg', 'jpeg', 'png'];
+            $allowed_types = ['image/jpeg', 'image/png'];
+            $new_file_name = uniqid() . '.' . $file_extension;
+            $upload_file = $upload_dir . $new_file_name;
 
-                // Simpan data guru ke database
-                $sql = mysqli_query($koneksi, "INSERT INTO guru (nik, nip, nama_guru, tanggal_lahir_guru, email_guru, jekel_guru, no_telepon_guru, foto_profil_guru, alamat, role, password_guru) VALUES ('$nik', '$nip', '$nama_guru', '$tanggal_lahir', '$email_guru', '$jekel', '$no_telepon_guru', '$upload_file', '$alamat', '$role', '$hashed_password')");
-                if ($sql) {
-                    header("Location: guru.php?aksi=suksestambah");
-                    exit();
+            // Validasi dan proses upload gambar
+            if (in_array($file_extension, $allowed_extensions) && in_array($file_type, $allowed_types)) {
+                if ($_FILES['foto_profil']['size'] < 2 * 1024 * 1024) { // Maks 2MB
+                    if (!move_uploaded_file($tmp_name, $upload_file)) {
+                        echo "<script>alert('Gagal mengupload foto profil'); window.history.back();</script>";
+                        exit();
+                    }
                 } else {
-                    echo "Error: " . mysqli_error($koneksi);
+                    echo "<script>alert('Ukuran file terlalu besar. Maksimal 2MB.'); window.history.back();</script>";
+                    exit();
                 }
             } else {
-                echo "<script>alert('Gagal mengupload foto profil'); window.history.back();</script>";
+                echo "<script>alert('Hanya file dengan ekstensi JPG, JPEG, atau PNG yang diizinkan'); window.history.back();</script>";
+                exit();
             }
         } else {
-            echo "<script>alert('Ukuran file terlalu besar. Maksimal 2MB.'); window.history.back();</script>";
+            echo "<script>alert('Gagal mengupload file.'); window.history.back();</script>";
+            exit();
         }
     } else {
-        echo "<script>alert('Hanya file dengan ekstensi JPG, JPEG, atau PNG yang diizinkan'); window.history.back();</script>";
+        // Jika foto profil tidak diupload, gunakan foto yang lama
+        $upload_file = $_POST['foto_profil_lama']; // Simpan path foto lama ke input tersembunyi di form
+    }
+
+    // Update data guru di database
+    $sql = mysqli_query($koneksi, "UPDATE guru SET nik='$nik', nip='$nip', nama_guru='$nama_guru', tanggal_lahir_guru='$tanggal_lahir', email_guru='$email_guru', jekel_guru='$jekel', no_telepon_guru='$no_telepon_guru', foto_profil_guru='$upload_file', alamat='$alamat', role='$role' WHERE nip='$nip'");
+
+    if ($sql) {
+        header("Location: guru.php?aksi=suksesedit");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($koneksi);
     }
 }
 
-// Mengambil data guru untuk ditampilkan di halaman
-$sql = mysqli_query($koneksi, "SELECT * FROM guru ORDER BY nik DESC");
+
+$nik = $_GET['nik'];
+$sql = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik'");
+$data = mysqli_fetch_array($sql);
+
+
+//mengambil data di database tanggal lahir guru
+$tanggal_lahir = isset($data['tanggal_lahir_guru']) ? date('Y-m-d', strtotime($data['tanggal_lahir_guru'])) : '';
+
 $nama = $_SESSION['nama_guru'];
 $email = $_SESSION['email_guru'];
 $foto = $_SESSION['foto_profil_guru'];
@@ -267,120 +286,101 @@ $foto = $_SESSION['foto_profil_guru'];
                     </div><!-- .container-fliud -->
                 </div>
                 <div class="container mt-5">
-    <h3 class="text-center mt-5 mb-4" >Halaman Tambah guru</h3>
+    <h3 class="text-center mt-5 mb-4" >Halaman Edit guru</h3>
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalFormLabel">Tambah Guru</h5>
+        <h5 class="modal-title" id="modalFormLabel">Edit Guru</h5>
      
       </div>
       <div class="modal-body">
-      <form action="" method="POST" enctype="multipart/form-data">
-                                                <div class="row g-gs">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">NIK</label>
-                                                            <input type="text" class="form-control" name="nik" placeholder="16 Karakter" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">NIP</label>
-                                                            <input type="text" class="form-control" name="nip"  placeholder="16 Karakter" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Nama Lengkap</label>
-                                                            <input type="text" class="form-control" name="nama_guru" placeholder="Tidak Boleh Mengandung Angka/Simbo/Angka" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                                                        <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir"  max="<?= $current_date ?>" required>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Email</label>
-                                                            <input type="email" class="form-control" name="email_guru" placeholder="Sesuaikan dengan Penulisan Email (person@gmail.com)" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">No Telepon</label>
-                                                            <input type="text" class="form-control" name="no_telepon_guru" placeholder="Tidak Boleh Mengandung Angka dan Min 10 Max 13" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Jenis Kelamin</label>
-                                                            <select class="form-control" name="jekel" required>
-                                                                <option value="" disabled selected>Pilih Jenis Kelamin</option>
-                                                                <option value="Laki-laki">Laki-laki</option>
-                                                                <option value="Perempuan">Perempuan</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Role</label>
-                                                            <select class="form-control" name="role" required>
-                                                                <option value="" disabled selected>Pilih Role</option>
-                                                                <option value="guru">Guru</option>
-                                                                <option value="admin">Admin</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="password" class="form-label">Password</label>
-                                                        <div class="input-group">
-                                                            <input type="password" class="form-control" name="password" id="password" placeholder="Harus Mengandung Simbol, Angka, dan Min 6 Karakter" required>
-                                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                                <i class="fas fa-eye" id="eyeIcon"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Foto Profil</label>
-                                                            <input type="file" class="form-control" name="foto_profil" required>
-                                                        </div>
-                                                    </div>
-                                                   
-                                                        <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Alamat</label>
-                                                            <textarea class="form-control" name="alamat" placeholder="Jln.Brawijaya Kec.Probolinggo" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <button type="submit" name="kirim" class="btn btn-primary">Simpan Data</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </form>
-                                        </div>
-
+      <form method="post" enctype="multipart/form-data">
+    <!-- Input tersembunyi untuk menyimpan foto profil lama -->
+    <input type="hidden" name="foto_profil_lama" value="<?php echo htmlspecialchars($data['foto_profil_guru']); ?>">
+  <div class="row g-gs">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">NIK</label>
+        <input type="text" class="form-control" name="nik" value="<?php echo $data['nik']; ?>" readonly>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">NIP</label>
+        <input type="text" class="form-control" name="nip" value="<?php echo $data['nip']; ?>" required>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" class="form-control" name="nama_guru" value="<?php echo $data['nama_guru']; ?>" required>
+      </div>
+    </div>
+    <div class="col-md-6">
+  <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+  <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" 
+    value="<?php echo $tanggal_lahir; ?>" 
+    max="<?php echo $current_date; ?>" required>
+</div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" name="email_guru" value="<?php echo $data['email_guru']; ?>" required>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">No Telepon</label>
+        <input type="text" class="form-control" name="no_telepon_guru" value="<?php echo $data['no_telepon_guru']; ?>" required>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">Jenis Kelamin</label>
+        <select class="form-control" name="jekel" required>
+          <option value="" disabled selected>Pilih Jenis Kelamin</option>
+          <option value="laki-laki" <?php echo $data['jekel_guru'] == 'laki-laki' ? 'selected' : ''; ?>>Laki-laki</option>
+          <option value="perempuan" <?php echo $data['jekel_guru'] == 'perempuan' ? 'selected' : ''; ?>>Perempuan</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-control" name="role" required>
+          <option value="" disabled selected>Pilih Role</option>
+          <option value="guru" <?php echo $data['role'] == 'guru' ? 'selected' : ''; ?>>Guru</option>
+          <option value="admin" <?php echo $data['role'] == 'admin' ? 'selected' : ''; ?>>Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+  <div class="form-group">
+    <label class="form-label">Foto Profil</label>
+    <?php 
+      // Cek jika path foto_profil tersedia dan file gambar benar-benar ada di direktori
+      if (!empty($data['foto_profil_guru']) && file_exists($data['foto_profil_guru'])): 
+    ?>
+      <img src="<?php echo $data['foto_profil_guru']; ?>" alt="Foto Profil" width="100" height="100" style="display:block; margin-bottom:10px;">
+    <?php else: ?>
+      <p>Gambar tidak tersedia.</p>
+    <?php endif; ?>
+    <input type="file" class="form-control" name="foto_profil">
+  </div>
+</div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label class="form-label">Alamat</label>
+        <textarea class="form-control" name="alamat" placeholder="Jln.Brawijaya Kec.Probolinggo" required><?php echo htmlspecialchars($data['alamat']); ?></textarea>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <button type="submit" name="kirim" class="btn btn-primary">Simpan Data</button>
+      </div>
+    </div>
+  </div>
+</form>
 <script>
-  // Mengubah tampilan passwsord
-  const togglePasswordButton = document.getElementById('togglePassword');
-  const passwordInput = document.getElementById('password');
-  const eyeIcon = document.getElementById('eyeIcon');
-
-  togglePasswordButton.addEventListener('click', function () {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    
-    // Ganti ikon berdasarkan status
-    eyeIcon.classList.toggle('fa-eye');
-    eyeIcon.classList.toggle('fa-eye-slash');
-  });
-</script>
-
-
-
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

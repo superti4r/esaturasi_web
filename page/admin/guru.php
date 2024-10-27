@@ -13,6 +13,7 @@ if (isset($_POST['cari'])) {
         OR email_guru LIKE '%".$katakunci."%' 
         OR no_telepon_guru LIKE '%".$katakunci."%' 
         OR nik LIKE '%".$katakunci."%' 
+        OR alamat LIKE '%".$katakunci."%' 
         OR jekel_guru LIKE '%".$katakunci."%' 
         ORDER BY nama_guru ASC");
 } else {
@@ -59,7 +60,7 @@ if (isset($_GET['pesan'])) {
   mysqli_query($koneksi, "DELETE FROM guru WHERE nik='$nik'");
   header("Location:guru.php?aksi=hapusok");
 }
-
+$loggedInNik = isset($_SESSION['nik']) ? $_SESSION['nik'] : '';
 $nama = $_SESSION['nama_guru'];
 $email = $_SESSION['email_guru'];
 $foto = $_SESSION['foto_profil_guru'];
@@ -316,22 +317,28 @@ $foto = $_SESSION['foto_profil_guru'];
         <td><?php echo $data['nik']; ?></td>
         <td><?php echo $data['nip']; ?></td>
         <td><?php echo $data['nama_guru']; ?></td>
-        <td><?php echo $data['tanggal_lahir_guru']; ?></td>
+        <td>
+    <?php 
+    $tanggalLahir = strtotime($data['tanggal_lahir_guru']); 
+    echo date('d M Y', $tanggalLahir); 
+    ?>
+    </td>
         <td><?php echo $data['jekel_guru']; ?></td>
         <td><?php echo $data['email_guru']; ?></td>
         <td><?php echo $data['alamat']; ?></td>
         <td><?php echo $data['no_telepon_guru']; ?></td>
         <td><?php echo $data['role']; ?></td>
         <td>
-          <a href="edit_guru.php?nik=<?php echo $data['nik'] ?>"><button class="btn btn-warning btn-sm mb-1" >Edit</button></a>
-          <a href="guru.php?nik=<?php echo $data['nik'] ?>&pesan=hapus" onClick ="return confirm ('Apakah data yang anda pilih akan di hapus')"><button class="btn btn-danger btn-sm" >Delete</button> </a>
-        </td>
-      </tr>
-     
-    </tbody>
-    <?php 
-                   } 
-                 ?>
+                <?php if ($data['nik'] == $loggedInNik) { // Cek apakah NIK data sama dengan NIK yang login ?>
+                    <span>-</span>
+                <?php } else { // Jika bukan pengguna yang sedang login, hanya tampilkan teks ?>
+                    <a href="edit_guru.php?nik=<?php echo $data['nik'] ?>"><button class="btn btn-warning btn-sm mb-1">Edit</button></a>
+                    <a href="guru.php?nik=<?php echo $data['nik'] ?>&pesan=hapus" onClick="return confirm('Apakah data yang anda pilih akan di hapus')"><button class="btn btn-danger btn-sm">Delete</button></a>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php } ?>
+</tbody>
   </table>
 </div>
 
