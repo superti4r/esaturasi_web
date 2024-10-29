@@ -4,7 +4,7 @@ session_start();
 if (!isset($_SESSION['nik'])) {
   header('location:index.php?aksi=belum');
 }
-
+//digunakan untuk mencari data dan menampilkan data guru
 $katakunci = "";
 if (isset($_POST['cari'])) {
     $katakunci = $_POST['kata_kunci'];
@@ -25,7 +25,8 @@ if ($sql) {
   } else {
     echo "Error: " . mysqli_error($koneksi); 
   }
-//pesan berhasil tambah data
+
+//untuk menampilkan pesan berhasil menambah data guru
 if (isset($_GET['aksi'])) {
   $aksi=$_GET['aksi'];
   if ($aksi=="suksestambah") {
@@ -37,6 +38,7 @@ if (isset($_GET['aksi'])) {
   }
 } 
 
+//untuk menampilkan pesan berhasil edit data
 if (isset($_GET['aksi'])) {
   $aksi=$_GET['aksi'];
   if ($aksi=="suksesedit") {
@@ -45,6 +47,8 @@ if (isset($_GET['aksi'])) {
     alert('selamat data anda berhasil diubah');
     </script>
     ";
+
+//untuk menampilkan pesan berhasil menghapus data
   }elseif ($aksi=="hapusok") {
     echo "
     <script>
@@ -54,7 +58,8 @@ if (isset($_GET['aksi'])) {
   }
 
 }
-//hapus data 
+
+//perintah untuk hapus data yang dipilih
 if (isset($_GET['pesan'])) {
   $nik = $_GET['nik'];
   mysqli_query($koneksi, "DELETE FROM guru WHERE nik='$nik'");

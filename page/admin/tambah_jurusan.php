@@ -167,6 +167,7 @@ $kd="JR".sprintf("%03s", $kd);
             <input type="text" class="form-control" name="nama_jurusan" id="nama" required>
           </div>
           <button type="sumbit" class="btn btn-primary" name="kirim">Simpan</button>
+          <button type="button" name="batal" class="btn btn-danger" onclick="window.location.href='jurusan.php'">Batal</button>
         </form>
       </div>
     </div>

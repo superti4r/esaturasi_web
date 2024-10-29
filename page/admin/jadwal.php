@@ -3,11 +3,102 @@ include '../../config.php';
 session_start();
 if (!isset($_SESSION['nik'])) {
   header('location:index.php?aksi=belum');
+}
+//digunakan untuk mencari data dan menampilkan data siswa
+$katakunci = "";
+if (isset($_POST['cari'])) {
+    $katakunci = $_POST['kata_kunci'];
+    $sql = mysqli_query($koneksi, "
+        SELECT jadwal.*, mapel.nama_mapel, guru.nama_guru, kelas.nama_kelas 
+        FROM jadwal
+        LEFT JOIN mapel ON jadwal.kd_mapel = mapel.kd_mapel
+        LEFT JOIN guru ON jadwal.nik = guru.nik
+        LEFT JOIN kelas ON jadwal.kd_kelas = kelas.kd_kelas
+        WHERE jadwal.kd_jadwal LIKE '%".$katakunci."%' 
+        OR mapel.nama_mapel LIKE '%".$katakunci."%' 
+        OR jadwal.hari LIKE '%".$katakunci."%' 
+        OR jadwal.dari_jam LIKE '%".$katakunci."%' 
+        OR jadwal.sampai_jam LIKE '%".$katakunci."%' 
+        OR kelas.nama_kelas LIKE '%".$katakunci."%' 
+        OR guru.nama_guru LIKE '%".$katakunci."%'
+        ORDER BY jadwal.kd_jadwal ASC");
+} else {
+    $sql = mysqli_query($koneksi, "
+        SELECT jadwal.*, mapel.nama_mapel, guru.nama_guru, kelas.nama_kelas 
+        FROM jadwal
+        LEFT JOIN mapel ON jadwal.kd_mapel = mapel.kd_mapel
+        LEFT JOIN guru ON jadwal.nik = guru.nik
+        LEFT JOIN kelas ON jadwal.kd_kelas = kelas.kd_kelas
+        ORDER BY jadwal.kd_jadwal ASC");
+}
+
+// Cek apakah query berhasil
+if ($sql) {
+    $row = mysqli_num_rows($sql);
+} else {
+    echo "Error: " . mysqli_error($koneksi); 
+}
+
+if ($sql) {
+    $row = mysqli_num_rows($sql);
+} else {
+    echo "Error: " . mysqli_error($koneksi); 
+}
+
+
+if (isset($_POST['delete_selected'])) {
+    if (!empty($_POST['selected_ids'])) {
+        $ids_to_delete = implode(",", $_POST['selected_ids']);
+        mysqli_query($koneksi, "DELETE FROM siswa WHERE nisn IN ($ids_to_delete)");
+        header("Location:siswa.php?aksi=hapusok");
+    } else {
+        echo "<script>alert('Pilih minimal satu data untuk dihapus.');</script>";
+    }
+}
+
+//untuk menampilkan pesan berhasil menambah data siswa
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksestambah") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil ditambahkan');
+    </script>
+    ";
+  }
+} 
+
+//untuk menampilkan pesan berhasil edit data siswa
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksesedit") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil diubah');
+    </script>
+    ";
+
+//untuk menampilkan pesan berhasil menghapus data siswa
+  }elseif ($aksi=="hapusok") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil hapus');
+    </script>
+    ";
+  }
 
 }
-$nama=$_SESSION['nama_guru'];
-$email=$_SESSION['email_guru'];
-$foto=$_SESSION['foto_profil_guru'];
+
+//perintah untuk hapus data yang dipilih
+if (isset($_GET['pesan'])) {
+  $nisn = $_GET['nisn'];
+  mysqli_query($koneksi, "DELETE FROM siswa WHERE nisn='$nisn'");
+  header("Location:siswa.php?aksi=hapusok");
+}
+
+$nama = $_SESSION['nama_guru'];
+$email = $_SESSION['email_guru'];
+$foto = $_SESSION['foto_profil_guru'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +128,43 @@ $foto=$_SESSION['foto_profil_guru'];
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <style>
+    /*biar gambar lingkaran*/
+    .foto-profil {
+        width: 100px; 
+        height: 35px; 
+        border-radius: 50%; 
+        object-fit: cover;
+        border: 0px solid #ddd;
+    }
+
+  
+    table {
+        width: 100%;
+        border-collapse: collapse; 
+    }
+
+    th, td {
+        padding: 20px;
+        text-align: left; 
+        border: 1px solid #ddd; 
+    }
+
+    th {
+        background-color: #f2f2f2; 
+    }
+</style>
+<!-- jarak button hapus semua -->
+<style>
+    /* Memberi jarak antara tabel dan tombol hapus */
+    #dataTable {
+        margin-bottom: 20px; /* Jarak bawah tabel */
+    }
+    .btn-delete-selected {
+        margin-top: 10px; /* Jarak atas tombol */
+        margin-bottom: 20px;
+    }
+</style>
 </head>
 
 <body class="nk-body bg-lighter npc-default has-sidebar ">
@@ -108,22 +236,14 @@ $foto=$_SESSION['foto_profil_guru'];
                                             <a href="./jadwal.php" class="nk-menu-link"><span class="nk-menu-text">Data Jadwal</span></a>
                                     </li>
                                 </ul>
-                                <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Session</h6>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="./logout.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-signout"></em></span>
-                                        <span class="nk-menu-text">Log Out</span>
-                                    </a>
-                                </li>
-                            </li>
+                              
                          </div>
                     </div>
                 </div>
             </div>
             <!-- sidebar @e -->
             <!-- wrap @s -->
+    
             <div class="nk-wrap ">
                 <!-- main header @s -->
                 <div class="nk-header nk-header-fixed is-light">
@@ -138,113 +258,138 @@ $foto=$_SESSION['foto_profil_guru'];
                                     <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
+                            <div class="nk-header-search ms-3 ms-xl-0">
+                               
+                            </div>
+                            <div class="nk-header-tools">
+                                    <li class="dropdown user-dropdown">
+                                        <a href="#" class="dropdown-toggle me-n1" data-bs-toggle="dropdown">
+                                            <div class="user-toggle">
+                                            <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="user-info d-none d-xl-block">
+                                                    <div class="user-name dropdown-indicator"><?php echo $_SESSION['nama_guru']?></div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end">
+                                            <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
+                                                <div class="user-card">
+                                                <div class="user-avatar">
+                                                    <?php if (!empty($foto)): ?>
+                                                        <img src="<?php echo $foto ?>" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%;">
+                                                    <?php else: ?>
+                                                        <span>#</span> <!-- Placeholder jika tidak ada foto -->
+                                                    <?php endif; ?>
+                                                </div>
+                                                    <div class="user-info">
+                                                        <span class="lead-text"><?php echo $_SESSION['nama_guru']?></span>
+                                                        <span class="sub-text"><?php echo $_SESSION['email_guru']?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Mode Gelap</span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown-inner">
+                                                <ul class="link-list">
+                                                    <li><a href="logout.php"><em class="icon ni ni-signout"></em><span>Keluar</span></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div><!-- .nk-header-wrap -->
                     </div><!-- .container-fliud -->
                 </div>
-                <!-- main header @e -->
-                <!-- content @s -->
-                <div class="nk-content ">
-                <div class="container my-5">
-    <h2 class="text-center">Data Jadwal</h2>
-    
-    <!-- Button Tambah Data -->
-    <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#jadwalModal">
-        Tambah Data
-    </button>
+ 
+                <div class="container mt-5">
+    <h3 class="text-center mt-5 mb-4">Data Siswa</h3>
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-1">
+        <a href="tambah_jadwal.php">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm">Tambah Data</button>
+        </a>
+     
 
-    <!-- Datatable -->
-    <table id="datatable" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-            <tr>
-                <th>Kode Jadwal</th>
-                <th>Mata Pelajaran</th>
-                <th>Hari</th>
-                <th>Nama Guru</th>
-                <th>Nama Kelas</th>
-                <th>Dari Jam</th>
-                <th>Sampai Jam</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data jadwal akan dimuat di sini -->
-        </tbody>
-    </table>
-</div>
-
-<!-- Modal Tambah/Edit Jadwal -->
-<div class="modal fade" id="jadwalModal" tabindex="-1" aria-labelledby="jadwalModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="formJadwal">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="jadwalModalLabel">Tambah Jadwal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="kodeJadwal" name="kodeJadwal">
-                    
-                    <div class="mb-3">
-                        <label for="mataPelajaran" class="form-label">Mata Pelajaran</label>
-                        <select class="form-select" id="mapel" name="mapel" required>
-                            <option value="" disabled selected>Pilih Mata Pelajaran</option>
-                            <option value="Senin">Mapel 1</option>
-                            <option value="Selasa">Mapel 2</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="hari" class="form-label">Hari</label>
-                        <select class="form-select" id="hari" name="hari" required>
-                            <option value="" disabled selected>Pilih Hari</option>
-                            <option value="Senin">Senin</option>
-                            <option value="Selasa">Selasa</option>
-                            <option value="Rabu">Rabu</option>
-                            <option value="Kamis">Kamis</option>
-                            <option value="Jumat">Jumat</option>
-                            <option value="Sabtu">Sabtu</option>
-                            <option value="Minggu">Minggu</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="namaGuru" class="form-label">Nama Guru</label>
-                        <select class="form-select" id="namaGuru" name="namaGuru" required>
-                            <!-- Populate this list with data from your database -->
-                            <option value="" disabled selected>Pilih Guru</option>
-                            <option value="Guru 1">Guru 1</option>
-                            <option value="Guru 2">Guru 2</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="namaKelas" class="form-label">Nama Kelas</label>
-                        <select class="form-select" id="namaKelas" name="namaKelas" required>
-                            <!-- Populate this list with data from your database -->
-                            <option value="" disabled selected>Pilih Kelas</option>
-                            <option value="Kelas 1">Kelas 1</option>
-                            <option value="Kelas 2">Kelas 2</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="dariJam" class="form-label">Dari Jam</label>
-                        <input type="text" class="form-control timepicker" id="dariJam" name="dariJam" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="sampaiJam" class="form-label">Sampai Jam</label>
-                        <input type="text" class="form-control timepicker" id="sampaiJam" name="sampaiJam" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
+        <!-- Form Pencarian -->
+        <form class="form-inline ms-1" action="siswa.php" method="POST">
+            <div class="input-group input-group-sm">
+                <input type="text" name="kata_kunci" class="form-control" placeholder="Cari" aria-label="Cari">
+                <button type="submit" class="btn btn-primary icon ni ni-search" name="cari">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
     </div>
+    <form method="POST" action="siswa.php">
+  <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+    <table>
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="select_all"> Pilih Semua</th>
+            <th>Kode Jadwal</th>
+            <th>Mata Pelajaran</th>
+            <th>Hari</th>
+            <th>Dari Jam</th>
+            <th>Sampai Jam</th>
+            <th>Kelas</th>
+            <th>Pengajar</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Asumsikan $sql adalah hasil query untuk mengambil data jadwal
+        $row = mysqli_num_rows($sql); // Jumlah baris hasil query
+        for ($i = 0; $i < $row; $i++) {
+            $data = mysqli_fetch_array($sql);
+        ?>
+        <tr>
+            <td><input type="checkbox" name="selected_ids[]" value="<?php echo $data['kd_jadwal']; ?>"></td>
+            <td><?php echo $data['kd_jadwal']; ?></td>
+            <td><?php echo $data['nama_mapel']; ?></td> <!-- Ubah sesuai dengan nama mata pelajaran -->
+            <td><?php echo $data['hari']; ?></td>
+            <td><?php echo $data['dari_jam']; ?></td>
+            <td><?php echo $data['sampai_jam']; ?></td>
+            <td><?php echo $data['nama_kelas']; ?></td> <!-- Ubah sesuai dengan nama kelas -->
+            <td><?php echo $data['nama_guru']; ?></td> <!-- NIK pengajar -->
+            <td>
+                <a href="edit_jadwal.php?kd_jadwal=<?php echo $data['kd_jadwal']; ?>">
+                    <button type="button" class="btn btn-warning btn-sm mb-1">Edit</button>
+                </a>
+                <a href="jadwal.php?kd_jadwal=<?php echo $data['kd_jadwal']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang anda pilih akan dihapus?')">
+                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                </a>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+        </table>
+    <button type="submit" name="delete_selected" onClick="return confirm('Apakah data yang dipilih akan dihapus?')" class="btn btn-danger btn-delete-selected">Hapus yang Dipilih</button>
+</form>
+
+<script>
+document.getElementById('select_all').onclick = function() {
+    var checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    for (var checkbox of checkboxes) {
+        checkbox.checked = this.checked;
+    }
+}
+</script>
+
+  </table>
 </div>
+
+
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -264,71 +409,6 @@ $foto=$_SESSION['foto_profil_guru'];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        // Initialize DataTable
-        $('#datatable').DataTable();
-
-        // Initialize Timepicker for time fields
-        $('.timepicker').timepicker({
-            timeFormat: 'HH:mm',
-            interval: 30,
-            minTime: '6:00',
-            maxTime: '18:00',
-            defaultTime: '8',
-            startTime: '6:00',
-            dynamic: false,
-            dropdown: true,
-            scrollbar: true
-        });
-
-        // Submit Form for Add/Edit
-        $('#formJadwal').submit(function(event) {
-            event.preventDefault();
-            let data = $(this).serialize();
-            // Ajax request to save data (replace URL with your own)
-            $.post("URL_SAVE_DATA", data, function(response) {
-                // Handle response
-                $('#datatable').DataTable().ajax.reload();
-                $('#jadwalModal').modal('hide');
-            });
-        });
-
-        // Button Edit and Delete handlers (Assumes your table has dynamically loaded data)
-        $('#datatable tbody').on('click', 'button', function() {
-            let action = $(this).data('action');
-            let data = $(this).data('info');
-            if(action === 'edit') {
-                $('#kodeJadwal').val(data.kodeJadwal);
-                $('#mataPelajaran').val(data.mataPelajaran);
-                $('#hari').val(data.hari);
-                $('#namaGuru').val(data.namaGuru);
-                $('#namaKelas').val(data.namaKelas);
-                $('#dariJam').val(data.dariJam);
-                $('#sampaiJam').val(data.sampaiJam);
-                $('#jadwalModal').modal('show');
-            } else if (action === 'delete') {
-                if(confirm('Hapus data ini?')) {
-                    $.post("URL_DELETE_DATA", { kodeJadwal: data.kodeJadwal }, function(response) {
-                        $('#datatable').DataTable().ajax.reload();
-                    });
-                }
-            }
-        });
-    });
-</script>
-                </div>
-                <!-- content @e -->
-                <!-- footer @s -->
-                <div class="nk-footer">
-                    <div class="container-fluid">
-                        <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright"> &copy; made with <3 <a href="#" target="#">@projectpintar</a>
-                            </div>
-                        </div>
-                    </div>
-    <!-- JavaScript -->
     <script src="./assets/js/bundle.js?ver=3.2.2"></script>
     <script src="./assets/js/scripts.js?ver=3.2.2"></script>
 </body>

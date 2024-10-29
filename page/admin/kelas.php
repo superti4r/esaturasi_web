@@ -7,17 +7,35 @@ if (!isset($_SESSION['nik'])) {
 
 $katakunci = "";
 if (isset($_POST['cari'])) {
-  $katakunci = $_POST['kata_kunci'];
-  
-  $sql = mysqli_query($koneksi, "SELECT * FROM vkelas WHERE kd_kelas LIKE '%".$katakunci."%' OR nama_kelas LIKE '%".$katakunci."%' OR nama_jurusan LIKE '%".$katakunci."%' OR tingkatan LIKE '%".$katakunci."%' ORDER BY kd_mapel ASC");
+    $katakunci = $_POST['kata_kunci'];
+
+    // Menggunakan mysqli_real_escape_string untuk mencegah SQL injection
+    $katakunci = mysqli_real_escape_string($koneksi, $katakunci);
+    
+    $sql = mysqli_query($koneksi, "
+        SELECT kelas.*, jurusan.nama_jurusan 
+        FROM kelas 
+        LEFT JOIN jurusan ON kelas.kd_jurusan = jurusan.kd_jurusan 
+        WHERE kelas.nama_kelas LIKE '%" . $katakunci . "%' 
+        OR jurusan.nama_jurusan LIKE '%" . $katakunci . "%' 
+        ORDER BY kelas.kd_kelas ASC
+    ");
 } else {
-  $sql = mysqli_query($koneksi, "SELECT * FROM vkelas ORDER BY kd_kelas ASC");
+    $sql = mysqli_query($koneksi, "
+        SELECT kelas.*, jurusan.nama_jurusan 
+        FROM kelas 
+        LEFT JOIN jurusan ON kelas.kd_jurusan = jurusan.kd_jurusan 
+        ORDER BY kelas.kd_kelas ASC
+    ");
 }
+
 if ($sql) {
-  $row = mysqli_num_rows($sql);
+    $row = mysqli_num_rows($sql);
 } else {
-  echo "Error: " . mysqli_error($koneksi); 
+    echo "Error: " . mysqli_error($koneksi);
 }
+
+  
 //pesan berhasil tambah data
 if (isset($_GET['aksi'])) {
   $aksi=$_GET['aksi'];
@@ -47,12 +65,22 @@ if (isset($_GET['aksi'])) {
   }
 
 }
-//hapus data mapel
+//hapus data 
 if (isset($_GET['pesan'])) {
-  $kd_mapel = $_GET['kd_mapel'];
-  mysqli_query($koneksi, "DELETE FROM mapel WHERE kd_mapel='$kd_mapel'");
-  header("Location:mata_pelajaran.php?aksi=hapusok");
+    $kd_kelas = $_GET['kd_kelas'];
+    $query = mysqli_query($koneksi, "DELETE FROM kelas WHERE kd_kelas='$kd_kelas'");
+    if ($query) {
+        header("Location: kelas.php?aksi=hapusok");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($koneksi);
+    }
 }
+
+
+$nama = $_SESSION['nama_guru'];
+$email = $_SESSION['email_guru'];
+$foto = $_SESSION['foto_profil_guru'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,9 +219,9 @@ if (isset($_GET['pesan'])) {
                 <div class="container mt-5">
     <h3 class="text-center mt-3" >Data Kelas</h3>
     <div class="d-flex justify-content-between mt-4 mb-1">
-    <a href="tambah_mapel.php"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm"> Tambah Data </button></a>
+    <a href="tambah_kelas.php"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalForm"> Tambah Data </button></a>
         <!-- Form Pencarian -->
-        <form class="form-inline" action="mata_pelajaran.php" method="POST">
+        <form class="form-inline" action="kelas.php" method="POST">
             <div class="input-group input-group-sm">
                 <input type="text" name="kata_kunci" class="form-control" placeholder="Cari"  aria-label="Cari">
                  <button type="submit" class="btn btn-primary icon ni ni-search" name="cari">
@@ -202,35 +230,35 @@ if (isset($_GET['pesan'])) {
             </div>
         </form>
     </div>
-  <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
-      <tr>
-        <th>Kode Kelas</th>
-        <th>Nama Kelas</th>
-        <th>Jurusan</th>
-        <th>Tingkat</th>
-        <th>Aksi</th>
-      </tr>
+        <tr>
+            <th>Kode Kelas</th>
+            <th>Nama Kelas</th>
+            <th>Jurusan</th>
+            <th>Aksi</th>
+        </tr>
     </thead>
     <tbody>
-      <?php
-        for ($i=0; $i < $row ; $i++) { 
+        <?php
+        for ($i = 0; $i < $row; $i++) { 
             $data = mysqli_fetch_array($sql);
-              ?>
-        <tr>
-           <td><?php echo $data['kd_mapel'] ?></td>
-            <td><?php echo $data['nama_mapel'] ?></td>
-        <td>
-          <a href="edit_mapel.php?kd_mapel=<?php echo $data['kd_mapel'] ?>"><button class="btn btn-warning btn-sm" >Edit</button></a>
-          <a href="mata_pelajaran.php?kd_mapel=<?php echo $data['kd_mapel'] ?>&pesan=hapus" onClick ="return confirm ('Apakah data yang anda pilih akan di hapus')"><button class="btn btn-danger btn-sm" >Delete</button> </a>
-        </td>
-      </tr>
-     
+            ?>
+            <tr>
+                <td><?php echo $data['kd_kelas']; ?></td>
+                <td><?php echo $data['nama_kelas']; ?></td>
+                <td><?php echo $data['nama_jurusan']; ?></td> 
+                <td>
+                    <a href="edit_kelas.php?kd_kelas=<?php echo $data['kd_kelas']; ?>"><button class="btn btn-warning btn-sm">Edit</button></a>
+                    <a href="kelas.php?kd_kelas=<?php echo $data['kd_kelas']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang anda pilih akan dihapus?')"><button class="btn btn-danger btn-sm">Delete</button></a>
+                </td>
+            </tr>
+        <?php 
+        } 
+        ?>
     </tbody>
-    <?php 
-                   } 
-                 ?>
-  </table>
+</table>
+
 </div>
 
 <!-- jQuery -->

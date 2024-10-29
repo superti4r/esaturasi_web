@@ -1,10 +1,13 @@
 <?php
 include '../../config.php'; 
 session_start();
-//tanggal hari ini
+
+// Mendapatkan tanggal hari ini
 $current_date = date('Y-m-d');
 
+// Proses tambah data guru dengan mengambil data dari hasil inputan
 if (isset($_POST['kirim'])) {
+    // Ambil data dari form
     $nik = $_POST['nik'];
     $nip = $_POST['nip'];
     $nama_guru = $_POST['nama_guru'];
@@ -18,7 +21,7 @@ if (isset($_POST['kirim'])) {
     $foto_profil = $_FILES['foto_profil']['name'];
     $tmp_name = $_FILES['foto_profil']['tmp_name'];
 
-    // Validasi Input
+    // Mengvalidasi setiap inputan
     $errors = [];
 
     // Validasi NIK
@@ -51,7 +54,6 @@ if (isset($_POST['kirim'])) {
         $errors[] = "Password harus minimal 6 karakter dan mengandung angka serta simbol.";
     }
     
-
     // Jika terdapat error, tampilkan pesan kesalahan
     if (!empty($errors)) {
         foreach ($errors as $error) {
@@ -379,6 +381,7 @@ $foto = $_SESSION['foto_profil_guru'];
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <button type="submit" name="kirim" class="btn btn-primary">Simpan Data</button>
+                                                            <button type="button" name="batal" class="btn btn-danger" onclick="window.location.href='guru.php'">Batal</button>
                                                         </div>
                                                     </div>
                                                     
