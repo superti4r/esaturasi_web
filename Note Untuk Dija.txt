@@ -16,6 +16,7 @@
     nah jadi jangan ditaruh luar ya, biar rapi
 
 - helper sama kayak config buat manggil database, semisal error buka aja folder /Helper/connection.php
+- di folder "db" itu ada database dummy kalo kamu bingung sama error semisal buka web nya ya ja
 - terus Foto Profil jangan ditampilin dulu ja, penting fungsi jalan di fitur jalan dulu, soalnya gara gara foto profil asset
   yang lain gabisa di pencet, jadi nanti kalo udah semua fitur nya baru ku ulik sama ku akalin buat ukuran perfoto ya
 - button buat import export excel/pdf nya nanti dulu ya, soalnya juga ngaruh, karena button yg kamu pasang besar nya ga pas sama Row + Container nya.
