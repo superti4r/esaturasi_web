@@ -29,9 +29,7 @@ $result = mysqli_query($connection, "
                 <tr class="text-center">
                   <th>No</th>
                   <th>ID Kelas</th>
-                  <th>Tingkat Kelas</th>
-                  <th>Kode Kelas</th>
-                  <th>Jurusan</th>
+                  <th>Nama Kelas</th>
                   <th style="width: 150">Aksi</th>
                 </tr>
               </thead>
@@ -44,9 +42,7 @@ $result = mysqli_query($connection, "
                   <tr class="text-center">
                     <td><?= $no ?></td>
                     <td><?= $data['ident_kelas'] ?></td>
-                    <td><?= $data['tingkat_kelas'] ?></td>
-                    <td><?= $data['kode_kelas'] ?></td>
-                    <td><?= $data['nama_jurusan'] ?></td>
+                    <td><?= $data['nama_kelas'] ?></td>
                     <td>
                       <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?ident_kelas=<?= $data['ident_kelas'] ?>">
                         <i class="fas fa-trash fa-fw"></i>

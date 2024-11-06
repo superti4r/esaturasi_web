@@ -4,7 +4,7 @@ require_once '../helper/connection.php';
 
 $jurusanResult = mysqli_query($connection, "SELECT * FROM jurusan");
 $result = mysqli_query($connection, "
-    SELECT kelas.ident_kelas, kelas.tingkat_kelas, kelas.kode_kelas, jurusan.nama_jurusan 
+    SELECT kelas.ident_kelas, kelas.nama_kelas, kelas.tingkat_kelas, kelas.kode_kelas, jurusan.nama_jurusan 
     FROM kelas 
     INNER JOIN jurusan ON kelas.id_jurusan = jurusan.id_jurusan
 ");
@@ -25,6 +25,10 @@ $result = mysqli_query($connection, "
               <tr>
                 <td>ID Kelas</td>
                 <td><input class="form-control" type="text" name="ident_kelas" id="ident_kelas"></td>
+              </tr>
+              <tr>
+                <td>Nama Kelas</td>
+                <td><input class="form-control" type="text" name="nama_kelas" id="nama_kelas"></td>
               </tr>
               <tr>
                 <td>Kode Kelas</td>
