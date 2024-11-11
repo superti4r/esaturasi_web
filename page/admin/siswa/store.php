@@ -2,19 +2,16 @@
 session_start();
 require_once '../helper/connection.php';
 
-$nisn = $_POST['nisn'];
+$nim = $_POST['nim'];
 $nama = $_POST['nama'];
-$jenis_kelamin = $_POST['jenis_kelamin'];
-$tempat_lahir = $_POST['tempat_lahir'];
+$jenkel = $_POST['jenkel'];
+$kota_lahir = $_POST['kota_lahir'];
 $tanggal_lahir = $_POST['tanggal_lahir'];
 $alamat = $_POST['alamat'];
-$kelas = $_POST['kelas'];
-$jurusan = $_POST['jurusan'];
-$no_telpon = $_POST['no_telpon'];
-$email = $_POST['email'];
-$password = $_POST['password'];
+$prodi = $_POST['prodi'];
+$tahun_masuk = $_POST['tahun_masuk'];
 
-$query = mysqli_query($connection, "insert into siswa (nisn, nama, jenis_kelamin, tempat_lahir, tanggal_lahir, alamat, kelas, jurusan, no_telpon, email, password) value('$nisn', '$nama', '$jenis_kelamin', '$tempat_lahir', '$tanggal_lahir', '$alamat', '$kelas', '$jurusan, '$no_telpon', '$email', '$password')");
+$query = mysqli_query($connection, "insert into mahasiswa (nim, nama, jenis_kelamin, kota_kelahiran, tanggal_kelahiran, alamat, program_studi, tahun_masuk) value('$nim', '$nama', '$jenkel', '$kota_lahir', '$tanggal_lahir', '$alamat', '$prodi', '$tahun_masuk')");
 if ($query) {
   $_SESSION['info'] = [
     'status' => 'success',

@@ -2,21 +2,11 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
-// Ambil data jurusan untuk dropdown
-$jurusanResult = mysqli_query($connection, "SELECT * FROM jurusan");
-
-// Ambil data kelas untuk ditampilkan
-$result = mysqli_query($connection, "
-    SELECT kelas.ident_kelas, kelas.tingkat_kelas, kelas.kode_kelas, jurusan.nama_jurusan 
-    FROM kelas 
-    INNER JOIN jurusan ON kelas.id_jurusan = jurusan.id_jurusan
-");
-
 ?>
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Kelas</h1>
+    <h1>List Kelas</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -28,35 +18,28 @@ $result = mysqli_query($connection, "
               <thead>
                 <tr class="text-center">
                   <th>No</th>
-                  <th>ID Kelas</th>
+                  <th>Kode Kelas</th>
                   <th>Nama Kelas</th>
+                  <th>Kode Jurusan</th>
                   <th style="width: 150">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php
-                $no = 1;
-                while ($data = mysqli_fetch_array($result)) :
-                ?>
 
                   <tr class="text-center">
-                    <td><?= $no ?></td>
-                    <td><?= $data['ident_kelas'] ?></td>
-                    <td><?= $data['nama_kelas'] ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?ident_kelas=<?= $data['ident_kelas'] ?>">
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?kode_kelas=">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?ident_kelas=<?= $data['ident_kelas'] ?>">
+                      <a class="btn btn-sm btn-info" href="edit.php?kode_kelas=">
                         <i class="fas fa-edit fa-fw"></i>
                       </a>
                     </td>
                   </tr>
-
-                <?php
-                  $no++;
-                endwhile;
-                ?>
               </tbody>
             </table>
           </div>

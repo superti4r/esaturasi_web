@@ -6,7 +6,7 @@ require_once '../helper/connection.php';
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Ubah Data Jurusan</h1>
+    <h1>Ubah Data Mata Pelajaran</h1>
     <a href="./index.php" class="btn btn-light">Kembali</a>
   </div>
   <div class="row">
@@ -15,15 +15,15 @@ require_once '../helper/connection.php';
         <div class="card-body">
           <!-- // Form -->
           <form action="./update.php" method="post">
-              <input type="hidden" name="kode_jurusan" value="">
+              <input type="hidden" name="kode_mapel" value="">
               <table cellpadding="8" class="w-100">
-                <tr>
-                  <td>Kode Jurusan</td>
+              <tr>
+                  <td>Kode Mata Pelajaran</td>
                   <td><input class="form-control" required value=""></td>
                 </tr>
                 <tr>
-                  <td>Nama Jurusan</td>
-                  <td><input class="form-control" type="text" name="nama_jurusan" required value=""></td>
+                  <td>Nama Mata Pelajaran</td>
+                  <td><input class="form-control" required value=""></td>
                 </tr>
                 <tr>
                   <td>

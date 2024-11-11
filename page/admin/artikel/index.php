@@ -2,11 +2,12 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
+
 ?>
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>List Jurusan</h1>
+    <h1>List Artikel</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -16,24 +17,27 @@ require_once '../helper/connection.php';
           <div class="table-responsive">
             <table class="table table-hover table-striped w-100" id="table-1">
               <thead>
-                <tr class="text-center">
-                  <th>No</th>
-                  <th>Kode Jurusan</th>
-                  <th>Nama Jurusan</th>
+                <tr>
+                  <th>Kode Artikel</th>
+                  <th>Judul Artikel</th>
+                  <th>Kategori</th>
+                  <th>Tanggal</th>
+                  <th>Status</th>
                   <th style="width: 150">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-
-                  <tr class="text-center">
+                  <tr>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?kode_jurusan=">
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?artikel=">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?kode_jurusan=">
+                      <a class="btn btn-sm btn-info" href="edit.php?artikel=">
                         <i class="fas fa-edit fa-fw"></i>
                       </a>
                     </td>

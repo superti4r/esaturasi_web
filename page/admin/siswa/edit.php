@@ -2,23 +2,6 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
-// Ambil ID siswa dari parameter URL
-$id_siswa = $_GET['id'];
-
-// Ambil data siswa berdasarkan ID
-$query_siswa = "SELECT * FROM siswa WHERE id_siswa = '$id_siswa'";
-$result_siswa = $koneksi->query($query_siswa);
-$data_siswa = $result_siswa->fetch_assoc();
-
-// Ambil data Kelas
-$query_kelas = "SELECT * FROM kelas";
-$result_kelas = $koneksi->query($query_kelas);
-
-// Ambil data Jurusan
-$query_jurusan = "SELECT * FROM jurusan";
-$result_jurusan = $koneksi->query($query_jurusan);
-
-
 ?>
 
 <section class="section">
@@ -32,72 +15,76 @@ $result_jurusan = $koneksi->query($query_jurusan);
         <div class="card-body">
           <!-- // Form -->
           <form action="./update.php" method="post">
-            <?php
-            while ($row = mysqli_fetch_array($query)) {
-            ?>
-              <input type="hidden" name="nisn" value="<?= $row['nisn'] ?>">
+              <input type="hidden" name="nim" value="">
               <table cellpadding="8" class="w-100">
-                <tr>
-                  <td>NISN</td>
-                  <td><input class="form-control" required value="<?= $row['nisn'] ?>" disabled></td>
-                </tr>
-                <tr>
-                  <td>Nama Siswa</td>
-                  <td><input class="form-control" type="text" name="nama" required value="<?= $row['nama'] ?>"></td>
-                </tr>
-                <tr>
-                  <td>Jenis Kelamin</td>
-                  <td>
-                    <select class="form-control" name="jenkel" id="jenkel" required>
-                      <option value="Pria" <?php if ($row['jenis_kelamin'] == "Pria") {
-                                              echo "selected";
-                                            } ?>>Pria</option>
-                      <option value="Wanita" <?php if ($row['jenis_kelamin'] == "Wanita") {
-                                                echo "selected";
-                                              } ?>>Wanita</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tempat Lahir</td>
-                  <td><input class="form-control" type="text" name="tempat_lahir" required value="<?= $row['tempat_lahir'] ?>"></td>
-                </tr>
-                <tr>
-                  <td>Tanggal Lahir</td>
-                  <td><input class="form-control" type="date" name="tanggal_lahir" required value="<?= $row['tanggal_lahir'] ?>"></td>
-                </tr>
-                <tr>
-                  <td>Alamat</td>
-                  <td colspan="3"><textarea class="form-control" name="alamat" id="alamat" required><?= $row['alamat'] ?></textarea></td>
-                </tr>
-                <tr>
-                  <td>Kelas</td>
-                  <td><input class="form-control" type="text" name="tempat_lahir" required value="<?= $row['kelas'] ?>"></td>
-                </tr>
-                <tr>
-                  <td>Jurusan</td>
-                  <td>
-                    <select class="form-control" name="tahun_masuk" id="tahun_masuk" required>
-                      <?php
-                      for ($x = 2015; $x <= 2021; $x++) {
-                      ?>
-                        <option value=<?= $x ?> <?php if ($row['tahun_masuk'] == $x) {
-                                                  echo "selected";
-                                                } ?>><?= $x ?></option>
-                      <?php
-                      }
-                      ?>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>No Telpon</td>
-                  <td><input class="form-control" type="phone" name="nomor_telpon" required value="<?= $row['kota_kelahiran'] ?>"></td>
-                </tr>
-                <tr>
-                  <td>Email</td>
-                  <td><input class="form-control" type="email" name="email" required value="<?= $row['kota_kelahiran'] ?>"></td>
-                </tr>
+              <tr>
+                <td>NIK</td>
+                <td><input class="form-control" type="number" name="nik"></td>
+              </tr>
+
+              <tr>
+                <td>Nama Siswa</td>
+                <td><input class="form-control" type="text" name="nama"></td>
+              </tr>
+
+              <tr>
+                <td>Jenis Kelamin</td>
+                <td>
+                  <select class="form-control" name="jenkel" id="jenkel" required>
+                    <option value="">--Pilih Jenis Kelamin--</option>
+                    <option value="Pria">Pria</option>
+                    <option value="Wanita">Wanita</option>
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Tempat Lahir</td>
+                <td><input class="form-control" type="text" name="tempat_lahir" size="20"></td>
+              </tr>
+
+              <tr>
+                <td>Tanggal Lahir</td>
+                <td><input class="form-control" type="date" id="datepicker" name="tanggal_lahir"></td>
+              </tr>
+
+              <tr>
+                <td>Alamat</td>
+                <td><textarea name="alamat" class="form-control"></textarea></td>
+              </tr>
+
+              <tr>
+                <td>Kelas</td>
+                <td>
+                  <select class="form-control" name="kelas" id="kelas" required>
+                    <option value="">--Pilih Kelas--</option>
+                    <option value="Teknik Informatika">X</option>
+                    <option value="Sistem Informasi">XI</option>
+                    <option value="Sistem Informasi">XII</option>
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Foto Siswa</td>
+                <td><input class="form-control" type="file" name="foto" accept="image/*" required></td>
+              </tr>
+
+              <tr>
+                <td>No Telpon</td>
+                <td><input class="form-control" type="phone" name="phone"></td>
+              </tr>
+
+              <tr>
+                <td>Email</td>
+                <td><input class="form-control" type="email" name="email"></td>
+              </tr>
+
+              <tr>
+                <td>Password</td>
+                <td><input class="form-control" type="password" name="password"></td>
+              </tr>
+
                 <tr>
                   <td>
                     <input class="btn btn-primary d-inline" type="submit" name="proses" value="Ubah">
@@ -105,8 +92,6 @@ $result_jurusan = $koneksi->query($query_jurusan);
                   <td>
                 </tr>
               </table>
-
-            <?php } ?>
           </form>
         </div>
       </div>

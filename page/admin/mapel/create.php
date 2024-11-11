@@ -5,7 +5,7 @@ require_once '../helper/connection.php';
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Tambah Data Kelas</h1>
+    <h1>Tambah Data Mata Pelajaran</h1>
     <a href="./index.php" class="btn btn-light">Kembali</a>
   </div>
   <div class="row">
@@ -16,16 +16,12 @@ require_once '../helper/connection.php';
           <form action="./store.php" method="POST">
             <table cellpadding="8" class="w-100">
             <tr>
-                <td>Kode Kelas</td>
-                <td><input class="form-control" type="text" name="kode_kelas"></td>
+                <td>Kode Mata Pelajaran</td>
+                <td><input class="form-control" type="text" name="kode_mapel"></td>
               </tr>
               <tr>
-                <td>Nama Kelas</td>
-                <td><input class="form-control" type="text" name="nama_kelas"></td>
-              </tr>
-              <tr>
-                <td>Kode Jurusan</td>
-                <td><input class="form-control" type="text" name="kode_jurusan"></td>
+                <td>Nama Mata Pelajaran</td>
+                <td><input class="form-control" type="text" name="nama_mapel"></td>
               </tr>
               <tr>
                 <td>

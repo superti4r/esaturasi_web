@@ -2,12 +2,12 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
-$result = mysqli_query($connection, "SELECT * FROM siswa");
+
 ?>
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Siswa</h1>
+    <h1>List Siswa</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -20,34 +20,27 @@ $result = mysqli_query($connection, "SELECT * FROM siswa");
                 <tr class="text-center">
                   <th>NISN</th>
                   <th>Nama</th>
-                  <th>Kelas</th>
                   <th>Jenis Kelamin</th>
+                  <th>Kelas</th>
                   <th style="width: 150">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php
-                while ($data = mysqli_fetch_array($result)) :
-                ?>
 
                   <tr>
-                    <td><?= $data['nisn'] ?></td>
-                    <td><?= $data['nama'] ?></td>
-                    <td><?= $data['kelas'] ?></td>
-                    <td><?= $data['jenis_kelamin'] ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?nisn=<?= $data['nisn'] ?>">
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?nisn=">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?nisn=<?= $data['nisn'] ?>">
+                      <a class="btn btn-sm btn-info" href="edit.php?nisn=">
                         <i class="fas fa-edit fa-fw"></i>
                       </a>
                     </td>
                   </tr>
-
-                <?php
-                endwhile;
-                ?>
               </tbody>
             </table>
           </div>

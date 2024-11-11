@@ -2,12 +2,12 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
-$result = mysqli_query($connection, "SELECT * FROM guru");
+
 ?>
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Guru</h1>
+    <h1>List Guru</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -26,28 +26,20 @@ $result = mysqli_query($connection, "SELECT * FROM guru");
                 </tr>
               </thead>
               <tbody>
-                <?php
-                while ($data = mysqli_fetch_array($result)) :
-                ?>
-
                   <tr>
-                    <td><?= $data['nik'] ?></td>
-                    <td><?= $data['nama_guru'] ?></td>
-                    <td><?= $data['jenkel_guru'] ?></td>
-                    <td><?= $data['alamat_guru'] ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?nik=<?= $data['nik'] ?>">
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?nisn=">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?nik=<?= $data['nik'] ?>">
+                      <a class="btn btn-sm btn-info" href="edit.php?nisn=">
                         <i class="fas fa-edit fa-fw"></i>
                       </a>
                     </td>
                   </tr>
-
-                <?php
-                endwhile;
-                ?>
               </tbody>
             </table>
           </div>

@@ -2,15 +2,15 @@
 require_once '../layout/_top.php';
 require_once '../helper/connection.php';
 
-$siswa = mysqli_query($connection, "SELECT COUNT(*) FROM guru");
-$siswa = mysqli_query($connection, "SELECT COUNT(*) FROM guru");
-$siswa = mysqli_query($connection, "SELECT COUNT(*) FROM guru");
-$siswa = mysqli_query($connection, "SELECT COUNT(*) FROM guru");
+$mahasiswa = mysqli_query($connection, "SELECT COUNT(*) FROM mahasiswa");
+$dosen = mysqli_query($connection, "SELECT COUNT(*) FROM dosen");
+$matakuliah = mysqli_query($connection, "SELECT COUNT(*) FROM matakuliah");
+$nilai = mysqli_query($connection, "SELECT COUNT(*) FROM nilai");
 
-$total_siswa = mysqli_fetch_array($siswa)[0];
-$total_siswa = mysqli_fetch_array($siswa)[0];
-$total_siswa = mysqli_fetch_array($siswa)[0];
-$total_siswa = mysqli_fetch_array($siswa)[0];
+$total_mahasiswa = mysqli_fetch_array($mahasiswa)[0];
+$total_dosen = mysqli_fetch_array($dosen)[0];
+$total_matakuliah = mysqli_fetch_array($matakuliah)[0];
+$total_nilai = mysqli_fetch_array($nilai)[0];
 ?>
 
 <section class="section">
@@ -29,7 +29,7 @@ $total_siswa = mysqli_fetch_array($siswa)[0];
               <h4>Total Guru</h4>
             </div>
             <div class="card-body">
-              <?= $total_siswa ?>
+              <?= $total_dosen ?>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@ $total_siswa = mysqli_fetch_array($siswa)[0];
               <h4>Total Siswa</h4>
             </div>
             <div class="card-body">
-              <?= $total_siswa ?>
+              <?= $total_mahasiswa ?>
             </div>
           </div>
         </div>
@@ -55,21 +55,6 @@ $total_siswa = mysqli_fetch_array($siswa)[0];
       <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
           <div class="card-icon bg-warning">
-            <i class="fas fa-book"></i>
-          </div>
-          <div class="card-wrap">
-            <div class="card-header">
-              <h4>Total Mata Pelajaran</h4>
-            </div>
-            <div class="card-body">
-              <?= $total_siswa ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-        <div class="card card-statistic-1">
-          <div class="card-icon bg-success">
             <i class="fas fa-school"></i>
           </div>
           <div class="card-wrap">
@@ -77,7 +62,22 @@ $total_siswa = mysqli_fetch_array($siswa)[0];
               <h4>Total Kelas</h4>
             </div>
             <div class="card-body">
-              <?= $total_siswa ?>
+              <?= $total_matakuliah ?>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="card card-statistic-1">
+          <div class="card-icon bg-success">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="card-wrap">
+            <div class="card-header">
+              <h4>Total Mata Pelajaran</h4>
+            </div>
+            <div class="card-body">
+              <?= $total_nilai ?>
             </div>
           </div>
         </div>
@@ -85,6 +85,8 @@ $total_siswa = mysqli_fetch_array($siswa)[0];
     </div>
   </div>
 </section>
+
+
 
 <?php
 require_once '../layout/_bottom.php';

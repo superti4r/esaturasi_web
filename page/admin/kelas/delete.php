@@ -2,9 +2,9 @@
 session_start();
 require_once '../helper/connection.php';
 
-$ident_kelas = $_GET['ident_kelas'];
+$kode_matkul = $_GET['kode_matkul'];
 
-$result = mysqli_query($connection, "DELETE FROM kelas WHERE ident_kelas='$ident_kelas'");
+$result = mysqli_query($connection, "DELETE FROM matakuliah WHERE kode_matkul='$kode_matkul'");
 
 if (mysqli_affected_rows($connection) > 0) {
   $_SESSION['info'] = [

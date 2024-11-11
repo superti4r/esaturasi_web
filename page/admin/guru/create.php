@@ -17,8 +17,8 @@ require_once '../helper/connection.php';
             <table cellpadding="8" class="w-100">
 
               <tr>
-                <td>NIK</td>
-                <td><input class="form-control" type="number" name="nik" size="20" required></td>
+                <td>NISN</td>
+                <td><input class="form-control" type="number" name="nisn" size="20" required></td>
               </tr>
 
               <tr>
@@ -32,24 +32,30 @@ require_once '../helper/connection.php';
               </tr>
 
               <tr>
-                <td>Tempat Lahir</td>
-                <td><input class="form-control" type="text" name="tempat_lahir" size="20" required></td>
-              </tr>
-
-              <tr>
-                <td>Tanggal Lahir</td>
-                <td><input class="form-control" type="date" id="datepicker" name="tanggal_lahir"></td>
-              </tr>
-
-              <tr>
                 <td>Jenis Kelamin</td>
                 <td>
                   <select class="form-control" name="jenkel" id="jenkel" required>
-                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="">--Pilih Jenis Kelamin--</option>
                     <option value="Pria">Pria</option>
                     <option value="Wanita">Wanita</option>
                   </select>
                 </td>
+              </tr>
+
+              <tr>
+                <td>Hak Akses</td>
+                <td>
+                  <select class="form-control" name="role" id="role" required>
+                    <option value="">--Pilih Hak Akses--</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Guru">Guru</option>
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Foto Guru</td>
+                <td><input class="form-control" type="file" name="foto" accept="image/*" required></td>
               </tr>
 
               <tr>
@@ -58,19 +64,8 @@ require_once '../helper/connection.php';
               </tr>
 
               <tr>
-                <td>Status Kepegawaian</td>
-                <td>
-                  <select class="form-control" name="stat_kepegawaian" id="stat_kepegawaian" required>
-                    <option value="">Pilih Status Kepegawaian</option>
-                    <option value="PNS">Pegawai Negeri Sipil</option>
-                    <option value="Honorer">Honorer</option>
-                  </select>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Nomor Telepon</td>
-                <td><input class="form-control" type="phone" name="no_telpon" size="20" required></td>
+                <td>No Telpon</td>
+                <td><input class="form-control" type="phone" name="phone" size="20" required></td>
               </tr>
 
               <tr>
@@ -80,7 +75,7 @@ require_once '../helper/connection.php';
 
               <tr>
                 <td>Password</td>
-                <td><input class="form-control" type="text" name="password" size="20" required></td>
+                <td><input class="form-control" type="password" name="password" size="20" required></td>
               </tr>
               
               <tr>

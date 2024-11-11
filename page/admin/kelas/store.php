@@ -2,11 +2,10 @@
 session_start();
 require_once '../helper/connection.php';
 
-$ident_kelas = $_POST['ident_kelas'];
-$kode_kelas = $_POST['kode_kelas'];
-$tingkat_kelas = $_POST['tingkat_kelas'];
-$id_jurusan = $_POST['id_jurusan'];
-$query = mysqli_query($connection, "INSERT INTO kelas (ident_kelas, kode_kelas, tingkat_kelas, id_jurusan) VALUES ('$ident_kelas', '$kode_kelas', '$tingkat_kelas', '$id_jurusan')");
+$kode_matkul = $_POST['kode_matkul'];
+$nama_matkul = $_POST['nama_matkul'];
+$sks = $_POST['sks'];
+$query = mysqli_query($connection, "insert into matakuliah (kode_matkul, nama_matkul, sks) value ('$kode_matkul', '$nama_matkul', '$sks')");
 
 if ($query) {
   $_SESSION['info'] = [

@@ -1,7 +1,7 @@
 </div>
 <footer class="main-footer">
   <div class="footer-left">
-    made with <i class="fas fa-heart" style="color: #e25555;"></i> @projectpintar</a>
+    Copyright &copy; 2023 Project Pintar</a>
   </div>
   <div class="footer-right">
 

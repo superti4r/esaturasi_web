@@ -2,13 +2,11 @@
 session_start();
 require_once '../helper/connection.php';
 
-$id_kelas = $_POST['id_kelas'];
-$ident_kelas = $_POST['ident_kelas'];
-$kode_kelas = $_POST['kode_kelas'];
-$tingkat_kelas = $_POST['tingkat_kelas'];
-$id_jurusan = $_POST['id_jurusan'];
+$kode_matkul = $_POST['kode_matkul'];
+$nama_matkul = $_POST['nama_matkul'];
+$sks = $_POST['sks'];
 
-$query = mysqli_query($connection, "UPDATE kelas SET kode_kelas = '$kode_kelas', ident_kelas = '$ident_kelas', tingkat_kelas = '$tingkat_kelas', id_jurusan = '$id_jurusan' WHERE id_kelas = '$id_kelas'");
+$query = mysqli_query($connection, "UPDATE matakuliah SET nama_matkul = '$nama_matkul', sks = '$sks' WHERE kode_matkul = '$kode_matkul'");
 if ($query) {
   $_SESSION['info'] = [
     'status' => 'success',

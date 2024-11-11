@@ -5,7 +5,7 @@ if (isset($_POST['submit'])) {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  $sql = "SELECT * FROM admin WHERE username='$username' and password='$password' LIMIT 1";
+  $sql = "SELECT * FROM login WHERE username='$username' and password='$password' LIMIT 1";
   $result = mysqli_query($connection, $sql);
 
   $row = mysqli_fetch_assoc($result);
@@ -18,80 +18,99 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Admin | E-Saturasi</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<link rel="icon" type="image/x-icon" href="assets/favicon.png" />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Login &mdash; STMIK IDS</title>
+
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <!-- CSS Libraries -->
+  <link rel="stylesheet" href="assets/modules/bootstrap-social/bootstrap-social.css">
+
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
 </head>
 
 <body>
-	<section class="h-100">
-		<div class="container h-100">
-			<div class="row justify-content-sm-center h-100">
-				<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-					<div class="text-center my-5">
-						<img src="./assets/img/icon_sekolah.svg" alt="logo" width="100">
-					</div>
-					<div class="card shadow-lg">
-						<div class="card-body p-5">
-							<h1 class="fs-4 card-title fw-bold mb-4">Login Admin</h1>
-							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
-								<div class="mb-3">
-									<label class="mb-2 text-muted" for="username">Username</label>
-									<input id="username" type="text" class="form-control" name="username" value="" required>
-									<div class="invalid-feedback">
-										Username tidak terdaftar di Database!
-									</div>
-								</div>
+  <div id="app">
+    <section class="section">
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+            <div class="login-brand">
+              <img src="./assets/esaturasi.png" alt="logo" width="300">
+            </div>
 
-								<div class="mb-3">
-									<div class="mb-2 w-100 d-flex align-items-center">
-										<label class="text-muted" for="password">Password</label>
-									</div>
-									<div class="input-group">
-										<input id="password" type="password" class="form-control" name="password" required>
-										<span class="input-group-text" id="togglePassword" style="cursor: pointer;">
-											<i class="fas fa-eye"></i>
-										</span>
-										<div class="invalid-feedback">
-											Password is required
-										</div>
-									</div>
-								</div>
-								<div class="d-flex align-items-center">
-									<button type="submit" name="submit" class="btn btn-primary ms-auto">
-										Login
-									</button>
-								</div>
-							</form>
-							<br><center>
-						</div>
-						<div class="card-footer py-3 border-0">
-							<div class="text-center">
-								Tidak bisa mengakses akun? hubungi admin.
-							</div>
-						</div>
-					</div>
-					<div class="text-center mt-5 text-muted">
-						made with <3 &copy; &mdash; @projectpintar
-					</div>
-					<div class="text-center mt-5 text-muted">
-				</div>
-			</div>
-		</div>
-	</section>
+            <div class="card card-primary">
+              <div class="card-header">
+                <h4>Login Admin</h4>
+              </div>
 
-	<script src="js/login.js"></script>
-	<script>
-		document.getElementById("togglePassword").addEventListener("click", function () {
-	const passwordInput = document.getElementById("password");
-	const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-	passwordInput.setAttribute("type", type);
-	this.querySelector("i").classList.toggle("fa-eye-slash");
-});
-	</script>
+              <div class="card-body">
+                <form method="POST" action="" class="needs-validation" novalidate="">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
+                    <div class="invalid-feedback">
+                      Mohon isi username
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="d-block">
+                      <label for="password" class="control-label">Password</label>
+                    </div>
+                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                    <div class="invalid-feedback">
+                      Mohon isi kata sandi
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                      <label class="custom-control-label" for="remember-me">Ingat Saya</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="3">
+                      Login
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+            <div class="simple-footer">
+              Copyright &copy; Project Pintar 2023
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="assets/js/stisla.js"></script>
+
+  <!-- JS Libraies -->
+
+  <!-- Template JS File -->
+  <script src="assets/js/scripts.js"></script>
+  <script src="assets/js/custom.js"></script>
+
+  <!-- Page Specific JS File -->
 </body>
+
 </html>

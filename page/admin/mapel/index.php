@@ -6,7 +6,7 @@ require_once '../helper/connection.php';
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>List Jurusan</h1>
+    <h1>List Mata Pelajaran</h1>
     <a href="./create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -18,8 +18,8 @@ require_once '../helper/connection.php';
               <thead>
                 <tr class="text-center">
                   <th>No</th>
-                  <th>Kode Jurusan</th>
-                  <th>Nama Jurusan</th>
+                  <th>Kode Mata Pelajaran</th>
+                  <th>Nama Mata Pelajaran</th>
                   <th style="width: 150">Aksi</th>
                 </tr>
               </thead>
@@ -30,10 +30,10 @@ require_once '../helper/connection.php';
                     <td></td>
                     <td></td>
                     <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?kode_jurusan=">
+                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?kode_mapel=">
                         <i class="fas fa-trash fa-fw"></i>
                       </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?kode_jurusan=">
+                      <a class="btn btn-sm btn-info" href="edit.php?kode_mapel=">
                         <i class="fas fa-edit fa-fw"></i>
                       </a>
                     </td>
