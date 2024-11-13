@@ -1,34 +1,18 @@
 <?php
-include 'helper/config.php';
-session_start(); 
-$pesan = "";
+require_once 'helper/connection.php';
+session_start();
 if (isset($_POST['submit'])) {
-    $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
-    $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
-    $query = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik' AND password_guru='$pass'");
-    if (!$query) {
-        die("Query Error: " . mysqli_error($koneksi)); 
-    }
-    $row = mysqli_num_rows($query);
-    if ($row > 0) {
-        $data = mysqli_fetch_array($query);
+  $username = $_POST['username'];
+  $password = $_POST['password'];
 
-        $_SESSION['nik'] = $data['nik'];
-        $_SESSION['email_guru'] = $data['email_guru'];
-        $_SESSION['nama_guru'] = $data['nama_guru'];
-		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
-        header("location:dashboard/index.php");
-    } else {
-        header("location:login.php?aksi=eror");
-    }
-}
-if (isset($_GET['aksi'])) {
-    $aksi = $_GET['aksi'];
-    if ($aksi == 'eror') {
-        $pesan = "Username atau Password yang Anda masukkan salah.";
-    } elseif ($aksi == 'belum') {
-        $pesan = "Anda belum login.";
-    }
+  $sql = "SELECT * FROM login WHERE username='$username' and password='$password' LIMIT 1";
+  $result = mysqli_query($connection, $sql);
+
+  $row = mysqli_fetch_assoc($result);
+  if ($row) {
+    $_SESSION['login'] = $row;
+    header('Location: index.php');
+  }
 }
 ?>
 
@@ -39,7 +23,6 @@ if (isset($_GET['aksi'])) {
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Login &mdash; E-Saturasi</title>
-  <link rel="icon" type="image/x-icon" href="../../assets/favicon.png" />
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -71,10 +54,10 @@ if (isset($_GET['aksi'])) {
               <div class="card-body">
                 <form method="POST" action="" class="needs-validation" novalidate="">
                   <div class="form-group">
-                    <label for="nik">NIK</label>
-                    <input id="nik" type="text" class="form-control" name="nik" tabindex="1" required autofocus>
+                    <label for="username">Username</label>
+                    <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
-                      Mohon isi NIK
+                      Mohon isi username
                     </div>
                   </div>
 
@@ -88,7 +71,12 @@ if (isset($_GET['aksi'])) {
                     </div>
                   </div>
 
-                  
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
+                      <label class="custom-control-label" for="remember-me">Ingat Saya</label>
+                    </div>
+                  </div>
 
                   <div class="form-group">
                     <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="3">
