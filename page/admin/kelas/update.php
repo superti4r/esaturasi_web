@@ -1,22 +1,25 @@
 <?php
-session_start();
-require_once '../helper/connection.php';
+require_once '../helper/config.php';
 
-$kode_matkul = $_POST['kode_matkul'];
-$nama_matkul = $_POST['nama_matkul'];
-$sks = $_POST['sks'];
+if (isset($_POST['kirim'])) {
+  // Mendapatkan data dari form
+  $kd_kelas = $_POST['kd_kelas'];
+  $nama_kelas = $_POST['nama_kelas'];
+  $kd_jurusan = $_POST['kd_jurusan'];
 
-$query = mysqli_query($connection, "UPDATE matakuliah SET nama_matkul = '$nama_matkul', sks = '$sks' WHERE kode_matkul = '$kode_matkul'");
-if ($query) {
-  $_SESSION['info'] = [
-    'status' => 'success',
-    'message' => 'Berhasil mengubah data'
-  ];
-  header('Location: ./index.php');
+  // Update data
+  $query = mysqli_query($koneksi, "UPDATE kelas SET 
+    nama_kelas = '$nama_kelas', 
+    kd_jurusan = '$kd_jurusan'
+    WHERE kd_kelas = '$kd_kelas'");
+
+  if ($query) {
+    header("Location: index.php?aksi=suksesedit");
+    exit;
+  } else {
+    echo "Error: " . mysqli_error($koneksi);
+  }
 } else {
-  $_SESSION['info'] = [
-    'status' => 'failed',
-    'message' => mysqli_error($connection)
-  ];
-  header('Location: ./index.php');
+  echo "Data tidak valid.";
 }
+?>

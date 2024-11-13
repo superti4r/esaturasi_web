@@ -1,89 +1,166 @@
-<?php
+<?php 
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
+require_once '../helper/config.php';
+// digunakan untuk mencari data dan menampilkan data guru
+$katakunci = "";
+if (isset($_POST['cari'])) {
+    $katakunci = $_POST['kata_kunci'];
+    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal ORDER BY hari ASC");
+} else {
+    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal ORDER BY hari ASC");
+}
 
+// Cek apakah query berhasil
+if ($sql && mysqli_num_rows($sql) > 0) {
+    $row = mysqli_num_rows($sql);
+} else {
+    echo "Error: " . mysqli_error($koneksi); 
+}
 
+if (isset($_POST['delete_selected'])) {
+    if (!empty($_POST['selected_ids'])) {
+        $ids_to_delete = implode(",", $_POST['selected_ids']);
+        mysqli_query($koneksi, "DELETE FROM siswa WHERE nisn IN ($ids_to_delete)");
+        header("Location:siswa.php?aksi=hapusok");
+    } else {
+        echo "<script>alert('Pilih minimal satu data untuk dihapus.');</script>";
+    }
+}
+
+// untuk menampilkan pesan berhasil menambah data siswa
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksestambah") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil ditambahkan');
+    </script>
+    ";
+  }
+} 
+
+// untuk menampilkan pesan berhasil edit data siswa
+if (isset($_GET['aksi'])) {
+  $aksi=$_GET['aksi'];
+  if ($aksi=="suksesedit") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil diubah');
+    </script>
+    ";
+
+// untuk menampilkan pesan berhasil menghapus data siswa
+  } elseif ($aksi=="hapusok") {
+    echo "
+    <script>
+    alert('selamat data anda berhasil hapus');
+    </script>
+    ";
+  }
+}
+$loggedInNik = isset($_SESSION['nik']) ? $_SESSION['nik'] : '';
+ob_end_flush();
 ?>
-
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>List Jadwal</h1>
-    <a href="./create.php" class="btn btn-primary">Tambah Data</a>
+    <h1>Data Mata Pelajaran</h1>
+    <a href="create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="card">
+    <div class="card pb-4">
         <div class="card-body">
+          <!-- Removed the search form from here -->
+          <div class="d-flex justify-content-between mt-4 mb-1">
+           
+            </div>
+          </div>
           <div class="table-responsive">
             <table class="table table-hover table-striped w-100" id="table-1">
               <thead>
                 <tr>
-                  <th>Kode Jadwal</th>
-                  <th>Nama Kelas</th>
-                  <th>Hari</th>
-                  <th>Mata Pelajaran</th>
-                  <th>Nama Guru</th>
-                  <th>Jam Mengajar</th>
-                  <th style="width: 150">Aksi</th>
+                <th>Kode Jadwal</th>
+            <th>Mata Pelajaran</th>
+            <th>Hari</th>
+            <th>Dari Jam</th>
+            <th>Sampai Jam</th>
+            <th>Kelas</th>
+            <th>Pengajar</th>
+            <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <a class="btn btn-sm btn-danger mb-md-0 mb-1" href="delete.php?jadwal=">
-                        <i class="fas fa-trash fa-fw"></i>
-                      </a>
-                      <a class="btn btn-sm btn-info" href="edit.php?jadwal=">
-                        <i class="fas fa-edit fa-fw"></i>
-                      </a>
-                    </td>
-                  </tr>
+              <tbody id="tableData">
+                <?php
+              $row = mysqli_num_rows($sql);
+                for ($i = 0; $i < $row; $i++) { 
+                    $data = mysqli_fetch_array($sql);
+                ?>
+                <tr>
+                <td><?php echo $data['kd_jadwal']; ?></td>
+            <td><?php echo $data['nama_mapel']; ?></td> 
+            <td><?php echo $data['hari']; ?></td>
+            <td><?php echo $data['dari_jam']; ?></td>
+            <td><?php echo $data['sampai_jam']; ?></td>
+            <td><?php echo $data['nama_kelas']; ?></td> 
+            <td><?php echo $data['nama_guru']; ?></td> 
+                  <td>
+                  <a href="edit.php?kd_mapel=<?php echo $data['kd_mapel']; ?>"><button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button></a>
+
+</a>                  <a href="delete.php?kd_mapel=<?php echo $data['kd_mapel']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang Anda pilih akan dihapus?')"><button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i> </button></a>
+                </td>
+
+                </tr>
+                <?php } ?>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </section>
-
 <?php
 require_once '../layout/_bottom.php';
-?>
-<!-- Page Specific JS File -->
-<?php
-if (isset($_SESSION['info'])) :
-  if ($_SESSION['info']['status'] == 'success') {
-?>
-    <script>
-      iziToast.success({
-        title: 'Sukses',
-        message: `<?= $_SESSION['info']['message'] ?>`,
-        position: 'topCenter',
-        timeout: 5000
-      });
-    </script>
-  <?php
-  } else {
-  ?>
-    <script>
-      iziToast.error({
-        title: 'Gagal',
-        message: `<?= $_SESSION['info']['message'] ?>`,
-        timeout: 5000,
-        position: 'topCenter'
-      });
-    </script>
-<?php
-  }
 
-  unset($_SESSION['info']);
-  $_SESSION['info'] = null;
-endif;
 ?>
-<script src="../assets/js/page/modules-datatables.js"></script>
+
+<td>
+<script>
+$(document).ready(function () {
+  // Event saat tombol cari diklik
+  $("#cariBtn").click(function () {
+    var kataKunci = $("#kataKunci").val(); // Mengambil nilai dari input pencarian
+
+    // Mengirim permintaan AJAX untuk melakukan pencarian
+    $.ajax({
+      url: "index.php", // URL untuk file PHP yang akan memproses pencarian
+      method: "POST",
+      data: { cari: true, kata_kunci: kataKunci },
+      success: function (response) {
+        // Menampilkan hasil pencarian pada tabel
+        $("#tableData").html(response);  // Update table body with the new data
+        // Reinitialize DataTable after updating the table
+        $("#table-1").DataTable().clear().destroy();
+        $("#table-1").DataTable({
+          "language": {
+            "emptyTable": "Data Tidak Tersedia", 
+            "zeroRecords": "Data Tidak Tersedia" 
+          }
+        });
+      },
+      error: function () {
+        alert("Terjadi kesalahan saat mencari data.");
+      },
+    });
+  });
+
+  // Inisialisasi DataTables pertama kali
+  $("#table-1").dataTable({
+    "language": {
+      "emptyTable": "Data Tidak Tersedia", 
+      "zeroRecords": "Data Tidak Tersedia" 
+    }
+  });
+});
+
+</script>

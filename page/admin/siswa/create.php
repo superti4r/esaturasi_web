@@ -1,101 +1,135 @@
 <?php
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
-
+require_once '../helper/config.php';
+// Mendapatkan tanggal hari ini
+$current_date = date('Y-m-d');
 ?>
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
     <h1>Tambah Siswa</h1>
-    <a href="./index.php" class="btn btn-light">Kembali</a>
+    <a href="./index.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> </a>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <!-- // Form -->
-          <form action="./store.php" method="POST">
+          <!-- Form -->
+          <form action="store.php" method="POST" enctype="multipart/form-data">
             <table cellpadding="8" class="w-100">
+
               <tr>
-                <td>NIK</td>
-                <td><input class="form-control" type="number" name="nik"></td>
+                <td>NISN</td>
+                <td><input class="form-control" type="text" name="nisn" required placeholder="10 Digit"></td>
               </tr>
 
               <tr>
-                <td>Nama Siswa</td>
-                <td><input class="form-control" type="text" name="nama"></td>
-              </tr>
-
-              <tr>
-                <td>Jenis Kelamin</td>
-                <td>
-                  <select class="form-control" name="jenkel" id="jenkel" required>
-                    <option value="">--Pilih Jenis Kelamin--</option>
-                    <option value="Pria">Pria</option>
-                    <option value="Wanita">Wanita</option>
-                  </select>
-                </td>
+                <td>Nama Lengkap</td>
+                <td><input class="form-control" type="text" name="nama_siswa" placeholder="Tidak Boleh Mengandung Angka/Simbol"></td>
               </tr>
 
               <tr>
                 <td>Tempat Lahir</td>
-                <td><input class="form-control" type="text" name="tempat_lahir" size="20"></td>
+                <td><input class="form-control" type="text" name="tempat_lahir" placeholder="Contoh Probolinggo"></td>
               </tr>
 
+              
               <tr>
                 <td>Tanggal Lahir</td>
-                <td><input class="form-control" type="date" id="datepicker" name="tanggal_lahir"></td>
+                <td><input class="form-control" type="date" name="tgl_lahir_siswa" max="<?= $current_date ?>" required></td>
               </tr>
 
+             
               <tr>
-                <td>Alamat</td>
-                <td><textarea name="alamat" class="form-control"></textarea></td>
-              </tr>
-
-              <tr>
-                <td>Kelas</td>
+                <td>Jenis Kelamin</td>
                 <td>
-                  <select class="form-control" name="kelas" id="kelas" required>
-                    <option value="">--Pilih Kelas--</option>
-                    <option value="Teknik Informatika">X</option>
-                    <option value="Sistem Informasi">XI</option>
-                    <option value="Sistem Informasi">XII</option>
+                  <select class="form-control" name="jekel_siswa" required>
+                    <option value="" disable>--Pilih Jenis Kelamin--</option>
+                    <option value="l">Laki-Laki</option>
+                    <option value="p">Perempuan</option>
                   </select>
                 </td>
               </tr>
 
               <tr>
-                <td>Foto Siswa</td>
-                <td><input class="form-control" type="file" name="foto" accept="image/*" required></td>
+                <td>Email
+                <td><input class="form-control" type="text" name="email" placeholder="Sesuaikan dengan Penulisan Email (person@gmail.com)"></td>
+              </tr>
+              <tr>
+                <td>No Telepon
+                <td><input class="form-control" type="text" name="no_telepon_siswa" placeholder="Tidak Boleh Mengandung Huruf dan Min 10 Max 13"></td>
               </tr>
 
               <tr>
-                <td>No Telpon</td>
-                <td><input class="form-control" type="phone" name="phone"></td>
-              </tr>
-
-              <tr>
-                <td>Email</td>
-                <td><input class="form-control" type="email" name="email"></td>
-              </tr>
-
-              <tr>
-                <td>Password</td>
-                <td><input class="form-control" type="password" name="password"></td>
-              </tr>
-
-              <tr>
+                <td>Tahun Masuk</td>
                 <td>
-                  <input class="btn btn-primary" type="submit" name="proses" value="Simpan">
+                  <select class="form-control" name="tahun_masuk_siswa" required>
+                    <option value="" disabled selected>--Pilih Tahun Masuk--</option>
+                    <?php
+                     $tahunSekarang = date("Y");
+                        for ($i = $tahunSekarang - 4; $i < $tahunSekarang + 1; $i++) {
+                            echo "<option value=\"$i\">$i</option>";
+                                                                    }
+                                                                ?>
+                  </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Pilih Kelas</td>
+                <td>
+                  <select class="form-control" name="kd_kelas" required>
+                    <option value="" disabled selected>--Pilih Kelas--</option>
+                    <?php
+            $queryKelas = mysqli_query($koneksi, "SELECT kd_kelas, nama_kelas FROM kelas ORDER BY nama_kelas ASC");
+            while ($kelas = mysqli_fetch_assoc($queryKelas)) {
+                echo "<option value=\"{$kelas['kd_kelas']}\">{$kelas['nama_kelas']}</option>";
+            }
+        ?>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Alamat</td>
+                <td colspan="3"><textarea class="form-control" name="alamat" required placeholder="Contoh : Jln Brawijaya N0.10 Kab Probolinggo"></textarea></td>
+              </tr>
+
+              <!-- Password otomatis (input hidden) -->
+              <tr>
+                <td><input type="hidden" name="password" value="saturasi123"></td>
+              </tr>
+
+              <tr>
+                <td colspan="3">
+                  <button type="submit" name="proses" class="btn btn-success">Simpan</button>
                   <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
                 </td>
               </tr>
+
             </table>
           </form>
         </div>
       </div>
     </div>
+  </div>
 </section>
+<script>
+    // Mendapatkan elemen tombol reset
+    const resetButton = document.querySelector('input[type="reset"]');
+
+    // Menambahkan event listener untuk tombol reset
+    resetButton.addEventListener('click', function(event) {
+      
+        // Jika ingin membersihkan gambar yang sudah di-upload
+        const fotoInput = document.querySelector('input[name="foto"]');
+        if (fotoInput) {
+            fotoInput.value = ''; // Mengosongkan input file jika ada
+        }
+
+        // Jika ingin mereset seluruh form
+        document.getElementById('form-tambah-guru').reset();
+    });
+</script>
 
 <?php
 require_once '../layout/_bottom.php';

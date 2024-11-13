@@ -10,7 +10,7 @@
     </div>
     <ul class="sidebar-menu">
       <li class="menu-header">Dashboard</li>
-      <li><a class="nav-link" href="../"><i class="fas fa-home"></i> <span>Halaman Utama</span></a></li>
+      <li><a class="nav-link" href="../dashboard/index.php"><i class="fas fa-home"></i> <span>Halaman Utama</span></a></li>
       <li class="menu-header">Master</li>
       <li class="dropdown">
         <a href="../guru/index.php"><i class="fas fa-user"></i> <span>Data Guru</span></a>
@@ -25,7 +25,10 @@
         <a href="../kelas/index.php"><i class="fas fa-school"></i> <span>Data Kelas</span></a>
       </li>
       <li class="dropdown">
-        <a href="../mapel/index.php"><i class="fas fa-book"></i> <span>Data Mata Pelajaran</span></a>
+        <a href="../mata_pelajaran/index.php"><i class="fas fa-book"></i> <span>Data Mata Pelajaran</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="../mata_pelajaran_perkelas/index.php"><i class="fas fa-book"></i> <span>Data Mata Pelajaran Kelas</span></a>
       </li>
       <li class="dropdown">
         <a href="../jadwal/index.php"><i class="fas fa-table"></i> <span>Data Jadwal</span></a>

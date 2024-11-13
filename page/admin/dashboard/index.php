@@ -1,16 +1,6 @@
 <?php
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
-
-$mahasiswa = mysqli_query($connection, "SELECT COUNT(*) FROM mahasiswa");
-$dosen = mysqli_query($connection, "SELECT COUNT(*) FROM dosen");
-$matakuliah = mysqli_query($connection, "SELECT COUNT(*) FROM matakuliah");
-$nilai = mysqli_query($connection, "SELECT COUNT(*) FROM nilai");
-
-$total_mahasiswa = mysqli_fetch_array($mahasiswa)[0];
-$total_dosen = mysqli_fetch_array($dosen)[0];
-$total_matakuliah = mysqli_fetch_array($matakuliah)[0];
-$total_nilai = mysqli_fetch_array($nilai)[0];
+require_once '../helper/config.php';
 ?>
 
 <section class="section">
@@ -29,7 +19,7 @@ $total_nilai = mysqli_fetch_array($nilai)[0];
               <h4>Total Guru</h4>
             </div>
             <div class="card-body">
-              <?= $total_dosen ?>
+              <!-- <?= $total_dosen ?> -->
             </div>
           </div>
         </div>
@@ -44,7 +34,7 @@ $total_nilai = mysqli_fetch_array($nilai)[0];
               <h4>Total Siswa</h4>
             </div>
             <div class="card-body">
-              <?= $total_mahasiswa ?>
+              <!-- <?= $total_mahasiswa ?> -->
             </div>
           </div>
         </div>
@@ -62,7 +52,7 @@ $total_nilai = mysqli_fetch_array($nilai)[0];
               <h4>Total Kelas</h4>
             </div>
             <div class="card-body">
-              <?= $total_matakuliah ?>
+              <!-- <?= $total_matakuliah ?> -->
             </div>
           </div>
         </div>
@@ -77,7 +67,7 @@ $total_nilai = mysqli_fetch_array($nilai)[0];
               <h4>Total Mata Pelajaran</h4>
             </div>
             <div class="card-body">
-              <?= $total_nilai ?>
+              <!-- <?= $total_nilai ?> -->
             </div>
           </div>
         </div>

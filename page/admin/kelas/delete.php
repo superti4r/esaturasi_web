@@ -1,21 +1,24 @@
 <?php
 session_start();
-require_once '../helper/connection.php';
-
-$kode_matkul = $_GET['kode_matkul'];
-
-$result = mysqli_query($connection, "DELETE FROM matakuliah WHERE kode_matkul='$kode_matkul'");
-
-if (mysqli_affected_rows($connection) > 0) {
-  $_SESSION['info'] = [
-    'status' => 'success',
-    'message' => 'Berhasil menghapus data'
-  ];
-  header('Location: ./index.php');
-} else {
-  $_SESSION['info'] = [
-    'status' => 'failed',
-    'message' => mysqli_error($connection)
-  ];
-  header('Location: ./index.php');
+require_once '../helper/config.php';
+//hapus data 
+if (isset($_GET['pesan'])) {
+  $kd_kelas = $_GET['kd_kelas'];
+  
+  // Set kolom kd_kelas menjadi NULL pada tabel siswa
+  $query_update = mysqli_query($koneksi, "UPDATE siswa SET kd_kelas=NULL WHERE kd_kelas='$kd_kelas'");
+  
+  if ($query_update) {
+    // Hapus data dari tabel kelas setelah kolom kd_kelas di tabel siswa dikosongkan
+    $query_delete = mysqli_query($koneksi, "DELETE FROM kelas WHERE kd_kelas='$kd_kelas'");
+    if ($query_delete) {
+      header("Location: index.php?aksi=hapusok");
+      exit();
+    } else {
+      echo "Error: " . mysqli_error($koneksi);
+    }
+  } else {
+    echo "Error: " . mysqli_error($koneksi);
+  }
 }
+?>
