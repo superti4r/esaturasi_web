@@ -24,14 +24,15 @@ if (isset($_POST['submit'])) {
     }
 }
 if (isset($_GET['aksi'])) {
-    $aksi = $_GET['aksi'];
-    if ($aksi == 'eror') {
-        $pesan = "Username atau Password yang Anda masukkan salah.";
-    } elseif ($aksi == 'belum') {
-        $pesan = "Anda belum login.";
-    }
+  $aksi = $_GET['aksi'];
+  if ($aksi == 'eror') {
+      $pesan = "Username atau Password yang Anda masukkan salah.";
+  } elseif ($aksi == 'belum') {
+      $pesan = "Anda belum login.";
   }
-  ?>
+}
+?>
+  
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,6 +94,8 @@ if (isset($_GET['aksi'])) {
                     </button>
                   </div>
                 </form>
+                <br><center>
+							<font color="red"><?php echo  $pesan; ?></font>
 </div>
               </div>
             </div>
