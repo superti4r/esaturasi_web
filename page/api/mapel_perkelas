@@ -1,0 +1,31 @@
+<?php
+require_once '../helper/config.php';
+
+if (isset($_GET['nisn'])) {
+    $id_siswa = $_GET['nisn'];
+    
+    // Cari kelas siswa berdasarkan id_siswa
+    $query_kelas = mysqli_query($koneksi, "SELECT kd_kelas FROM siswa WHERE id_siswa = '$id_siswa'");
+    $data_kelas = mysqli_fetch_assoc($query_kelas);
+    $kd_kelas = $data_kelas['kd_kelas'];
+
+    // Ambil mata pelajaran sesuai kelas siswa
+    $sql_mapel = "
+        SELECT mapel.nama_mapel, mapel.kode_mpp 
+        FROM vmpp 
+        JOIN mapel ON vmpp.kd_mapel = mapel.kd_mapel 
+        WHERE vmpp.kd_kelas = '$kd_kelas'
+    ";
+
+    $result = mysqli_query($koneksi, $sql_mapel);
+    $mapel = [];
+    
+    while ($row = mysqli_fetch_assoc($result)) {
+        $mapel[] = $row;
+    }
+
+    echo json_encode($mapel);
+} else {
+    echo json_encode(["error" => "id_siswa is required"]);
+}
+?>

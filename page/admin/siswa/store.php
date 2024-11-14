@@ -3,7 +3,6 @@
 session_start();
 require_once '../helper/config.php';
 
-
 // Proses tambah data siswa
 if (isset($_POST['proses'])) {
   $nisn = $_POST['nisn'];
@@ -15,7 +14,7 @@ if (isset($_POST['proses'])) {
   $alamat = $_POST['alamat'];
   $tempat_lahir = $_POST['tempat_lahir'];
   $tahun_masuk_siswa = $_POST['tahun_masuk_siswa'];
-  $password = $nisn;
+  $password = $nisn;  // Anda bisa mengganti ini jika ingin password berbeda
   $kd_kelas = $_POST['kd_kelas'];
   $foto_profil_siswa = "";
   $status_siswa = "Aktif";
@@ -34,7 +33,6 @@ if (isset($_POST['proses'])) {
   if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $errors[] = "Email tidak valid.";
   }
-  
 
   if (!preg_match('/^[0-9]{10,13}$/', $no_telepon_siswa)) {
       $errors[] = "No telepon harus terdiri dari 10 hingga 13 angka.";
@@ -55,8 +53,12 @@ if (isset($_POST['proses'])) {
       exit();
   }
 
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+
   // Menyimpan data ke tabel siswa
-  $sql = "INSERT INTO siswa (nisn, nama_siswa, email, no_telepon_siswa, jekel_siswa, tempat_lahir_siswa, tgl_lahir_siswa, alamat, tahun_masuk_siswa, status_siswa, kd_kelas, password, foto_profil_siswa) VALUES ('$nisn', '$nama_siswa', '$email', '$no_telepon_siswa', '$jekel_siswa', '$tempat_lahir', '$tgl_lahir_siswa', '$alamat', '$tahun_masuk_siswa', '$status_siswa', '$kd_kelas', '$password', '$foto_profil_siswa')";
+  $sql = "INSERT INTO siswa (nisn, nama_siswa, email, no_telepon_siswa, jekel_siswa, tempat_lahir_siswa, tgl_lahir_siswa, alamat, tahun_masuk_siswa, status_siswa, kd_kelas, password, foto_profil_siswa) 
+          VALUES ('$nisn', '$nama_siswa', '$email', '$no_telepon_siswa', '$jekel_siswa', '$tempat_lahir', '$tgl_lahir_siswa', '$alamat', '$tahun_masuk_siswa', '$status_siswa', '$kd_kelas', '$hashed_password', '$foto_profil_siswa')";
 
   // Eksekusi query
   if (mysqli_query($koneksi, $sql)) {
