@@ -1,56 +1,50 @@
 <?php
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
+
+$current_date = date('Y-m-d');
 ?>
-
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Tambah Artikel</h1>
-    <a href="./index.php" class="btn btn-light">Kembali</a>
+    <h1>Tambah Pengumuman</h1>
+    <a href="./index.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> </a>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <!-- // Form -->
-          <form action="./store.php" method="POST">
+          <!-- Form -->
+          <form action="store.php" method="POST" enctype="multipart/form-data">
             <table cellpadding="8" class="w-100">
-              <tr>
-                <td>Kode Artikel</td>
-                <td><input class="form-control" type="text" name="kode_artikel" size="20" required></td>
-              </tr>
 
-              <tr>
-                <td>Judul Artikel</td>
-                <td><input class="form-control" type="text" name="judul_artikel" size="20" required></td>
+            <tr>
+                <td>Judul</td>
+                <td><input type="text" class="form-control" name="judul" id="judul"></td>
               </tr>
-
               <tr>
-                <td>Gambar</td>
-                <td><input class="form-control" type="file" name="foto" accept="image/*" required></td>
-              </tr>
-
-              <tr>
-                <td>Tanggal Upload</td>
-                <td><input class="form-control" type="date" name="tanggal_artikel" size="20" required></td>
-              </tr>
-
-              <tr>
-                <td>Isi Artikel</td>
+                <td>Tanggal Pengumuman</td>
+                <td><input type="text" class="form-control" name="tgl_pengumuman_display" value="<?php echo date('d-F-Y'); ?>" readonly>
+                <input type="hidden" name="tgl_pengumuman" value="<?php echo date('Y-m-d'); ?>" required>
                 <td>
-                  <div id="editor" style="height: 200px;"></div>
-                  <input type="hidden" name="isi_artikel" id="isi_artikel">
+              </tr>
+
+              <tr>
+                <td>File (Berupa Gambar)</td>
+                <td> 
+                <input type="file" class="form-control" name="file" id="file" required></td>
+              </tr>
+
+              <tr>
+                <td>Deskripsi Pengumuman</td>
+                <td><textarea class="form-control" name="deskripsi" ></textarea></td>
+              </tr>
+
+
+              <tr>
+                <td colspan="3">
+                  <button type="submit" name="kirim" class="btn btn-success">Simpan</button>
+                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
                 </td>
-              </tr>
-              
-              <tr>
-                <td>
-                  <input class="btn btn-primary" type="submit" name="proses" value="Simpan">
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan"></td>
               </tr>
 
             </table>
@@ -58,20 +52,25 @@ require_once '../helper/connection.php';
         </div>
       </div>
     </div>
+  </div>
 </section>
-
 <script>
-  // Inisialisasi QuillJS
-  var quill = new Quill('#editor', {
-    theme: 'snow'
-  });
+    // Mendapatkan elemen tombol reset
+    const resetButton = document.querySelector('input[type="reset"]');
 
-  // Ambil data dari Quill sebelum form di-submit
-  document.querySelector('form').onsubmit = function() {
-    document.querySelector('#isi_artikel').value = quill.root.innerHTML;
-  };
+    // Menambahkan event listener untuk tombol reset
+    resetButton.addEventListener('click', function(event) {
+      
+        // Jika ingin membersihkan gambar yang sudah di-upload
+        const fotoInput = document.querySelector('input[name="foto"]');
+        if (fotoInput) {
+            fotoInput.value = ''; // Mengosongkan input file jika ada
+        }
+
+        // Jika ingin mereset seluruh form
+        document.getElementById('form-tambah-guru').reset();
+    });
 </script>
-
 
 <?php
 require_once '../layout/_bottom.php';

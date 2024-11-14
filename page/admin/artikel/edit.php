@@ -1,79 +1,115 @@
 <?php
+
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
+require_once '../helper/config.php';
+
+$nama = $_SESSION['nama_guru'];
+$email = $_SESSION['email_guru'];
+$foto = $_SESSION['foto_profil_guru'];
+
+$id_pengumuman = $_GET['kd_pengumuman'];
+$sql = mysqli_query($koneksi, "SELECT pengumuman.*, guru.nama_guru 
+                               FROM pengumuman 
+                               JOIN guru ON pengumuman.nik = guru.nik 
+                               WHERE pengumuman.kd_pengumuman='$id_pengumuman'");
+$data = mysqli_fetch_array($sql);
+
+$tanggal_display = date('d-F-Y', strtotime($data['tgl_pengumuman']));
+$tanggal_hidden = date('Y-m-d', strtotime($data['tgl_pengumuman']));
 
 ?>
 
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
-
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Ubah Artikel</h1>
-    <a href="./index.php" class="btn btn-light">Kembali</a>
+    <h1>Edit Pengumuman</h1>
+    <a href="./index.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> </a>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <!-- // Form -->
-          <form action="./update.php" method="post">
-              <input type="hidden" name="nisn" value="">
-              <table cellpadding="8" class="w-100">
-              <tr>
-                <td>Kode Artikel</td>
-                <td><input class="form-control" type="text" name="kode_artikel" size="20" required></td>
-              </tr>
+          <!-- Edit Form -->
+          <form id="form-edit-guru" action="update.php" method="POST" enctype="multipart/form-data">
+    <table cellpadding="8" class="w-100">
+      <!-- foto lama -->
+      <input type="hidden" name="file_lama" value="<?php echo htmlspecialchars($data['file_pengumuman']); ?>">
+      <!-- Input tersembunyi untuk menyimpan NIP (nik) -->
+      <input type="hidden" name="nik" value="<?php echo $data['nik']; ?>">
+        <input type="hidden" name="kd_pengumuman" value="<?php echo $id_pengumuman; ?>">
 
-              <tr>
-                <td>Judul Artikel</td>
-                <td><input class="form-control" type="text" name="judul_artikel" size="20" required></td>
-              </tr>
+        <tr>
+            <td>Nama Pembuat</td>
+            <td> <input type="text" class="form-control" name="nama_guru" id="kode" value="<?php echo $data['nama_guru']; ?>" readonly></td>
+        </tr>
+        <tr>
+            <td>Judul Pengumuman</td>
+            <td><input type="text" class="form-control" name="judul" id="kode" value="<?php echo $data['judul_pengumuman']; ?>"></td>
+            </div>
+        </tr>
+        <tr>
+            <td>Tanggal Pengumuman</td>
+            <td><input type="text" class="form-control" name="tgl_pengumuman_display" value="<?php echo $tanggal_display; ?>" readonly>
+            <input type="hidden" name="tgl_pengumuman" value="<?php echo $tanggal_hidden; ?>" required></td>
+            </div>
+        </tr>
+       
+        <tr>
+            <td>File Pengumuman</td>
+            <td>
+            <?php 
+                $file_path = "../uploads/pengumuman/" . $data['file_pengumuman'];
+                // Cek apakah file tersedia dan file benar-benar ada
+                if (!empty($data['file_pengumuman']) && file_exists($file_path)): 
+            ?>
+                <img src="<?php echo $file_path; ?>" alt="Foto Pengumuman" width="25%" height="25%" style="display:block; margin-bottom:10px;">
+            <?php else: ?>
+                <p>Gambar tidak tersedia.</p>
+            <?php endif; ?>
+            
+            <!-- Input untuk upload file -->
+            <input type="file" class="form-control" name="file">
+        </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Deskripsi Pengumuman</td>
+            <td><textarea class="form-control" name="deskripsi"><?php echo $data['deskripsi_pengumuman']; ?></textarea></td>
+            </div>
+        </tr>
+       
 
-              <tr>
-                <td>Gambar</td>
-                <td><input class="form-control" type="file" name="foto" accept="image/*" required></td>
-              </tr>
+        <tr>
+            <td colspan="3">
+                <button type="submit" name="kirim" class="btn btn-success">Simpan Perubahan</button>
+                <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+            </td>
+        </tr>
+    </table>
+</form>
 
-              <tr>
-                <td>Tanggal Upload</td>
-                <td><input class="form-control" type="date" name="tanggal_artikel" size="20" required></td>
-              </tr>
-
-              <tr>
-                <td>Isi Artikel</td>
-                <td>
-                  <div id="editor" style="height: 200px;"></div>
-                  <input type="hidden" name="isi_artikel" id="isi_artikel">
-                </td>
-              </tr>
-
-                <tr>
-                  <td>
-                    <input class="btn btn-primary d-inline" type="submit" name="proses" value="Ubah">
-                    <a href="./index.php" class="btn btn-danger ml-1">Batal</a>
-                <td>
-              </tr>
-            </table>
-          </form>
         </div>
       </div>
     </div>
+  </div>
 </section>
 
 <script>
-  // Inisialisasi QuillJS
-  var quill = new Quill('#editor', {
-    theme: 'snow'
-  });
+    // Mendapatkan elemen tombol reset
+    const resetButton = document.querySelector('input[type="reset"]');
 
-  // Ambil data dari Quill sebelum form di-submit
-  document.querySelector('form').onsubmit = function() {
-    document.querySelector('#isi_artikel').value = quill.root.innerHTML;
-  };
+    // Menambahkan event listener untuk tombol reset
+    resetButton.addEventListener('click', function(event) {
+      
+        // Jika ingin membersihkan gambar yang sudah di-upload
+        const fotoInput = document.querySelector('input[name="foto"]');
+        if (fotoInput) {
+            fotoInput.value = ''; // Mengosongkan input file jika ada
+        }
+
+        // Jika ingin mereset seluruh form
+        document.getElementById('form-tambah-guru').reset();
+    });
 </script>
-
 
 <?php
 require_once '../layout/_bottom.php';

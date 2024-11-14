@@ -40,7 +40,7 @@ $kd="KL".sprintf("%02s", $kd);
                 <td>Jurusan</td>
                 <td>
                   <select class="form-control" name="kd_jurusan" required>
-                    <option value="" disable>--Pilih Jenis Kelamin--</option>
+                    <option value="" disable>--Pilih Kelas--</option>
                     <?php
                         // Ambil data jurusan dari database
                         $queryJurusan = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY nama_jurusan ASC");

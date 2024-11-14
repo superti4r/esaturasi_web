@@ -36,6 +36,9 @@
       <li class="dropdown">
         <a href="../artikel/index.php"><i class="fas fa-newspaper"></i> <span>Data Artikel</span></a>
       </li>
+      <li class="dropdown">
+        <a href="../admin/index.php"><i class="fas fa-newspaper"></i> <span>Data Admin</span></a>
+      </li>
     </ul>
   </aside>
 </div>
