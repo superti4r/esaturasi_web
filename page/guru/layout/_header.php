@@ -8,14 +8,21 @@
   </form>
   <ul class="navbar-nav navbar-right">
     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-        <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-        <div class="d-sm-none d-lg-inline-block">Hi, <?= $_SESSION['login']['username'] ?></div>
+    <?php 
+      // Cek apakah ada foto profil yang diset dalam session
+      if (!empty($_SESSION['foto_profil_guru'])): ?>
+        <img src="<?php echo $_SESSION['foto_profil_guru']; ?>" alt="image" class="rounded-circle mr-1">
+      <?php else: ?>
+        <!-- Jika tidak ada, tampilkan gambar default -->
+        <img src="../assets/img/avatar/avatar-1.png" alt="image" class="rounded-circle mr-1">
+      <?php endif; ?>
+      <div class="d-sm-none d-lg-inline-block">Hi, <?= $_SESSION['nama_guru'] ?></div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right">
+      <a href="../logout.php" class="dropdown-item has-icon text-danger">
+        <i class="fas fa-sign-out-alt"></i> Logout
       </a>
-      <div class="dropdown-menu dropdown-menu-right">
-        <a href="../logout.php" class="dropdown-item has-icon text-danger">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-      </div>
-    </li>
+    </div>
+  </li>
   </ul>
 </nav>

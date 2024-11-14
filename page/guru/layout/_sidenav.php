@@ -13,7 +13,7 @@
       <li><a class="nav-link" href="../"><i class="fas fa-home"></i> <span>Halaman Utama</span></a></li>
       <li class="menu-header">Master</li>
       <li class="dropdown">
-        <a href="../jadwal/index.php"><i class="fas fa-table"></i> <span>Jadwal</span></a>
+        <a href="../jadwal/index.php"><i class="fas fa-table"></i> <span>Jadwal Mengajar</span></a>
       </li>
       <li class="dropdown">
         <a href="../materi/index.php"><i class="fas fa-book"></i> <span>Materi</span></a>

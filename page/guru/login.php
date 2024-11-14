@@ -1,20 +1,49 @@
 <?php
-require_once 'helper/connection.php';
-session_start();
+include 'helper/config.php';
+session_start(); 
+$pesan = "";
+
 if (isset($_POST['submit'])) {
-  $username = $_POST['username'];
-  $password = $_POST['password'];
+    $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
+    $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
+    $query = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass'");
+    if (!$query) {
+        die("Query Error: " . mysqli_error($koneksi)); 
+    }
+    $row = mysqli_num_rows($query);
+    if ($row > 0) {
+        $data = mysqli_fetch_array($query);
 
-  $sql = "SELECT * FROM login WHERE username='$username' and password='$password' LIMIT 1";
-  $result = mysqli_query($connection, $sql);
-
-  $row = mysqli_fetch_assoc($result);
-  if ($row) {
-    $_SESSION['login'] = $row;
-    header('Location: index.php');
+        $_SESSION['nik'] = $data['nik'];
+        $_SESSION['email_guru'] = $data['email_guru'];
+        $_SESSION['nama_guru'] = $data['nama_guru'];
+		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
+        header("location:dashboard/index.php");
+    } else {
+        header("location:login.php?aksi=eror");
+    }
+}
+if (isset($_GET['aksi'])) {
+  $aksi = $_GET['aksi'];
+  if ($aksi == 'eror') {
+      $pesan = "Username atau Password yang Anda masukkan salah.";
+  } elseif ($aksi == 'belum') {
+      $pesan = "Anda belum login.";
   }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Guru | E-Saturasi</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +51,8 @@ if (isset($_POST['submit'])) {
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Login &mdash; STMIK IDS</title>
-
+  <title>Login &mdash; E-Saturasi</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/favicon.png" />
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -48,17 +77,16 @@ if (isset($_POST['submit'])) {
 
             <div class="card card-primary">
               <div class="card-header">
-                <h4>Login Guru</h4>
+                <h4>Login Admin</h4>
               </div>
 
               <div class="card-body">
                 <form method="POST" action="" class="needs-validation" novalidate="">
                   <div class="form-group">
-                    <label for="username">Username</label>
-                    <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
+                  <label for="nik">NIK</label>
+                  <input id="nik" type="text" class="form-control" name="nik" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
-                      Mohon isi username
-                    </div>
+                    Mohon isi NIK
                   </div>
 
                   <div class="form-group">
@@ -71,27 +99,23 @@ if (isset($_POST['submit'])) {
                     </div>
                   </div>
 
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
-                      <label class="custom-control-label" for="remember-me">Ingat Saya</label>
-                    </div>
-                  </div>
-
+                 
                   <div class="form-group">
                     <button name="submit" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="3">
                       Login
                     </button>
                   </div>
                 </form>
-
+                <br><center>
+							<font color="red"><?php echo  $pesan; ?></font>
+</div>
               </div>
             </div>
             <div class="simple-footer">
               Copyright &copy; Project Pintar 2023
             </div>
           </div>
-        </div>
+        </divW
       </div>
     </section>
   </div>

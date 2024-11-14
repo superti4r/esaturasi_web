@@ -80,22 +80,21 @@ if (mysqli_num_rows($sql_kelas) > 0) {
         die("Error pada query jadwal: " . mysqli_error($koneksi));
       }
 
-      // Tampilkan data jadwal
       if (mysqli_num_rows($sql_jadwal) > 0) {
         while ($jadwal = mysqli_fetch_assoc($sql_jadwal)) {
-          $kd_jadwal = $jadwal['kd_jadwal'];
-          echo '
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span>' . htmlspecialchars($jadwal['nama_mapel']) . ' - Jam: ' . substr(htmlspecialchars($jadwal['dari_jam']), 0, 5) . ' - ' . substr(htmlspecialchars($jadwal['sampai_jam']), 0, 5) . '</span>
-            <div>
-              <a href="delete.php?kd_jadwal=' . urlencode($kd_jadwal) . '&pesan=hapus" onClick="return confirm(\'Apakah data yang anda pilih akan dihapus?\')">
-                <button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button>
-              </a>
-              <a href="edit.php?kd_jadwal=' . urlencode($kd_jadwal) .  '&kode_mpp=' . urlencode($jadwal['kode_mpp']) .'">
-                <button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button>
-              </a>
-            </div>
-          </div>';
+            $kd_jadwal = $jadwal['kd_jadwal'];
+            echo '
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span>' . substr(htmlspecialchars($jadwal['dari_jam']), 0, 5) . ' - ' . substr(htmlspecialchars($jadwal['sampai_jam']), 0, 5) . ' | ' . htmlspecialchars($jadwal['nama_mapel']) . ' | ' . htmlspecialchars($jadwal['nama_guru']) . '</span>
+                <div>
+                    <a href="delete.php?kd_jadwal=' . urlencode($kd_jadwal) . '&pesan=hapus" onClick="return confirm(\'Apakah data yang anda pilih akan dihapus?\')">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button>
+                    </a>
+                    <a href="edit.php?kd_jadwal=' . urlencode($kd_jadwal) . '&kode_mpp=' . urlencode($jadwal['kode_mpp']) .'">
+                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button>
+                    </a>
+                </div>
+            </div>';
         }
       } else {
         echo '<p>Tidak ada jadwal uyang tersedia.</p>';

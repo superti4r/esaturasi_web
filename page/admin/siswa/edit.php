@@ -51,7 +51,7 @@ $tanggal_lahir = isset($data['tanggal_lahir_siswa']) ? date('Y-m-d', strtotime($
             <td>Jenis Kelamin</td>
             <td>
                 <select class="form-control" name="jekel_siswa" required>
-                    <option value="" disable >--Pilih Jenis Kelamin--</option>
+                    <option value="" disabled selected >--Pilih Jenis Kelamin--</option>
                     <option value="l" <?php echo $data['jekel_siswa'] == 'l' ? 'selected' : ''; ?>>Laki-Laki</option>
                     <option value="p" <?php echo $data['jekel_siswa'] == 'p' ? 'selected' : ''; ?>>Perempuan</option>
                 </select>
