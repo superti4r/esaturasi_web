@@ -1,166 +1,132 @@
 <?php 
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
-// digunakan untuk mencari data dan menampilkan data guru
+
 $katakunci = "";
 if (isset($_POST['cari'])) {
-    $katakunci = $_POST['kata_kunci'];
-    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal ORDER BY hari ASC");
-} else {
-    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal ORDER BY hari ASC");
+  $katakunci = $_POST['kata_kunci'];
 }
 
-// Cek apakah query berhasil
-if ($sql && mysqli_num_rows($sql) > 0) {
-    $row = mysqli_num_rows($sql);
-} else {
-    echo "Error: " . mysqli_error($koneksi); 
-}
 
-if (isset($_POST['delete_selected'])) {
-    if (!empty($_POST['selected_ids'])) {
-        $ids_to_delete = implode(",", $_POST['selected_ids']);
-        mysqli_query($koneksi, "DELETE FROM siswa WHERE nisn IN ($ids_to_delete)");
-        header("Location:siswa.php?aksi=hapusok");
-    } else {
-        echo "<script>alert('Pilih minimal satu data untuk dihapus.');</script>";
-    }
-}
+// Query untuk mengambil kelas berdasarkan kata kunci pencarian
+$sql_kelas = mysqli_query($koneksi, "
+    SELECT * FROM kelas 
+    WHERE nama_kelas LIKE '%" . $katakunci . "%'
+    ORDER BY nama_kelas ASC
+");
 
-// untuk menampilkan pesan berhasil menambah data siswa
+
+if (!$sql_kelas) {
+  die("Error pada query kelas: " . mysqli_error($koneksi));
+}
+// untuk menampilkan pesan berhasil menambah, mengubah, atau menghapus data
 if (isset($_GET['aksi'])) {
-  $aksi=$_GET['aksi'];
-  if ($aksi=="suksestambah") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil ditambahkan');
-    </script>
-    ";
-  }
-} 
-
-// untuk menampilkan pesan berhasil edit data siswa
-if (isset($_GET['aksi'])) {
-  $aksi=$_GET['aksi'];
-  if ($aksi=="suksesedit") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil diubah');
-    </script>
-    ";
-
-// untuk menampilkan pesan berhasil menghapus data siswa
-  } elseif ($aksi=="hapusok") {
-    echo "
-    <script>
-    alert('selamat data anda berhasil hapus');
-    </script>
-    ";
+  $aksi = $_GET['aksi'];
+  if ($aksi == "suksestambah") {
+    echo "<script>alert('Selamat, data berhasil ditambahkan');</script>";
+  } elseif ($aksi == "suksesedit") {
+    echo "<script>alert('Selamat, data berhasil diubah');</script>";
+  } elseif ($aksi == "hapusok") {
+    echo "<script>alert('Selamat, data berhasil dihapus');</script>";
   }
 }
-$loggedInNik = isset($_SESSION['nik']) ? $_SESSION['nik'] : '';
+
 ob_end_flush();
 ?>
+
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Mata Pelajaran</h1>
-    <a href="create.php" class="btn btn-primary">Tambah Data</a>
+    <h1>Data Jadwal Kelas</h1>
   </div>
+
+  <!-- Form Pencarian -->
+  <form method="POST" action="">
+    <div class="input-group mb-3">
+      <input type="text" name="kata_kunci" id="kata_kunci" class="form-control" placeholder="Cari kelas..." onkeyup="cariKelas()" autocomplete="off">
+    </div>
+  </form>
+
   <div class="row">
     <div class="col-12">
-    <div class="card pb-4">
-        <div class="card-body">
-          <!-- Removed the search form from here -->
-          <div class="d-flex justify-content-between mt-4 mb-1">
-           
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover table-striped w-100" id="table-1">
-              <thead>
-                <tr>
-                <th>Kode Jadwal</th>
-            <th>Mata Pelajaran</th>
-            <th>Hari</th>
-            <th>Dari Jam</th>
-            <th>Sampai Jam</th>
-            <th>Kelas</th>
-            <th>Pengajar</th>
-            <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="tableData">
-                <?php
-              $row = mysqli_num_rows($sql);
-                for ($i = 0; $i < $row; $i++) { 
-                    $data = mysqli_fetch_array($sql);
-                ?>
-                <tr>
-                <td><?php echo $data['kd_jadwal']; ?></td>
-            <td><?php echo $data['nama_mapel']; ?></td> 
-            <td><?php echo $data['hari']; ?></td>
-            <td><?php echo $data['dari_jam']; ?></td>
-            <td><?php echo $data['sampai_jam']; ?></td>
-            <td><?php echo $data['nama_kelas']; ?></td> 
-            <td><?php echo $data['nama_guru']; ?></td> 
-                  <td>
-                  <a href="edit.php?kd_mapel=<?php echo $data['kd_mapel']; ?>"><button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button></a>
-
-</a>                  <a href="delete.php?kd_mapel=<?php echo $data['kd_mapel']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang Anda pilih akan dihapus?')"><button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i> </button></a>
-                </td>
-
-                </tr>
-                <?php } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="table-responsive" id="kelas-container">
+       
+      <?php 
+if (mysqli_num_rows($sql_kelas) > 0) {
+  while ($kelas = mysqli_fetch_assoc($sql_kelas)) {
+    echo '
+    <div class="card mb-3">
+      <div class="card-header">
+        Kelas: ' . htmlspecialchars($kelas['nama_kelas']) . '
       </div>
-    </div>
-  </div>
-</section>
-<?php
-require_once '../layout/_bottom.php';
+      <div class="card-body">
+        <a href="create.php?kd_kelas=' . urlencode($kelas['kd_kelas']) . '">
+          <button class="btn btn-primary btn-block mb-4">Tambah Mata Pelajaran</button>
+        </a>';
 
+    // Array untuk hari-hari
+    $hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+    foreach ($hari as $h) {
+      echo '<label for="hari">' . $h . '</label>';
+      
+      // Query untuk mengambil jadwal sesuai hari dan kelas
+      $kd_kelas = $kelas['kd_kelas'];
+      $sql_jadwal = mysqli_query($koneksi, "
+          SELECT * FROM vjadwal
+          WHERE kd_kelas = '$kd_kelas' AND hari = '$h'
+          ORDER BY hari ASC
+      ");
+
+      if (!$sql_jadwal) {
+        die("Error pada query jadwal: " . mysqli_error($koneksi));
+      }
+
+      // Tampilkan data jadwal
+      if (mysqli_num_rows($sql_jadwal) > 0) {
+        while ($jadwal = mysqli_fetch_assoc($sql_jadwal)) {
+          $kd_jadwal = $jadwal['kd_jadwal'];
+          echo '
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span>' . htmlspecialchars($jadwal['nama_mapel']) . ' - Jam: ' . substr(htmlspecialchars($jadwal['dari_jam']), 0, 5) . ' - ' . substr(htmlspecialchars($jadwal['sampai_jam']), 0, 5) . '</span>
+            <div>
+              <a href="delete.php?kd_jadwal=' . urlencode($kd_jadwal) . '&pesan=hapus" onClick="return confirm(\'Apakah data yang anda pilih akan dihapus?\')">
+                <button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button>
+              </a>
+              <a href="edit.php?kd_jadwal=' . urlencode($kd_jadwal) .  '&kode_mpp=' . urlencode($jadwal['kode_mpp']) .'">
+                <button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button>
+              </a>
+            </div>
+          </div>';
+        }
+      } else {
+        echo '<p>Tidak ada jadwal uyang tersedia.</p>';
+      }
+
+      echo '<hr>'; // Pemisah antara hari
+    }
+
+    echo '</div></div>';
+  }
+} else {
+  echo '<p>Tidak ada data kelas yang sesuai dengan pencarian.</p>';
+}
 ?>
 
-<td>
+</section>
 <script>
-$(document).ready(function () {
-  // Event saat tombol cari diklik
-  $("#cariBtn").click(function () {
-    var kataKunci = $("#kataKunci").val(); // Mengambil nilai dari input pencarian
+function cariKelas() {
+  const kataKunci = document.getElementById("kata_kunci").value;
 
-    // Mengirim permintaan AJAX untuk melakukan pencarian
-    $.ajax({
-      url: "index.php", // URL untuk file PHP yang akan memproses pencarian
-      method: "POST",
-      data: { cari: true, kata_kunci: kataKunci },
-      success: function (response) {
-        // Menampilkan hasil pencarian pada tabel
-        $("#tableData").html(response);  // Update table body with the new data
-        // Reinitialize DataTable after updating the table
-        $("#table-1").DataTable().clear().destroy();
-        $("#table-1").DataTable({
-          "language": {
-            "emptyTable": "Data Tidak Tersedia", 
-            "zeroRecords": "Data Tidak Tersedia" 
-          }
-        });
-      },
-      error: function () {
-        alert("Terjadi kesalahan saat mencari data.");
-      },
-    });
-  });
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "cari_kelas.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-  // Inisialisasi DataTables pertama kali
-  $("#table-1").dataTable({
-    "language": {
-      "emptyTable": "Data Tidak Tersedia", 
-      "zeroRecords": "Data Tidak Tersedia" 
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      document.getElementById("kelas-container").innerHTML = xhr.responseText;
     }
-  });
-});
-
+  };
+  xhr.send("kata_kunci=" + encodeURIComponent(kataKunci));
+}
 </script>
+
+<?php require_once '../layout/_bottom.php'; ?>

@@ -6,7 +6,7 @@ $pesan = "";
 if (isset($_POST['submit'])) {
     $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
     $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
-    $query = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass'");
+    $query = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik' AND password_guru='$pass'");
     if (!$query) {
         die("Query Error: " . mysqli_error($koneksi)); 
     }
@@ -32,7 +32,7 @@ if (isset($_GET['aksi'])) {
   }
 }
 ?>
-
+  
 <!DOCTYPE html>
 <html lang="en">
 

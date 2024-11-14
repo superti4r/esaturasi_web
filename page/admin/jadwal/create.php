@@ -1,30 +1,100 @@
 <?php
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
+require_once '../helper/config.php';
+
+$kd_kelas = $_GET['kd_kelas'];
+
+// Cek apakah query berhasil dan menghasilkan hasil
+if (isset($_GET['kd_kelas'])) {
+  $kd_kelas = $_GET['kd_kelas'];
+
+  // Query untuk mengambil nama kelas berdasarkan kd_kelas
+  $kelas_query = mysqli_query($koneksi, "SELECT nama_kelas FROM kelas WHERE kd_kelas = '$kd_kelas'");
+  if (mysqli_num_rows($kelas_query) > 0) {
+      $kelas = mysqli_fetch_assoc($kelas_query);
+      $nama_kelas = $kelas['nama_kelas'];  // Ambil nama kelas, misalnya 'X RPL 1'
+  } else {
+      echo "Kelas tidak ditemukan!";
+      exit;
+  }
+} else {
+  echo "ID kelas tidak ditemukan!";
+  exit;
+}
+
+
+// Ambil tahun saat ini
+$tahun = date('y'); // Mengambil dua digit terakhir dari tahun, misalnya "24" untuk tahun 2024
+
+// Ambil kode jadwal yang terakhir dari database
+$sql = mysqli_query($koneksi, "SELECT * FROM jadwal ORDER BY kd_jadwal DESC");
+$row = mysqli_num_rows($sql);
+
+
+
+// Jika ada data
+if ($row > 0) {
+    $data = mysqli_fetch_array($sql);
+    $kd = $data['kd_jadwal'];
+    
+    // Ambil nomor urut dari kode jadwal (misal, KJ24001)
+    $kd = (int)substr($kd, 4, 3); // Mengambil angka setelah "KJ" dan tahun
+    $kd = $kd + 1; // Menambah angka urut
+
+    // Gabungkan tahun dan nomor urut menjadi kode jadwal
+    $kd = "KJ" . $tahun . sprintf("%03s", $kd); // Menambahkan tahun dan nomor urut
+} else {
+    // Jika belum ada data, mulai dengan kode jadwal pertama
+    $kd = "KJ" . $tahun . "001"; // Misal, KJ240001
+}
+
+// Ambil data mata pelajaran berdasarkan kelas yang dipilih
+$kd_kelas = isset($_GET['kd_kelas']) ? $_GET['kd_kelas'] : '';
+$mapelQuery = "SELECT m.kd_mapel, m.nama_mapel FROM mapel m
+             JOIN mata_pelajaran_perkelas mpk ON m.kd_mapel = mpk.kd_mapel
+             WHERE mpk.kd_kelas = '$kd_kelas'";
+$mapelResult = mysqli_query($koneksi, $mapelQuery);
 ?>
+
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Tambah Jadwal</h1>
-    <a href="./index.php" class="btn btn-light">Kembali</a>
+ 
+    <h1>Tambah Jadwal Kelas <?php echo htmlspecialchars($kelas['nama_kelas']); ?></h1>
+    <a href="./index.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> </a>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <!-- // Form -->
-          <form action="./store.php" method="POST">
+          <!-- Form -->
+          <form action="store.php" method="POST" enctype="multipart/form-data">
             <table cellpadding="8" class="w-100">
+         
+                <td><input type="hidden" class="form-control" name="kd_jadwal" value="<?php echo $kd; ?>" required></td>
+            
+                <td><input type="hidden" class="form-control" name="kd_kelas" value="<?php echo $kd_kelas; ?>" required></td>
+              
               <tr>
-                <td>Kode Jadwal</td>
-                <td><input class="form-control" type="text" name="kode_jadwal" size="20" required></td>
-              </tr>
-
-              <tr>
-                <td>Hari</td>
+                <td>Pilih Mapel</td>
                 <td>
-                  <select class="form-control" name="hari" id="hari" required>
-                    <option value="">--Pilih Hari--</option>
+                  <select name="kd_mapel" id="mapel" class="form-control" required>
+                    <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
+                    <?php if ($mapelResult && mysqli_num_rows($mapelResult) > 0): ?>
+                      <?php while ($mapel = mysqli_fetch_assoc($mapelResult)): ?>
+                        <option value="<?= $mapel['kd_mapel']; ?>"><?= $mapel['nama_mapel']; ?></option>
+                      <?php endwhile; ?>
+                    <?php else: ?>
+                      <option value="" disabled>Tidak ada mata pelajaran</option>
+                    <?php endif; ?>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Pilih Hari</td>
+                <td>
+                  <select class="form-control" name="hari" required>
+                    <option value="" disabled selected>-- Pilih Hari --</option>
                     <option value="Senin">Senin</option>
                     <option value="Selasa">Selasa</option>
                     <option value="Rabu">Rabu</option>
@@ -34,63 +104,65 @@ require_once '../helper/connection.php';
                   </select>
                 </td>
               </tr>
-
+              <!-- Pilih Guru -->
               <tr>
-                <td>Nama Guru</td>
+                <td>Pilih Guru</td>
                 <td>
-                  <select class="form-control" name="nama_guru" id="nama_guru" required>
-                    <option value="">--Pilih Guru--</option>
-                    <option value="Admin">Contoh 1</option>
-                    <option value="Guru">Contoh 2</option>
+                  <select class="form-control" name="nik" required>
+                    <option value="" disabled selected>-- Pilih Guru --</option>
+                    <?php
+                    $query_guru = mysqli_query($koneksi, "SELECT * FROM guru");
+                    while ($data_guru = mysqli_fetch_array($query_guru)) {
+                      echo "<option value='{$data_guru['nik']}'>{$data_guru['nama_guru']}</option>";
+                    }
+                    ?>
                   </select>
                 </td>
               </tr>
-
               <tr>
-                <td>Nama Kelas</td>
-                <td>
-                  <select class="form-control" name="nama_kelas" id="nama_kelas" required>
-                    <option value="">--Pilih Kelas--</option>
-                    <option value="X">X</option>
-                    <option value="XI">XI</option>
-                    <option value="XII">XII</option>
-                  </select>
+                <td>Waktu Mulai</td>
+                <td><input type="time" class="form-control" name="waktu_mulai" required></td>
+              </tr>
+
+           
+              <tr>
+                <td>Waktu Selesai</td>
+                <td><input type="time" class="form-control" name="waktu_selesai" required></td>
+              </tr>
+              <tr>
+                <td><input type="hidden" name="kd_kelas" value="<?php echo $kd_kelas; ?>"></td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <button type="submit" name="proses" class="btn btn-success">Simpan</button>
+                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
                 </td>
               </tr>
-
-              <tr>
-                <td>Mata Pelajaran</td>
-                <td>
-                  <select class="form-control" name="mapel" id="mapel" required>
-                    <option value="">--Pilih Mata Pelajaran--</option>
-                    <option value="Admin">Contoh 1</option>
-                    <option value="Guru">Contoh 2</option>
-                  </select>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Dari Jam</td>
-                <td><input class="form-control" type="time" name="darijam" size="20" required></td>
-              </tr>
-
-              <tr>
-                <td>Sampai Jam</td>
-                <td><input class="form-control" type="time" name="sampaijam" size="20" required></td>
-              </tr>
-              
-              <tr>
-                <td>
-                  <input class="btn btn-primary" type="submit" name="proses" value="Simpan">
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan"></td>
-              </tr>
-
             </table>
           </form>
         </div>
       </div>
     </div>
+  </div>
 </section>
+
+<script>
+    // Mendapatkan elemen tombol reset
+    const resetButton = document.querySelector('input[type="reset"]');
+
+    // Menambahkan event listener untuk tombol reset
+    resetButton.addEventListener('click', function(event) {
+      
+        // Jika ingin membersihkan gambar yang sudah di-upload
+        const fotoInput = document.querySelector('input[name="foto"]');
+        if (fotoInput) {
+            fotoInput.value = ''; // Mengosongkan input file jika ada
+        }
+
+        // Jika ingin mereset seluruh form
+        document.getElementById('form-tambah-guru').reset();
+    });
+</script>
 
 <?php
 require_once '../layout/_bottom.php';

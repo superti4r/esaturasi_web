@@ -68,7 +68,7 @@ $kd_mapel = $kd_mapel_base . $kd_mapel_urutan; // Gabungkan semuanya menjadi '24
         <div class="form-group">
           <label for="kd_mapel">Pilih Mata Pelajaran</label>
           <select name="kd_mapel" id="kd_mapel" class="form-control" required>
-            <option value="">-- Pilih Mata Pelajaran --</option>
+            <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
             <?php
             // Query untuk mengambil daftar mata pelajaran
             $sql_mapel = mysqli_query($koneksi, "SELECT * FROM mapel ORDER BY nama_mapel ASC");

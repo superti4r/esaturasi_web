@@ -35,7 +35,7 @@ $data = mysqli_fetch_array($sql);
                 <td>Jurusan</td>
                 <td>
                   <select class="form-control" name="kd_jurusan" required>
-                    <option value="" disabled>Pilih Jurusan</option>
+                    <option value="" disabled selected>Pilih Jurusan</option>
                     <?php
                       $kd_jurusan = $data['kd_jurusan']; // Ambil data kd_kelas dari database untuk ditampilkan
                           $queryJurusan = mysqli_query($koneksi, "SELECT kd_jurusan, nama_jurusan FROM jurusan ORDER BY nama_jurusan ASC");

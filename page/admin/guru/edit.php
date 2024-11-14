@@ -47,7 +47,7 @@ $foto = $_SESSION['foto_profil_guru'];
             <td>Jenis Kelamin</td>
             <td>
                 <select class="form-control" name="jekel" required>
-                    <option value="" disable>--Pilih Jenis Kelamin--</option>
+                    <option value="" disabled selected>--Pilih Jenis Kelamin--</option>
                     <option value="l" <?php echo $data['jekel_guru'] == 'l' ? 'selected' : ''; ?>>Laki-Laki</option>
                     <option value="p" <?php echo $data['jekel_guru'] == 'p' ? 'selected' : ''; ?>>Perempuan</option>
                 </select>

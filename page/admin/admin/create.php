@@ -2,14 +2,6 @@
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
 
-$sql = mysqli_query($koneksi, "SELECT * FROM kelas ORDER BY kd_kelas DESC");
-$row = mysqli_num_rows($sql);
-$data = mysqli_fetch_array($sql);
-$kd=$data['kd_kelas'];
-$kd=(int)substr($kd, 2,2);
-$kd=$kd+1;
-$kd="KL".sprintf("%02s", $kd);
-
 ?>
 
 <section class="section">
@@ -26,26 +18,15 @@ $kd="KL".sprintf("%02s", $kd);
             <table cellpadding="8" class="w-100">
 
               <tr>
-                <td>Kode Kelas</td>
-                <td><input class="form-control" type="text" name="kd_kelas" required value="<?php echo $kd ?>"  readonly></td>
-              </tr>
-
-              <tr>
-                <td>Nama Kelas</td>
-                <td><input class="form-control" type="text" name="nama_kelas" required ></td>
-              </tr>
-
-           
-              <tr>
-                <td>Jurusan</td>
+                <td>Nama Guru</td>
                 <td>
-                  <select class="form-control" name="kd_jurusan" required>
-                    <option value="" disabled selected>--Pilih Kelas--</option>
+                  <select class="form-control" name="nik" required>
+                    <option value="" disabled selected>--Pilih Guru--</option>
                     <?php
                         // Ambil data jurusan dari database
-                        $queryJurusan = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY nama_jurusan ASC");
+                        $queryJurusan = mysqli_query($koneksi, "SELECT * FROM guru ORDER BY nama_guru ASC");
                         while ($jurusan = mysqli_fetch_assoc($queryJurusan)) {
-                            echo "<option value=\"{$jurusan['kd_jurusan']}\">{$jurusan['nama_jurusan']}</option>";
+                            echo "<option value=\"{$jurusan['nik']}\">{$jurusan['nama_guru']}</option>";
                         }
                         ?>
                    

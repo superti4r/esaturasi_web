@@ -1,5 +1,5 @@
 <?php
-include 'helper/config.php';
+include 'admin/helper/config.php';
 session_start(); 
 $pesan = "";
 
@@ -18,9 +18,9 @@ if (isset($_POST['submit'])) {
         $_SESSION['email_guru'] = $data['email_guru'];
         $_SESSION['nama_guru'] = $data['nama_guru'];
 		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
-        header("location:dashboard/index.php");
+        header("location:admin/dashboard/index.php");
     } else {
-        header("location:login.php?aksi=eror");
+        header("location:loginGuru.php?aksi=eror");
     }
 }
 if (isset($_GET['aksi'])) {
@@ -32,6 +32,18 @@ if (isset($_GET['aksi'])) {
   }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Guru | E-Saturasi</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +115,7 @@ if (isset($_GET['aksi'])) {
               Copyright &copy; Project Pintar 2023
             </div>
           </div>
-        </div>
+        </divW
       </div>
     </section>
   </div>

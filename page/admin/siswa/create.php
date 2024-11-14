@@ -44,7 +44,7 @@ $current_date = date('Y-m-d');
                 <td>Jenis Kelamin</td>
                 <td>
                   <select class="form-control" name="jekel_siswa" required>
-                    <option value="" disable>--Pilih Jenis Kelamin--</option>
+                    <option value="" disabled selected>--Pilih Jenis Kelamin--</option>
                     <option value="l">Laki-Laki</option>
                     <option value="p">Perempuan</option>
                   </select>
