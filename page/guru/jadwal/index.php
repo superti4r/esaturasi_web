@@ -18,7 +18,7 @@ if (isset($_POST['cari'])) {
         ORDER BY nama_guru ASC
     ");
 } else {
-    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal WHERE nik = '$guru' ORDER BY nik ASC");
+    $sql = mysqli_query($koneksi, "SELECT * FROM vjadwal WHERE nik = '$guru' AND status='aktif' ORDER BY nik ASC");
 }
 
 if ($sql) {
@@ -69,8 +69,9 @@ ob_end_flush();
                   <td><?php echo $data['hari']; ?></td>
                   <td><?php echo $data['nama_kelas']; ?></td>
                   <td><?php echo $data['nama_mapel']; ?></td>
-                  <td><?php echo $data['dari_jam']; ?></td>
-                  <td><?php echo $data['sampai_jam']; ?></td>
+                  <td><?php echo date('H:i', strtotime($data['dari_jam'])); ?></td>
+<td><?php echo date('H:i', strtotime($data['sampai_jam'])); ?></td>
+
                 </tr>
                 <?php } ?>
               </tbody>

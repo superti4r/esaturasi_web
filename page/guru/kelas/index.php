@@ -6,11 +6,13 @@ $katakunci = "";
 if (isset($_POST['cari'])) {
   $katakunci = $_POST['kata_kunci'];
 }
-
+$guru = $_SESSION['nik'];
 // Query untuk mengambil kelas berdasarkan kata kunci pencarian
 $sql_kelas = mysqli_query($koneksi, "
-    SELECT * FROM vkelas 
-    WHERE nama_kelas LIKE '%" . $katakunci . "%' AND status='aktif'
+    SELECT * FROM vjadwal 
+    WHERE nama_kelas LIKE '%" . $katakunci . "%' 
+    AND status='aktif' 
+    AND nik='$nik' 
     ORDER BY nama_kelas ASC
 ");
 
@@ -78,7 +80,7 @@ ob_end_flush();
               </div>
               <div class="card-body">
                <a href="create.php?kd_kelas=' . urlencode($kelas['kd_kelas']) . '">
-  <button class="btn btn-primary btn-block mb-4">Tambah Mata Pelajaran</button>
+  <button class="btn btn-primary btn-block mb-4">Tambah Bab Pelajaran</button>
 </a>';
 
             // Query untuk mengambil mata pelajaran dari tabel `vmpp` sesuai dengan `kd_kelas` dan `kd_tahun_ajaran`

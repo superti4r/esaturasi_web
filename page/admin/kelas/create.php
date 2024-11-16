@@ -2,14 +2,32 @@
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
 
-$sql = mysqli_query($koneksi, "SELECT * FROM kelas ORDER BY kd_kelas DESC");
-$row = mysqli_num_rows($sql);
-$data = mysqli_fetch_array($sql);
-$kd=$data['kd_kelas'];
-$kd=(int)substr($kd, 2,2);
-$kd=$kd+1;
-$kd="KL".sprintf("%02s", $kd);
+// Ambil tahun sekarang dan ambil dua digit terakhir
+$tahun_sekarang = date('Y'); 
+$tahun_terakhir = substr($tahun_sekarang, 2, 2); // Mengambil dua digit terakhir, contoh "24" untuk tahun 2024
 
+// Query untuk mendapatkan kode kelas terakhir
+$sql = mysqli_query($koneksi, "SELECT * FROM kelas ORDER BY kd_kelas DESC LIMIT 1");
+
+// Cek apakah query berhasil dan mengembalikan data
+if (mysqli_num_rows($sql) > 0) {
+    $data = mysqli_fetch_array($sql);
+
+    // Mendapatkan nomor urut dari kode kelas terakhir
+    $kd = $data['kd_kelas']; 
+
+    // Mengambil urutan (misalnya 001, 002, dst) dari kode kelas terakhir
+    $urutan = (int)substr($kd, 4, 2); // Menyesuaikan posisi urutan jika formatnya K + Tahun + Urutan
+
+    // Menambah urutan 1
+    $urutan = $urutan + 1;
+
+    // Membuat kode kelas baru dengan format K + 2-digit TAHUN + URUTAN (3 digit)
+    $kd_kelas_baru = "K" . $tahun_terakhir . str_pad($urutan, 2, '0', STR_PAD_LEFT); // Menambahkan padding 0
+} else {
+    // Jika tidak ada kelas, set kode kelas baru ke K + tahun + 001
+    $kd_kelas_baru = "K" . $tahun_terakhir . "01";
+}
 ?>
 
 <section class="section">
@@ -27,33 +45,46 @@ $kd="KL".sprintf("%02s", $kd);
 
               <tr>
                 <td>Kode Kelas</td>
-                <td><input class="form-control" type="text" name="kd_kelas" required value="<?php echo $kd ?>"  readonly></td>
+                <td><input class="form-control" type="text" name="kd_kelas" required value="<?php echo $kd_kelas_baru ?>" readonly></td>
               </tr>
 
               <tr>
                 <td>Nama Kelas</td>
                 <td><input class="form-control" type="text" name="nama_kelas" required ></td>
               </tr>
-
-           
               <tr>
+                <td>Tingkatan Kelas</td>
+                <td>
+                    <select class="form-control" name="tingkatan_kelas" required>
+                        <option value="" disabled selected>--Pilih Tingkatan Kelas--</option>
+                        <option value="1">X</option>
+                        <option value="2">XI</option>
+                        <option value="3">XII</option>
+                    </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td>No Kelas</td>
+                <td><input class="form-control" type="text" name="no_kelas" required ></td>
+              </tr>
+              <tr> 
+              <tr>
+                
                 <td>Jurusan</td>
                 <td>
                   <select class="form-control" name="kd_jurusan" required>
-                    <option value="" disabled selected>--Pilih Kelas--</option>
+                    <option value="" disabled selected>--Pilih Jurusan--</option>
                     <?php
                         // Ambil data jurusan dari database
                         $queryJurusan = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY nama_jurusan ASC");
                         while ($jurusan = mysqli_fetch_assoc($queryJurusan)) {
                             echo "<option value=\"{$jurusan['kd_jurusan']}\">{$jurusan['nama_jurusan']}</option>";
                         }
-                        ?>
-                   
+                    ?>
                   </select>
                 </td>
               </tr>
-
-       
 
               <tr>
                 <td colspan="3">
@@ -69,6 +100,7 @@ $kd="KL".sprintf("%02s", $kd);
     </div>
   </div>
 </section>
+
 <script>
     // Mendapatkan elemen tombol reset
     const resetButton = document.querySelector('input[type="reset"]');
@@ -89,4 +121,4 @@ $kd="KL".sprintf("%02s", $kd);
 
 <?php
 require_once '../layout/_bottom.php';
-?>
+?>    

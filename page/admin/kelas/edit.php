@@ -3,8 +3,16 @@ require_once '../layout/_top.php';
 require_once '../helper/config.php';
 
 $kd_kelas = $_GET['kd_kelas'];
-$sql = mysqli_query($koneksi, "SELECT * FROM kelas WHERE kd_kelas='$kd_kelas'");
+$sql = mysqli_query($koneksi, "
+    SELECT kelas.*, jurusan.nama_jurusan 
+    FROM kelas 
+    INNER JOIN jurusan ON kelas.kd_jurusan = jurusan.kd_jurusan 
+    WHERE kelas.kd_kelas = '$kd_kelas'
+");
+
 $data = mysqli_fetch_array($sql);
+
+
 
 ?>
 
@@ -33,20 +41,27 @@ $data = mysqli_fetch_array($sql);
 
               <tr>
                 <td>Jurusan</td>
-                <td>
-                  <select class="form-control" name="kd_jurusan" required>
-                    <option value="" disabled selected>Pilih Jurusan</option>
-                    <?php
-                      $kd_jurusan = $data['kd_jurusan']; // Ambil data kd_kelas dari database untuk ditampilkan
-                          $queryJurusan = mysqli_query($koneksi, "SELECT kd_jurusan, nama_jurusan FROM jurusan ORDER BY nama_jurusan ASC");
-                          while ($jurusan = mysqli_fetch_assoc($queryJurusan)) {
-                            $selected = ($jurusan['kd_jurusan'] == $kd_jurusan) ? 'selected' : ''; // Tandai jika sesuai
-                              echo "<option value=\"{$jurusan['kd_jurusan']}\" $selected>{$jurusan['nama_jurusan']}</option>";
-                                }
-                                ?>
-                  </select>
-                </td>
+                <td><input class="form-control" type="text" name="nama_jurusan" value="<?php echo $data['nama_jurusan']; ?>" readonly></td>
               </tr>
+
+              <tr>
+  <td>Tingkat Kelas</td>
+  <td>
+    <?php
+      // Konversi nilai tingkatan
+      $tingkatKelas = '';
+      if ($data['tingkatan'] == 1) {
+          $tingkatKelas = 'X';
+      } elseif ($data['tingkatan'] == 2) {
+          $tingkatKelas = 'XI';
+      } elseif ($data['tingkatan'] == 3) {
+          $tingkatKelas = 'XII';
+      }
+    ?>
+    <input class="form-control" type="text" name="tingkatan" value="<?php echo $tingkatKelas; ?>" readonly>
+  </td>
+</tr>
+
               <tr>
                 <td colspan="3">
                   <button type="submit" name="kirim" class="btn btn-success">Simpan</button>

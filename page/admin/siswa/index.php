@@ -1,7 +1,72 @@
-<?php 
+<?php
 ob_start(); // Tambahkan ini di awal file
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
+
+// Handle promote_selected action
+if (isset($_POST['promote_selected'])) {
+    if (!empty($_POST['selected_ids'])) {
+        $ids = array_map(function($id) use ($koneksi) {
+            return mysqli_real_escape_string($koneksi, $id);
+        }, $_POST['selected_ids']);
+        
+        // Ambil data kelas siswa yang dipilih
+        $ids_string = "'" . implode("','", $ids) . "'";
+        $query = "SELECT siswa.nisn, siswa.kd_kelas, kelas.tingkatan, kelas.kd_jurusan, kelas.no_kelas 
+                  FROM siswa 
+                  LEFT JOIN kelas ON siswa.kd_kelas = kelas.kd_kelas 
+                  WHERE siswa.nisn IN ($ids_string)";
+        
+        $result = mysqli_query($koneksi, $query);
+        
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $kd_kelas = $row['kd_kelas'];
+                $tingkat_kelas = $row['tingkatan'];
+                $kd_jurusan = $row['kd_jurusan'];
+                $no_kelas = $row['no_kelas']; // Ambil no_kelas dari query
+
+                // Tentukan kelas baru dengan tingkat yang lebih tinggi dan nomor kelas yang sama
+                if ($tingkat_kelas == 1) {
+                    $tingkat_baru = $tingkat_kelas + 1;  // Tingkat baru
+
+                    // Cari kelas baru berdasarkan tingkat dan jurusan yang sama, dan no_kelas yang sama
+                    $new_class_query = "SELECT kd_kelas 
+                                        FROM kelas 
+                                        WHERE no_kelas = '$no_kelas' 
+                                        AND kd_jurusan = '$kd_jurusan' 
+                                        AND tingkatan = '$tingkat_baru' 
+                                        LIMIT 1";
+                    $new_class_result = mysqli_query($koneksi, $new_class_query);
+                    
+                    if ($new_class_result && mysqli_num_rows($new_class_result) > 0) {
+                        $new_class_data = mysqli_fetch_assoc($new_class_result);
+                        $new_kd_kelas = $new_class_data['kd_kelas'];
+                        
+                        // Update kelas dan tingkat kelas siswa
+                        $update_query = "UPDATE siswa 
+                                         SET kd_kelas = '$new_kd_kelas'
+                                         WHERE nisn = '".$row['nisn']."'";
+                        mysqli_query($koneksi, $update_query);
+                    } else {
+                        $_SESSION['message'] = "Kelas baru untuk jurusan yang sama dan tingkat yang lebih tinggi tidak ditemukan.";
+                        header("Location: index.php");
+                        exit();
+                    }
+                }
+                // Tambahkan logika lain jika perlu untuk tingkat kelas yang lebih tinggi
+            }
+
+            $_SESSION['message'] = "Siswa berhasil naik kelas.";
+            header("Location: index.php");
+            exit();
+        } else {
+            $_SESSION['message'] = "Gagal mengambil data kelas siswa.";
+        }
+    } else {
+        $_SESSION['message'] = "Pilih minimal satu data untuk dipromosikan.";
+    }
+}
 
 //digunakan untuk mencari data dan menampilkan data siswa
 $katakunci = "";
@@ -55,22 +120,49 @@ if (isset($_POST['delete_selected'])) {
     }
 }
 
+// Handle naik_kelas action
+if (isset($_POST['naik_kelas'])) {
+    if (!empty($_POST['selected_ids'])) {
+        $ids = array_map(function($id) use ($koneksi) {
+            return mysqli_real_escape_string($koneksi, $id);
+        }, $_POST['selected_ids']);
+        
+        $ids_string = "'" . implode("','", $ids) . "'";
+
+        // Update kelas untuk siswa yang dipilih
+        // Misalnya, jika ingin naik kelas dengan menambah 1 pada `tingkatan` dan mengupdate `kd_kelas`
+        $update_query = "UPDATE siswa SET 
+                         kd_kelas = (SELECT kd_kelas FROM kelas WHERE tingkatan = (SELECT tingkatan+1 FROM kelas WHERE kd_kelas = siswa.kd_kelas) LIMIT 1)
+                         WHERE nisn IN ($ids_string)";
+        
+        if(mysqli_query($koneksi, $update_query)) {
+            $_SESSION['message'] = "Siswa berhasil naik kelas";
+            header("Location: index.php");
+            exit();
+        } else {
+            $_SESSION['message'] = "Gagal naik kelas: " . mysqli_error($koneksi);
+        }
+    } else {
+        $_SESSION['message'] = "Pilih minimal satu data untuk naik kelas.";
+    }
+}
+
+// Untuk menampilkan pesan berhasil menambah, mengubah, atau menghapus data
+if (isset($_GET['aksi'])) {
+    $aksi = $_GET['aksi'];
+    if ($aksi == "suksestambah") {
+      echo "<script>alert('Selamat, data berhasil ditambahkan');</script>";
+    } elseif ($aksi == "suksesedit") {
+      echo "<script>alert('Selamat, data berhasil diubah');</script>";
+    } elseif ($aksi == "hapusok") {
+      echo "<script>alert('Selamat, data berhasil dihapus');</script>";
+    }
+  }
+
 // Tampilkan pesan jika ada
 if (isset($_SESSION['message'])) {
     echo "<script>alert('" . $_SESSION['message'] . "');</script>";
     unset($_SESSION['message']); // Hapus pesan setelah ditampilkan
-}
-
-//untuk menampilkan pesan berhasil menambah data siswa
-if (isset($_GET['aksi'])) {
-    $aksi = $_GET['aksi'];
-    if ($aksi == "suksestambah") {
-        echo "<script>alert('Selamat data anda berhasil ditambahkan');</script>";
-    } elseif ($aksi == "suksesedit") {
-        echo "<script>alert('Selamat data anda berhasil diubah');</script>";
-    } elseif ($aksi == "hapusok") {
-        echo "<script>alert('Selamat data anda berhasil dihapus');</script>";
-    }
 }
 ?>
 
@@ -83,21 +175,21 @@ if (isset($_GET['aksi'])) {
                 <button type="submit" name="delete_selected" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data yang dipilih?')">
                     <i class="fas fa-trash"></i> Hapus Yang Dipilih
                 </button>
+                <button type="submit" name="promote_selected" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mempromosikan data yang dipilih?')">
+    <i class="fas fa-arrow-up"></i> Naik Kelas
+</button>
+
             </div>
-</div>
-            <div class="row">
-    <div class="col-12">
-    <div class="card pb-4">
-        <div class="card-body">
-          <!-- Removed the search form from here -->
-          <div class="d-flex justify-content-between mt-4 mb-1">
-           
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover table-striped w-100" id="table-1">
-              <thead>
-                <tr>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card pb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped w-100" id="table-1">
+                                <thead>
+                                    <tr>
                                         <th><input type="checkbox" id="select_all"> Pilih Semua</th>
                                         <th>NISN</th>
                                         <th>Nama Siswa</th>
@@ -140,6 +232,19 @@ if (isset($_GET['aksi'])) {
         </div>
     </form>
 </section>
+
+<?php require_once '../layout/_bottom.php'; ?>
+
+<script>
+document.getElementById('select_all').onclick = function() {
+    var checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    for (var checkbox of checkboxes) {
+        checkbox.checked = this.checked;
+    }
+}
+</script>
+
+<?php require_once '../layout/_bottom.php'; ?>
 
 <script>
 document.getElementById('select_all').onclick = function() {
@@ -188,5 +293,3 @@ $(document).ready(function () {
 });
 
 </script>
-
-<?php require_once '../layout/_bottom.php'; ?>

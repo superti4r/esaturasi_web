@@ -10,13 +10,16 @@
     </div>
     <ul class="sidebar-menu">
       <li class="menu-header">Dashboard</li>
-      <li><a class="nav-link" href="../"><i class="fas fa-home"></i> <span>Halaman Utama</span></a></li>
+      <li><a class="nav-link" href="../dashboard/index.php"><i class="fas fa-home"></i> <span>Halaman Utama</span></a></li>
       <li class="menu-header">Master</li>
       <li class="dropdown">
         <a href="../jadwal/index.php"><i class="fas fa-table"></i> <span>Jadwal Mengajar</span></a>
       </li>
       <li class="dropdown">
         <a href="../materi/index.php"><i class="fas fa-book"></i> <span>Materi</span></a>
+      </li>
+      <li class="dropdown">
+        <a href="../kelas/index.php"><i class="fas fa-book"></i> <span>Kelas</span></a>
       </li>
       <li class="dropdown">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i> <span>Tugas</span></a>
