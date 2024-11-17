@@ -75,22 +75,28 @@ $mapelResult = mysqli_query($koneksi, $mapelQuery);
             
                 <td><input type="hidden" class="form-control" name="kd_kelas" value="<?php echo $kd_kelas; ?>" required></td>
               
-              <tr>
-                <td>Pilih Mapel</td>
-                <td>
-                  <select name="kd_mapel" id="mapel" class="form-control" required>
-                    <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
-                    <?php if ($mapelResult && mysqli_num_rows($mapelResult) > 0): ?>
-                      <?php while ($mapel = mysqli_fetch_assoc($mapelResult)): ?>
-                        <option value="<?= $mapel['kd_mapel']; ?>"><?= $mapel['nama_mapel']; ?></option>
-                      <?php endwhile; ?>
-                    <?php else: ?>
-                      <option value="" disabled>Tidak ada mata pelajaran</option>
-                    <?php endif; ?>
-                  </select>
-                </td>
-              </tr>
-              <tr>
+                <tr>
+  <td>Pilih Mapel</td>
+  <td>
+    <select name="kd_mapel" id="mapel" class="form-control" required>
+      <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
+      <?php if ($mapelResult && mysqli_num_rows($mapelResult) > 0): ?>
+        <?php while ($mapel = mysqli_fetch_assoc($mapelResult)): ?>
+          <option value="<?= $mapel['kd_mapel']; ?>"><?= $mapel['nama_mapel']; ?></option>
+        <?php endwhile; ?>
+      <?php else: ?>
+        <option value="" disabled>Tidak ada mata pelajaran</option>
+      <?php endif; ?>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>Guru</td>
+  <td>
+    <input type="text" class="form-control" id="guru" name="nik" readonly placeholder="-- Nama Guru Akan Ditampilkan --">
+  </td>
+</tr>
+
                 <td>Pilih Hari</td>
                 <td>
                   <select class="form-control" name="hari" required>
@@ -103,22 +109,6 @@ $mapelResult = mysqli_query($koneksi, $mapelQuery);
                     <option value="Sabtu">Sabtu</option>
                   </select>
                 </td>
-              </tr>
-              <!-- Pilih Guru -->
-              <tr>
-                <td>Pilih Guru</td>
-                <td>
-                  <select class="form-control" name="nik" required>
-                    <option value="" disabled selected>-- Pilih Guru --</option>
-                    <?php
-                    $query_guru = mysqli_query($koneksi, "SELECT * FROM guru");
-                    while ($data_guru = mysqli_fetch_array($query_guru)) {
-                      echo "<option value='{$data_guru['nik']}'>{$data_guru['nama_guru']}</option>";
-                    }
-                    ?>
-                  </select>
-                </td>
-              </tr>
               <tr>
                 <td>Waktu Mulai</td>
                 <td><input type="time" class="form-control" name="waktu_mulai" required></td>
@@ -162,7 +152,34 @@ $mapelResult = mysqli_query($koneksi, $mapelQuery);
         // Jika ingin mereset seluruh form
         document.getElementById('form-tambah-guru').reset();
     });
+
+    document.getElementById('mapel').addEventListener('change', function () {
+    const kdMapel = this.value;
+    const kdKelas = "<?php echo $kd_kelas; ?>"; // Ambil kd_kelas dari PHP
+
+    // Kirim request ke server untuk mendapatkan nama guru
+    fetch(`get_guru_by_mapel.php?kd_mapel=${kdMapel}&kd_kelas=${kdKelas}`)
+        .then(response => response.json())
+        .then(data => {
+            const guruInput = document.getElementById('guru');
+            
+            // Jika data ditemukan, tampilkan nama guru
+            if (data && data.nama_guru) {
+                guruInput.value = data.nama_guru;
+            } else {
+                guruInput.value = "-- Tidak Ada Guru --";
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('guru').value = "-- Error Memuat Guru --";
+        });
+});
+
+
+
 </script>
+
 
 <?php
 require_once '../layout/_bottom.php';

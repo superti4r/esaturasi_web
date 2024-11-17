@@ -7,6 +7,7 @@ if (isset($_POST['submit'])) {
     $kd_mpp = $_POST['kd_mpp'];  
     $kd_kelas = $_POST['kd_kelas'];  // Ambil data kd_kelas dari form
     $kd_mapel_selected = $_POST['kd_mapel'];  // Kode mata pelajaran yang dipilih
+    $nik = $_POST['nik'];  // Ambil nik guru yang dipilih
     $foto_mapel = $_FILES['foto_mapel'];
 
     // Validasi upload file gambar
@@ -21,11 +22,9 @@ if (isset($_POST['submit'])) {
             // Ambil kd_tahun_ajaran yang aktif
             $query_tahun_ajaran = mysqli_query($koneksi, "SELECT kd_tahun_ajaran FROM tahun_ajaran WHERE status='aktif' LIMIT 1");
             if ($row = mysqli_fetch_assoc($query_tahun_ajaran)) {
-              
-                
                 // Simpan data ke database dengan nama file adalah kode MPP
-                $query = "INSERT INTO mata_pelajaran_perkelas (kode_mpp, kd_kelas, kd_mapel, foto_mapel_perkelas) 
-                          VALUES ('$kd_mpp', '$kd_kelas', '$kd_mapel_selected', '$kd_mpp.$imageFileType')";
+                $query = "INSERT INTO mata_pelajaran_perkelas (kode_mpp, kd_kelas, kd_mapel, nik, foto_mapel_perkelas) 
+                          VALUES ('$kd_mpp', '$kd_kelas', '$kd_mapel_selected', '$nik', '$kd_mpp.$imageFileType')";
                 if (mysqli_query($koneksi, $query)) {
                     echo "<script>alert('Data berhasil disimpan!'); window.location.href='index.php';</script>";
                 } else {

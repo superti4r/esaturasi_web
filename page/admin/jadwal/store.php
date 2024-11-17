@@ -74,8 +74,8 @@ if (isset($_POST['proses'])) {
     }
 
     // Query untuk menyimpan data jadwal
-    $query_insert = "INSERT INTO jadwal (kd_jadwal, kode_mpp, hari, dari_jam, sampai_jam, nik) 
-                     VALUES ('$kd_jadwal', '$kode_mpp', '$hari', '$waktu_mulai', '$waktu_selesai', '$nik')";
+    $query_insert = "INSERT INTO jadwal (kd_jadwal, kode_mpp, hari, dari_jam, sampai_jam) 
+                     VALUES ('$kd_jadwal', '$kode_mpp', '$hari', '$waktu_mulai', '$waktu_selesai')";
 
     if (mysqli_query($koneksi, $query_insert)) {
         echo "<script>alert('Data berhasil disimpan.'); window.location.href='index.php';</script>";

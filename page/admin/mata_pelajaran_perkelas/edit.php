@@ -37,7 +37,7 @@ if (!$data) {
             <table cellpadding="8" class="w-100">
               <tr>
                 <td>Kode Mapel</td>
-                <td><input class="form-control" type="text" name="kode_mpp" value="<?php echo $data['kode_mpp']; ?>" readonly></td>
+                <td><input class="form-control" type="hidden" name="kode_mpp" value="<?php echo $data['kode_mpp']; ?>" readonly></td>
               </tr>
               <tr>
                 <td>Nama Mapel</td>
@@ -47,6 +47,27 @@ if (!$data) {
                 <input type="hidden" name="kd_kelas" value="<?php echo $data['kd_kelas']; ?>">
               </tr>
               <tr> 
+              <tr>
+    <td>Nama Guru</td>
+    <td>
+        <select name="nik" class="form-control" required>
+            <option value="" disabled selected>-- Pilih Guru --</option>
+            <?php
+            // Query untuk mengambil daftar nama guru
+            $sql_guru = mysqli_query($koneksi, "SELECT nik, nama_guru FROM guru ORDER BY nama_guru ASC");
+            if (mysqli_num_rows($sql_guru) > 0) {
+                while ($guru = mysqli_fetch_assoc($sql_guru)) {
+                    // Menandai guru yang sudah terpilih
+                    $selected = ($guru['nik'] == $data1['nik']) ? 'selected' : '';
+                    echo '<option value="' . $guru['nik'] . '" ' . $selected . '>' . htmlspecialchars($guru['nama_guru']) . '</option>';
+                }
+            } else {
+                echo '<option value="">Tidak ada guru tersedia</option>';
+            }
+            ?>
+        </select>
+    </td>
+</tr>
                 <td>Foto Mapel</td> 
                 <td>
                   <?php if (!empty($data['foto_mapel_perkelas'])): ?>

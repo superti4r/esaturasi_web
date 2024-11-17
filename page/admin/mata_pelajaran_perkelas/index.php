@@ -84,10 +84,16 @@ ob_end_flush();
             // Query untuk mengambil mata pelajaran dari tabel `vmpp` sesuai dengan `kd_kelas` dan `kd_tahun_ajaran`
             $kd_kelas = $kelas['kd_kelas'];
             $sql_mapel = mysqli_query($koneksi, "
-                SELECT mapel.nama_mapel, vmpp.kode_mpp, vmpp.kd_mapel, vmpp.kd_kelas 
+                SELECT 
+                    mapel.nama_mapel, 
+                    vmpp.kode_mpp, 
+                    vmpp.kd_mapel, 
+                    vmpp.kd_kelas,
+                    vmpp.nama_guru 
                 FROM vmpp 
                 JOIN mapel ON mapel.kd_mapel = vmpp.kd_mapel 
-                WHERE vmpp.kd_kelas = '$kd_kelas' AND vmpp.kd_tahun_ajaran = '$kd_tahun_ajaran_aktif'
+                WHERE vmpp.kd_kelas = '$kd_kelas' 
+                AND vmpp.kd_tahun_ajaran = '$kd_tahun_ajaran_aktif'
                 ORDER BY mapel.nama_mapel ASC
             ");
 
@@ -100,7 +106,10 @@ ob_end_flush();
                 $kode_mpp = $mapel['kode_mpp'];
                 echo '
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span>' . htmlspecialchars($mapel['nama_mapel']) . '</span>
+                  <span>
+                    ' . htmlspecialchars($mapel['nama_mapel']) . ' - 
+                    <strong>' . htmlspecialchars($mapel['nama_guru']) . '</strong>
+                  </span>
                   <div>
                     <a href="delete.php?kode_mpp=' . urlencode($kode_mpp) . '&kd_mapel=' . urlencode($mapel['kd_mapel']) . '&kd_kelas=' . urlencode($kelas['kd_kelas']) . '&pesan=hapus" onClick="return confirm(\'Apakah data yang anda pilih akan dihapus?\')">
                       <button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button>
@@ -143,4 +152,4 @@ function cariKelas() {
 }
 </script>
 
-<?php require_once '../layout/_bottom.php'; ?> 
+<?php require_once '../layout/_bottom.php'; ?>

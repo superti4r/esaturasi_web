@@ -9,6 +9,7 @@ if (isset($_POST['kirim'])) {
     $nama_mapel = $_POST['nama_mapel'];
     $foto_mapel_lama = $_POST['foto_mapel_lama'];
     $foto_mapel = $_FILES['foto_mapel'];
+    $nik = $_POST['nik']; // Ambil nik guru yang dipilih
 
     // Path direktori penyimpanan gambar
     $target_dir = "../uploads/foto_mapel/";
@@ -42,8 +43,10 @@ if (isset($_POST['kirim'])) {
         $foto_mapel_baru = $foto_mapel_lama;
     }
 
-    // Query untuk memperbarui data di database
-    $query = "UPDATE mata_pelajaran_perkelas SET foto_mapel_perkelas = '$foto_mapel_baru' WHERE kode_mpp = '$kode_mpp'";
+    // Query untuk memperbarui data di database (termasuk foto dan nik)
+    $query = "UPDATE mata_pelajaran_perkelas 
+              SET foto_mapel_perkelas = '$foto_mapel_baru', nik = '$nik' 
+              WHERE kode_mpp = '$kode_mpp'";
 
     if (mysqli_query($koneksi, $query)) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location.href='index.php';</script>";

@@ -1,51 +1,60 @@
 <?php
-// Menambahkan header CORS
+header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Koneksi ke database
 include 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil data dari request
-    $nisn = isset($_POST['nisn']) ? $_POST['nisn'] : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
+$response = array();
 
-    // Memeriksa apakah nisn dan password sudah diinput
-    if ($nisn && $password) {
-        // Query untuk mengambil data siswa berdasarkan NISN
-        $query = "SELECT * FROM siswa WHERE nisn = '$nisn'";
-        $result = mysqli_query($koneksi, $query);
+// Baca data input JSON
+$data = json_decode(file_get_contents("php://input"), true);
 
-        if ($result && mysqli_num_rows($result) > 0) {
-            $data = mysqli_fetch_assoc($result);
+// Pastikan data JSON ada
+if (!$data) {
+    $response['success'] = false;
+    $response['message'] = "Data tidak diterima. Pastikan format JSON sesuai.";
+    echo json_encode($response);
+    exit;
+}
 
-            // Verifikasi password menggunakan password_verify()
-            if (password_verify($password, $data['password'])) {
-                // Jika password benar, kirimkan response sukses
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Login berhasil',
-                    'data' => [
-                        'nisn' => $data['nisn'],
-                        'nama' => $data['nama_siswa']
-                    ]
-                ]);
-            } else {
-                // Jika password salah
-                echo json_encode(['success' => false, 'message' => 'Password salah']);
-            }
-        } else {
-            // Jika NISN tidak ditemukan
-            echo json_encode(['success' => false, 'message' => 'NISN tidak ditemukan']);
-        }
+// Ambil nilai NISN dan Password
+$nisn = isset($data['nisn']) ? $data['nisn'] : null;
+$password = isset($data['password']) ? $data['password'] : null;
+
+// Validasi input
+if (empty($nisn) || empty($password)) {
+    $response['success'] = false;
+    $response['message'] = "NISN dan Password harus diisi!";
+    echo json_encode($response);
+    exit;
+}
+
+// Query database
+$query = "SELECT * FROM siswa WHERE nisn = '$nisn'";
+$result = mysqli_query($koneksi, $query);
+
+if (mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+
+    // Periksa password
+    if (password_verify($password, $row['password'])) {
+        $response['success'] = true;
+        $response['message'] = "Login berhasil!";
+        $response['data'] = array(
+            "nisn" => $row['nisn'],
+            "nama_siswa" => $row['nama_siswa'],
+            "kd_kelas" => $row['kd_kelas']
+        );
     } else {
-        // Jika parameter tidak lengkap
-        echo json_encode(['success' => false, 'message' => 'Parameter tidak lengkap']);
+        $response['success'] = false;
+        $response['message'] = "Password salah!";
     }
 } else {
-    // Jika metode request tidak valid
-    echo json_encode(['success' => false, 'message' => 'Metode tidak valid']);
+    $response['success'] = false;
+    $response['message'] = "NISN tidak ditemukan!";
 }
+
+echo json_encode($response);
 ?>

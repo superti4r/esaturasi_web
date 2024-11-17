@@ -57,17 +57,18 @@ $kd_mapel = $kd_mapel_base . $kd_mapel_urutan; // Gabungkan semuanya menjadi '24
   <div class="card">
     <div class="card-body">
     <form action="store.php" method="POST" enctype="multipart/form-data">
-        <!-- Kode Mata Pelajaran (readonly) -->
-        <div class="form-group">
-          <label for="kode_mpp">Kode Mata Pelajaran Kelas</label>
-          <input type="text" name="kd_mpp" id="kode_mpp" class="form-control" value="<?php echo $kd_mapel; ?>" readonly>
-        </div>
+    <!-- Kode Mata Pelajaran (readonly) -->
+    <div class="form-group">
+     
+        <input type="hidden" name="kd_mpp" id="kode_mpp" class="form-control" value="<?php echo $kd_mapel; ?>" readonly>
+    </div>
 
-        <input type="hidden" name="kd_kelas" value="<?php echo $kd_kelas; ?>">
-        <!-- Pilihan Mata Pelajaran -->
-        <div class="form-group">
-          <label for="kd_mapel">Pilih Mata Pelajaran</label>
-          <select name="kd_mapel" id="kd_mapel" class="form-control" required>
+    <input type="hidden" name="kd_kelas" value="<?php echo $kd_kelas; ?>">
+
+    <!-- Pilihan Mata Pelajaran -->
+    <div class="form-group">
+        <label for="kd_mapel">Pilih Mata Pelajaran</label>
+        <select name="kd_mapel" id="kd_mapel" class="form-control" required>
             <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
             <?php
             // Query untuk mengambil daftar mata pelajaran
@@ -80,18 +81,38 @@ $kd_mapel = $kd_mapel_base . $kd_mapel_urutan; // Gabungkan semuanya menjadi '24
                 echo '<option value="">Tidak ada mata pelajaran tersedia</option>';
             }
             ?>
-          </select>
-        </div>
+        </select>
+    </div>
 
-        <!-- Input Foto Mata Pelajaran -->
-        <div class="form-group">
-          <label for="foto_mapel">Foto Mata Pelajaran</label>
-          <input type="file" name="foto_mapel" id="foto_mapel" class="form-control" accept="image/*" required>
-        </div>
+    <!-- Pilihan Nama Guru (Disimpan nik) -->
+    <div class="form-group">
+        <label for="nik">Pilih Nama Guru</label>
+        <select name="nik" id="nik" class="form-control" required>
+            <option value="" disabled selected>-- Pilih Guru --</option>
+            <?php
+            // Query untuk mengambil daftar nama guru
+            $sql_guru = mysqli_query($koneksi, "SELECT nik, nama_guru FROM guru ORDER BY nama_guru ASC");
+            if (mysqli_num_rows($sql_guru) > 0) {
+                while ($guru = mysqli_fetch_assoc($sql_guru)) {
+                    echo '<option value="' . $guru['nik'] . '">' . htmlspecialchars($guru['nama_guru']) . '</option>';
+                }
+            } else {
+                echo '<option value="">Tidak ada guru tersedia</option>';
+            }
+            ?>
+        </select>
+    </div>
 
-        <button type="submit" name="submit" class="btn btn-success">Simpan</button>
-        <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
-      </form>
+    <!-- Input Foto Mata Pelajaran -->
+    <div class="form-group">
+        <label for="foto_mapel">Foto Mata Pelajaran</label>
+        <input type="file" name="foto_mapel" id="foto_mapel" class="form-control" accept="image/*" required>
+    </div>
+
+    <button type="submit" name="submit" class="btn btn-success">Simpan</button>
+    <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+</form>
+
     </div>
   </div>
 </section>
