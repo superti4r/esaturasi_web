@@ -21,6 +21,9 @@
       <div class="d-sm-none d-lg-inline-block">Hi, <?= $_SESSION['nama_guru'] ?></div>
     </a>
     <div class="dropdown-menu dropdown-menu-right">
+    <a href="../profil/index.php" class="dropdown-item has-icon">
+        <i class="fas fa-user-alt"></i> Profil
+      </a>
       <a href="../logout.php" class="dropdown-item has-icon text-danger">
         <i class="fas fa-sign-out-alt"></i> Logout
       </a>
