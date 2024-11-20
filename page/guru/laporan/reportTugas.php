@@ -1,6 +1,6 @@
 <?php
 require_once '../layout/_top.php';
-require_once '../helper/connection.php';
+require_once '../helper/config.php';
 
 
 ?>

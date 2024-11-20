@@ -34,6 +34,9 @@
         <a href="../jadwal/index.php"><i class="fas fa-table"></i> <span>Data Jadwal</span></a>
       </li>
       <li class="dropdown">
+        <a href="../bab/index.php"><i class="fas fa-table"></i> <span>Data Bab</span></a>
+      </li>
+      <li class="dropdown">
         <a href="../tahun_ajaran/index.php"><i class="fas fa-table"></i> <span>Tahun Ajaran</span></a>
       </li>
       <li class="dropdown">

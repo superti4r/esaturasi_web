@@ -28,15 +28,7 @@
           <li><a class="nav-link" href="../pengumpulan_tugas/index.php">List Pengumpulan</a></li>
        </ul>
       </li>
-      <li class="dropdown">
-        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-clipboard-list"></i> <span>Ujian</span></a>
-        <ul class="dropdown-menu">
-          <li><a class="nav-link" href="../ujian/daftar_ujian.php">Daftar Ujian</a></li>
-          <li><a class="nav-link" href="../ujian/pengaturan_ujian.php">Pengaturan Ujian</a></li>
-          <li><a class="nav-link" href="../ujian/buat_soal.php">Buat Soal</a></li>
-          <li><a class="nav-link" href="../ujian/import_soal.php">Import Soal</a></li>
-        </ul>
-      </li>
+    
       <li class="dropdown">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-print"></i> <span>Laporan</span></a>
         <ul class="dropdown-menu">
