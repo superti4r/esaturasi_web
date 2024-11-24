@@ -38,7 +38,12 @@ $sql_pretest = mysqli_query($koneksi, "
     WHERE kode_mpp = '$kode_mpp' AND kd_bab = '$kd_bab'
 ");
 $data_pretest = mysqli_fetch_assoc($sql_pretest);
-
+$sql_tugas = mysqli_query($koneksi, "
+    SELECT * 
+    FROM vtugas 
+    WHERE kode_mpp = '$kode_mpp' AND kd_bab = '$kd_bab'
+");
+$data_tugas = mysqli_fetch_assoc($sql_tugas);
 ?>
 
 <section class="section">
@@ -82,7 +87,7 @@ $data_pretest = mysqli_fetch_assoc($sql_pretest);
 
         <div class="mb-3">
           <!-- Edit Tugas -->
-          <a href="edit_tugas.php?kode_mpp=<?php echo urlencode($kode_mpp); ?>&kd_mapel=<?php echo urlencode($kd_mapel); ?>&kd_kelas=<?php echo urlencode($kd_kelas); ?>" 
+          <a href="tugas.php?kode_mpp=<?php echo urlencode($kode_mpp); ?>&kd_mapel=<?php echo urlencode($kd_mapel); ?>&kd_kelas=<?php echo urlencode($kd_kelas); ?>&kd_bab_kelas=<?php echo urlencode($data_bab['kd_bab_kelas']); ?>" 
              class="btn <?php echo $data_tugas ? 'btn-success' : 'btn-secondary'; ?> btn-sm">
             Edit Tugas
           </a>
