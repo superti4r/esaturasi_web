@@ -3,13 +3,13 @@ require_once '../layout/_top.php';
 require_once '../helper/config.php';
 
 
-$kd_pretest = isset($_GET['kd_pretest']) ? $_GET['kd_pretest'] : '';
+$kd_posttest = isset($_GET['kd_posttest']) ? $_GET['kd_posttest'] : '';
 // Proses pencarian berdasarkan kata kunci
 if (isset($_POST['cari'])) {
   $katakunci = $_POST['kata_kunci'];
-  $sql = mysqli_query($koneksi, "SELECT * FROM vsoalpretest WHERE kd_pretest = '$kd_pretest' ORDER BY kd_pretest ASC");
+  $sql = mysqli_query($koneksi, "SELECT * FROM vsoalposttest WHERE kd_posttest = '$kd_posttest' ORDER BY kd_posttest ASC");
 } else {
-  $sql = mysqli_query($koneksi, "SELECT * FROM vsoalpretest WHERE kd_pretest = '$kd_pretest' ORDER BY kd_pretest ASC");
+  $sql = mysqli_query($koneksi, "SELECT * FROM vsoalposttest WHERE kd_posttest = '$kd_posttest' ORDER BY kd_posttest ASC");
 }
 
 // Memeriksa apakah query berhasil
@@ -40,10 +40,10 @@ ob_end_flush();
 
 <section class="section">
   <div class="section-header d-flex justify-content-between align-items-center">
-    <h1>Soal Pretest</h1>
+    <h1>Soal posttest</h1>
     <div> 
-      <a href="create_soal.php?kd_pretest=<?php echo urlencode($kd_pretest); ?>" class="btn btn-primary mr-2">Tambah Soal</a>
-      <a href="./pretest.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> Kembali</a>
+      <a href="create_soal_posttest.php?kd_posttest=<?php echo urlencode($kd_posttest); ?>" class="btn btn-primary mr-2">Tambah Soal</a>
+      <a href="./posttest.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> Kembali</a>
     </div>
   </div>
 
@@ -81,8 +81,8 @@ ob_end_flush();
                   <td><?php echo $data['opsi_d']; ?></td>
                   <td><?php echo $data['jawab_benar']; ?></td>
                   <td>
-                  <a href="edit_soal_pretest.php?kd_soal=<?php echo $data['kd_soal']; ?>"><button class="btn btn-success btn-sm"><i class="fas fa-edit fa-fw"></i></button></a>
-                    <a href="hapus_soal_pretest.php?kd_soal=<?php echo $data['kd_soal']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang Anda pilih akan dihapus?')">
+                  <a href="edit_soal_prost.php?kd_soal=<?php echo $data['kd_soal']; ?>"><button class="btn btn-success btn-sm"><i class="fas fa-edit fa-fw"></i></button></a>
+                    <a href="hapus_soal_posttest.php?kd_soal=<?php echo $data['kd_soal']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang Anda pilih akan dihapus?')">
                       <button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button>
                     </a>
                   </td>
