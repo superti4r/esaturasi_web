@@ -95,7 +95,7 @@ $data_tugas = mysqli_fetch_assoc($sql_tugas);
 
         <div class="mb-3">
           <!-- Edit Post Test -->
-          <a href="edit_post_test.php?kode_mpp=<?php echo urlencode($kode_mpp); ?>&kd_mapel=<?php echo urlencode($kd_mapel); ?>&kd_kelas=<?php echo urlencode($kd_kelas); ?>" 
+          <a href="posttest.php?kode_mpp=<?php echo urlencode($kode_mpp); ?>&kd_mapel=<?php echo urlencode($kd_mapel); ?>&kd_kelas=<?php echo urlencode($kd_kelas); ?>&kd_bab_kelas=<?php echo urlencode($data_bab['kd_bab_kelas']); ?>" 
              class="btn <?php echo $data_posttest ? 'btn-success' : 'btn-secondary'; ?> btn-sm">
             Edit Post Test
           </a>
