@@ -34,7 +34,6 @@ ob_end_flush();
 <section class="section">
   <div class="section-header d-flex justify-content-between">
     <h1>Jadwal Mengajar</h1>
-    <a href="create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
     <div class="col-12">
