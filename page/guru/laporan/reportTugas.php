@@ -14,10 +14,10 @@ require_once '../helper/config.php';
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <h6>Cetak Laporan Tugas</h6>
+          <h6>Laporan Tugas Per-siswa</h6>
           <table cellpadding="8" class="w-100">
               <tr>
-                <td>Kelas</td>
+                <td>Kelas Yang Diampu</td>
                 <td>
                   <select class="form-control" name="kelas" id="kelas" required>
                     <option value="">--Pilih Kelas--</option>
@@ -28,20 +28,44 @@ require_once '../helper/config.php';
                 </td>
               </tr>
               <tr>
-                <td>Nama Tugas</td>
+                <td>Mata Pelajaran</td>
                 <td>
-                  <select class="form-control" name="jenis_tugas" id="jenis_tugas" required>
-                    <option value="">--Pilih Nama Tugas--</option>
-                    <option value="X">nama tugas ambil dari DB</option>
-                    <option value="X">nama tugas ambil dari DB</option>
-                    <option value="X">nama tugas ambil dari DB</option>
-                    <option value="X">nama tugas ambil dari DB</option>
+                  <select class="form-control" name="mapel" id="mapel" required>
+                    <option value="">--Pilih Nama Mata Pelajaran--</option>
+                    <option value="X">nama mapel ambil dari DB</option>
+                    <option value="X">nama mapel ambil dari DB</option>
+                    <option value="X">nama mapel ambil dari DB</option>
+                    <option value="X">nama mapel ambil dari DB</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Bab</td>
+                <td>
+                  <select class="form-control" name="bab" id="bab" required>
+                    <option value="">--Pilih Bab--</option>
+                    <option value="X">nama bab ambil dari DB</option>
+                    <option value="X">nama bab ambil dari DB</option>
+                    <option value="X">nama bab ambil dari DB</option>
+                    <option value="X">nama bab ambil dari DB</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Siswa</td>
+                <td>
+                  <select class="form-control" name="pilih_siswa" id="pilih_siswa" required>
+                    <option value="">--Pilih Siswa--</option>
+                    <option value="X">nama siswa ambil dari DB</option>
+                    <option value="X">nama siswa ambil dari DB</option>
+                    <option value="X">nama siswa ambil dari DB</option>
+                    <option value="X">nama siswa ambil dari DB</option>
                   </select>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <input class="btn btn-primary" type="submit" name="printReport" value="Cetak">
+                  <input class="btn btn-primary" type="submit" name="printReport" value="Unduh">
                   <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
                 </td>
               </tr>
