@@ -60,9 +60,10 @@ $foto = $_SESSION['foto_profil_guru'];
         <tr>
             <td>Foto</td>
             <td>
-                <img src="<?php echo $data['foto_profil_guru']; ?>" alt="Foto Profil" width="100" height="100">
+                <img src="../uploads/profile/<?php echo $data['foto_profil_guru']; ?>" alt="Foto Profil" width="100" height="100">
                 <input class="form-control" type="file" name="foto_profil" accept="image/*">
-                <input type="hidden" name="foto_profil_lama" value="<?php echo $data['foto_profil_guru']; ?>">
+                <input type="hidden" name="foto_profil_lama" value="<?php echo htmlspecialchars($data['foto_profil_guru']); ?>">
+
             </td>
         </tr>
         <tr>
@@ -77,6 +78,7 @@ $foto = $_SESSION['foto_profil_guru'];
             <td>Email</td>
             <td><input class="form-control" type="email" name="email_guru" value="<?php echo $data['email_guru']; ?>" required placeholder="Sesuai Format Email"></td>
         </tr>
+        
         <tr>
             <td><input type="hidden" name="password" value="saturasi123"></td>
         </tr>

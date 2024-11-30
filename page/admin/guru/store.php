@@ -2,8 +2,6 @@
 session_start();
 require_once '../helper/config.php';
 
-
-
 // Proses tambah data guru dengan mengambil data dari hasil inputan
 if (isset($_POST['proses'])) {
     // Ambil data dari form
@@ -83,19 +81,18 @@ if (isset($_POST['proses'])) {
     $file_type = mime_content_type($tmp_name);
     $allowed_extensions = ['jpg', 'jpeg', 'png'];
     $allowed_types = ['image/jpeg', 'image/png'];
-    $new_file_name = $nik . '.' . $file_extension;
+    $new_file_name = $nik . '.' . $file_extension; // Nama file sesuai format NIK
     $upload_file = $upload_dir . $new_file_name;
 
     // Validasi dan proses upload gambar
     if (in_array($file_extension, $allowed_extensions) && in_array($file_type, $allowed_types)) {
         if ($_FILES['foto']['size'] < 2 * 1024 * 1024) { // Maks 2MB
             if (move_uploaded_file($tmp_name, $upload_file)) {
-                // Simpan data guru ke database tanpa role
-                $sql = mysqli_query($koneksi, "INSERT INTO guru (nik, nip, nama_guru, tanggal_lahir_guru, email_guru, jekel_guru, no_telepon_guru, foto_profil_guru, alamat, password_guru) VALUES ('$nik', '$nip', '$nama_guru', '$tanggal_lahir', '$email_guru', '$jekel', '$no_telepon_guru', '$upload_file', '$alamat', '$password')");
+                // Simpan data guru ke database dengan nama file saja
+                $sql = mysqli_query($koneksi, "INSERT INTO guru (nik, nip, nama_guru, tanggal_lahir_guru, email_guru, jekel_guru, no_telepon_guru, foto_profil_guru, alamat, password_guru) VALUES ('$nik', '$nip', '$nama_guru', '$tanggal_lahir', '$email_guru', '$jekel', '$no_telepon_guru', '$new_file_name', '$alamat', '$password')");
 
                 if ($sql) {
                     header("Location:./index.php?aksi=suksestambah");
-                    location.reload();
                     exit();
                 } else {
                     echo "Error: " . mysqli_error($koneksi);
