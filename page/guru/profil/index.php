@@ -1,6 +1,10 @@
 <?php
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
+
+$nik = $_SESSION['nik']; 
+$sql = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik = '$nik'");
+$guru = mysqli_fetch_assoc($sql);
 ?>
 
 <section class="section">
@@ -20,31 +24,37 @@ require_once '../helper/config.php';
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="nik">NIK</label>
-                                        <input type="text" class="form-control" id="nik">
+                                        <input type="text" class="form-control" id="nik" value="<?= $guru['nik'] ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="nip">NIP</label>
-                                        <input type="text" class="form-control" id="nip">
+                                        <input type="text" class="form-control" id="nip" value="<?= $guru['nik'] ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="nama">Nama</label>
-                                        <input type="text" class="form-control" id="nama">
+                                        <input type="text" class="form-control" id="nama" value="<?= $guru['nama_guru'] ?>" readonly>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email">
+                                        <input type="email" class="form-control" id="email" value="<?= $guru['email_guru'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="telepon">Telepon</label>
+                                        <input type="number" class="form-control" id="telepon" value="<?= $guru['no_telepon_guru'] ?>" required>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password">
+                                        <input type="password" class="form-control" id="password" value="<?= $guru['password_guru'] ?>" >
                                     </div>
                                 </div>
                             </div>
@@ -61,12 +71,17 @@ require_once '../helper/config.php';
                 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <img src="../assets/img/default.png" alt="Foto Profil" class="img-fluid rounded-circle mb-3" style="max-width: 150px;" id="foto-preview">
-                            <div class="form-group">
-                            <label for="foto_profil" class="form-label" style="color: red;">*Ukuran foto adalah 500x500</label>
-                                <input type="file" class="form-control mb-2" id="foto_profil">
-                            </div>
-                            <button type="button" class="btn btn-primary">Unggah Foto</button>
+                        <img src="../../admin/uploads/profile/<?php echo $data['foto_profil_guru']; ?>" alt="Tidak Ada Foto" width="100" height="100">
+                                
+                        <form action="upload_foto.php" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+    
+        <input type="file" class="form-control mb-2 mt-5" id="foto_profil" name="foto_profil">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Unggah Foto</button>
+</form>
+
+                       
                             <button type="button" class="btn btn-danger" id="btn-hapus-foto">Hapus Foto</button>
                         </div>
                     </div>
