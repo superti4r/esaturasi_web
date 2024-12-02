@@ -106,7 +106,7 @@ $mapelResult = mysqli_query($koneksi, $mapelQuery);
                     <option value="Rabu">Rabu</option>
                     <option value="Kamis">Kamis</option>
                     <option value="Jumat">Jumat</option>
-                    <option value="Sabtu">Sabtu</option>
+                 
                   </select>
                 </td>
               <tr>
@@ -125,7 +125,8 @@ $mapelResult = mysqli_query($koneksi, $mapelQuery);
               <tr>
                 <td colspan="3">
                   <button type="submit" name="proses" class="btn btn-success">Simpan</button>
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+                  <input class="btn btn-warning" type="reset" name="batal" value="Bersihkan">
+                  <a href="index.php" class="btn btn-danger">Batal</a>
                 </td>
               </tr>
             </table>

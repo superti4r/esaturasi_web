@@ -110,7 +110,8 @@ $kd_mapel = $kd_mapel_base . $kd_mapel_urutan; // Gabungkan semuanya menjadi '24
     </div>
 
     <button type="submit" name="submit" class="btn btn-success">Simpan</button>
-    <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+    <input class="btn btn-warning" type="reset" name="batal" value="Bersihkan">
+    <a href="index.php" class="btn btn-danger">Batal</a>
 </form>
 
     </div>

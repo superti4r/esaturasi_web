@@ -10,9 +10,9 @@
     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
     <?php 
   // Cek apakah ada foto profil yang diset dalam session
-  if (!empty($_SESSION['foto_profil_guru']) && file_exists('../admin/' . $_SESSION['foto_profil_guru'])):
+  if (!empty($_SESSION['foto_profil_guru']) && file_exists('../../admin/uploads/profile/' . $_SESSION['foto_profil_guru'])):
 ?>
-    <img src="../admin/<?php echo $_SESSION['foto_profil_guru']; ?>" alt="image" class="rounded-circle mr-1">
+    <img src="../../admin/uploads/profile/<?php echo $_SESSION['foto_profil_guru']; ?>" alt="image" class="rounded-circle mr-1">
 <?php else: ?>
     <!-- Jika tidak ada foto profil, tampilkan gambar default -->
     <img src="../assets/img/avatar/avatar-1.png" alt="image" class="rounded-circle mr-1">

@@ -2,36 +2,62 @@
 include 'helper/config.php';
 session_start(); 
 $pesan = "";
-
 if (isset($_POST['submit'])) {
-    $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
-    $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
-    $query = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass'");
-    if (!$query) {
-        die("Query Error: " . mysqli_error($koneksi)); 
-    }
-    $row = mysqli_num_rows($query);
-    if ($row > 0) {
-        $data = mysqli_fetch_array($query);
+  $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
+  $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
+  
+  // Menambahkan pengecekan status aktif
+  $query = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass' AND status='aktif'");
+  
+  if (!$query) {
+      die("Query Error: " . mysqli_error($koneksi)); 
+  }
 
-        $_SESSION['nik'] = $data['nik'];
-        $_SESSION['email_guru'] = $data['email_guru'];
-        $_SESSION['nama_guru'] = $data['nama_guru'];
-		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
-        header("location:dashboard/index.php");
-    } else {
-        header("location:login.php?aksi=eror");
-    }
+  $row = mysqli_num_rows($query);
+  if ($row > 0) {
+      $data = mysqli_fetch_array($query);
+
+      $_SESSION['nik'] = $data['nik'];
+      $_SESSION['email_guru'] = $data['email_guru'];
+      $_SESSION['nama_guru'] = $data['nama_guru'];
+      $_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
+      
+      header("location:dashboard/index.php");
+  } else {
+      // Menambahkan pengecekan untuk status tidak aktif
+      $query_status = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass'");
+      if (mysqli_num_rows($query_status) > 0) {
+          header("location:login.php?aksi=nonaktif");
+      } else {
+          header("location:login.php?aksi=eror");
+      }
+  }
 }
+
 if (isset($_GET['aksi'])) {
   $aksi = $_GET['aksi'];
   if ($aksi == 'eror') {
       $pesan = "Username atau Password yang Anda masukkan salah.";
+  } elseif ($aksi == 'nonaktif') {
+      $pesan = "Akun Anda sudah tidak aktif.";
   } elseif ($aksi == 'belum') {
       $pesan = "Anda belum login.";
   }
 }
+
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Guru | E-Saturasi</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="icon" type="image/x-icon" href="assets/favicon.png" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +129,7 @@ if (isset($_GET['aksi'])) {
               Copyright &copy; Project Pintar 2023
             </div>
           </div>
-        </div>
+        </divW
       </div>
     </section>
   </div>

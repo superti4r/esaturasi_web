@@ -13,7 +13,7 @@ $kd="MP".sprintf("%03s", $kd);
 
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Tambah Mata Pelajara</h1>
+    <h1>Tambah Mata Pelajaran</h1>
     <a href="./index.php" class="btn btn-light"><i class="fas fa-arrow-left"></i> </a>
   </div>
   <div class="row">
@@ -37,7 +37,8 @@ $kd="MP".sprintf("%03s", $kd);
               <tr>
                 <td colspan="3">
                   <button type="submit" name="proses" class="btn btn-success">Simpan</button>
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+                  <input class="btn btn-warning" type="reset" name="batal" value="Bersihkan">
+                  <a href="index.php" class="btn btn-danger">Batal</a>
                 </td>
               </tr>
 

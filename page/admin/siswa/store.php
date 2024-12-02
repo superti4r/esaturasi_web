@@ -53,12 +53,12 @@ if (isset($_POST['proses'])) {
       exit();
   }
 
-  $password_hash = password_hash($password, PASSWORD_DEFAULT);
+  
 
 
   // Menyimpan data ke tabel siswa
   $sql = "INSERT INTO siswa (nisn, nama_siswa, email, no_telepon_siswa, jekel_siswa, tempat_lahir_siswa, tgl_lahir_siswa, alamat, tahun_masuk_siswa, status_siswa, kd_kelas, password, foto_profil_siswa) 
-          VALUES ('$nisn', '$nama_siswa', '$email', '$no_telepon_siswa', '$jekel_siswa', '$tempat_lahir', '$tgl_lahir_siswa', '$alamat', '$tahun_masuk_siswa', '$status_siswa', '$kd_kelas', '$password_hash', '$foto_profil_siswa')";
+          VALUES ('$nisn', '$nama_siswa', '$email', '$no_telepon_siswa', '$jekel_siswa', '$tempat_lahir', '$tgl_lahir_siswa', '$alamat', '$tahun_masuk_siswa', '$status_siswa', '$kd_kelas', '$password', '$foto_profil_siswa')";
 
   // Eksekusi query
   if (mysqli_query($koneksi, $sql)) {

@@ -119,11 +119,14 @@ $tanggal_lahir = isset($data['tanggal_lahir_siswa']) ? date('Y-m-d', strtotime($
           
         </tr>
         <tr>
-            <td colspan="3">
-                <button type="submit" name="kirim" class="btn btn-success">Simpan Perubahan</button>
-                <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
-            </td>
-        </tr>
+    <td colspan="3">
+        <button type="submit" name="kirim" class="btn btn-success">Simpan Perubahan</button>
+        <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+        <!-- Tombol Reset Password -->
+        <a href="reset_password.php?nisn=<?php echo $data['nisn']; ?>" class="btn btn-warning">Reset Password</a>
+    </td>
+</tr>
+
     </table>
 </form>
         </div>
