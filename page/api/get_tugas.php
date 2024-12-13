@@ -6,22 +6,21 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
 // Validasi parameter
-if (empty($_GET['nisn'])) {
+if (empty($_GET['kd_kelas'])) {
     echo json_encode([
         "status" => "error",
-        "message" => "Parameter NISN diperlukan."
+        "message" => "Parameter Kode Kelas diperlukan."
     ]);
     exit();
 }
 
-$nisn = mysqli_real_escape_string($koneksi, $_GET['nisn']);
-
-// Query untuk mengambil data berdasarkan parameter
+$kd_kelas = mysqli_real_escape_string($koneksi, $_GET['kd_kelas']);
+// Query untuk mengambil data berdasarkan parameter kd_kelas
 $query = mysqli_query($koneksi, "
     SELECT 
-        kd_tugas, nisn, tgl_pengumpulan, jam, status
-    FROM pengumpulan_tugas
-    WHERE nisn = '$nisn'
+        kd_tugas, nama_bab, kd_kelas, nama_mapel,  judul_bab, tenggat_waktu
+    FROM vtugas
+    WHERE kd_kelas = '$kd_kelas'
 ");
 
 if (!$query) {
@@ -35,10 +34,11 @@ if (!$query) {
 $result = [];
 while ($row = mysqli_fetch_assoc($query)) {
     $result[] = [
-        'title' => $row['kd_tugas'],
-        'subject' => $row['nisn'],
-        'deadline' => $row['tgl_pengumpulan'] . ' ' . $row['jam'],
-        'status' => $row['status']
+        'task_id' => $row['nama_bab'], 
+        'class_code' => $row['kd_kelas'], 
+        'subject' => $row['nama_mapel'], 
+        'chapter_title' => $row['judul_bab'], 
+        'deadline' => $row['tenggat_waktu'], 
     ];
 }
 
@@ -46,7 +46,7 @@ while ($row = mysqli_fetch_assoc($query)) {
 if (empty($result)) {
     echo json_encode([
         "status" => "success",
-        "message" => "Tidak ada tugas untuk siswa ini.",
+        "message" => "Tidak ada tugas untuk kelas ini.",
         "data" => []
     ]);
 } else {
