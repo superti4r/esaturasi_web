@@ -43,7 +43,8 @@ $current_date = date('Y-m-d');
               <tr>
                 <td colspan="3">
                   <button type="submit" name="kirim" class="btn btn-success">Simpan</button>
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+                  <input class="btn btn-warning" type="reset" name="reset" value="Bersihkan">
+                  <a href="index.php" class="btn btn-danger">Batal</a>
                 </td>
               </tr>
 

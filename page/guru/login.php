@@ -6,32 +6,48 @@ $pesan = "";
 if (isset($_POST['submit'])) {
     $nik = mysqli_real_escape_string($koneksi, $_POST['nik']);
     $pass = mysqli_real_escape_string($koneksi, $_POST['password']);
-    $query = mysqli_query($koneksi, "SELECT * FROM vadmin WHERE nik='$nik' AND password_guru='$pass'");
+    
+    // Query untuk mengecek NIK, password, dan status 'aktif'
+    $query = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik' AND password_guru='$pass' AND status='aktif'");
+    
     if (!$query) {
         die("Query Error: " . mysqli_error($koneksi)); 
     }
+
     $row = mysqli_num_rows($query);
     if ($row > 0) {
         $data = mysqli_fetch_array($query);
 
+        // Simpan data ke dalam sesi
         $_SESSION['nik'] = $data['nik'];
         $_SESSION['email_guru'] = $data['email_guru'];
         $_SESSION['nama_guru'] = $data['nama_guru'];
-		$_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
+        $_SESSION['foto_profil_guru'] = $data['foto_profil_guru'];
+        
         header("location:dashboard/index.php");
     } else {
-        header("location:login.php?aksi=eror");
+        // Query untuk mengecek apakah akun tidak aktif
+        $query_status = mysqli_query($koneksi, "SELECT * FROM guru WHERE nik='$nik' AND password_guru='$pass'");
+        if (mysqli_num_rows($query_status) > 0) {
+            header("location:login.php?aksi=nonaktif");
+        } else {
+            header("location:login.php?aksi=eror");
+        }
     }
 }
+
 if (isset($_GET['aksi'])) {
-  $aksi = $_GET['aksi'];
-  if ($aksi == 'eror') {
-      $pesan = "Username atau Password yang Anda masukkan salah.";
-  } elseif ($aksi == 'belum') {
-      $pesan = "Anda belum login.";
-  }
+    $aksi = $_GET['aksi'];
+    if ($aksi == 'eror') {
+        $pesan = "Username atau Password yang Anda masukkan salah.";
+    } elseif ($aksi == 'nonaktif') {
+        $pesan = "Akun Anda sudah tidak aktif.";
+    } elseif ($aksi == 'belum') {
+        $pesan = "Anda belum login.";
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -77,7 +93,7 @@ if (isset($_GET['aksi'])) {
 
             <div class="card card-primary">
               <div class="card-header">
-                <h4>Login Admin</h4>
+                <h4>Login Guru</h4>
               </div>
 
               <div class="card-body">

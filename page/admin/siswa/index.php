@@ -3,7 +3,6 @@ ob_start(); // Tambahkan ini di awal file
 require_once '../layout/_top.php';
 require_once '../helper/config.php';
 
-// Handle promote_selected action
 if (isset($_POST['promote_selected'])) {
     if (!empty($_POST['selected_ids'])) {
         $ids = array_map(function($id) use ($koneksi) {
@@ -43,18 +42,77 @@ if (isset($_POST['promote_selected'])) {
                         $new_class_data = mysqli_fetch_assoc($new_class_result);
                         $new_kd_kelas = $new_class_data['kd_kelas'];
                         
-                        // Update kelas dan tingkat kelas siswa
+                        // Update kelas siswa
                         $update_query = "UPDATE siswa 
                                          SET kd_kelas = '$new_kd_kelas'
                                          WHERE nisn = '".$row['nisn']."'";
-                        mysqli_query($koneksi, $update_query);
+                        if (mysqli_query($koneksi, $update_query)) {
+                            // Jika tingkat kelas sudah 3 (tingkat akhir), ubah status siswa menjadi "Tidak Aktif"
+                            if ($tingkat_baru == 3) {
+                                $update_status_query = "UPDATE siswa 
+                                                        SET status_siswa = 'aktif' 
+                                                        WHERE nisn = '".$row['nisn']."'";
+                                if (!mysqli_query($koneksi, $update_status_query)) {
+                                    error_log("Gagal update status siswa untuk NISN: ".$row['nisn'].". Error: " . mysqli_error($koneksi));
+                                }
+                            }
+                        } else {
+                            error_log("Gagal update kelas untuk NISN: ".$row['nisn'].". Error: " . mysqli_error($koneksi));
+                        }
                     } else {
                         $_SESSION['message'] = "Kelas baru untuk jurusan yang sama dan tingkat yang lebih tinggi tidak ditemukan.";
                         header("Location: index.php");
                         exit();
                     }
+                } elseif ($tingkat_kelas == 2) {
+                    // Logika untuk tingkat kelas 2, jika perlu
+                    $tingkat_baru = $tingkat_kelas + 1;  // Tingkat baru
+                   // Cari kelas baru berdasarkan tingkat dan jurusan yang sama, dan no_kelas yang sama
+                   $new_class_query = "SELECT kd_kelas 
+                   FROM kelas 
+                   WHERE no_kelas = '$no_kelas' 
+                   AND kd_jurusan = '$kd_jurusan' 
+                   AND tingkatan = '$tingkat_baru' 
+                   LIMIT 1";
+$new_class_result = mysqli_query($koneksi, $new_class_query);
+
+if ($new_class_result && mysqli_num_rows($new_class_result) > 0) {
+   $new_class_data = mysqli_fetch_assoc($new_class_result);
+   $new_kd_kelas = $new_class_data['kd_kelas'];
+   
+   // Update kelas siswa
+   $update_query = "UPDATE siswa 
+                    SET kd_kelas = '$new_kd_kelas'
+                    WHERE nisn = '".$row['nisn']."'";
+   if (mysqli_query($koneksi, $update_query)) {
+       // Jika tingkat kelas sudah 3 (tingkat akhir), ubah status siswa menjadi "Tidak Aktif"
+       if ($tingkat_baru == 3) {
+           $update_status_query = "UPDATE siswa 
+                                   SET status_siswa = 'aktif' 
+                                   WHERE nisn = '".$row['nisn']."'";
+           if (!mysqli_query($koneksi, $update_status_query)) {
+               error_log("Gagal update status siswa untuk NISN: ".$row['nisn'].". Error: " . mysqli_error($koneksi));
+           }
+       }
+   } else {
+       error_log("Gagal update kelas untuk NISN: ".$row['nisn'].". Error: " . mysqli_error($koneksi));
+   }
+} else {
+   $_SESSION['message'] = "Kelas baru untuk jurusan yang sama dan tingkat yang lebih tinggi tidak ditemukan.";
+   header("Location: index.php");
+   exit();
+}
                 }
-                // Tambahkan logika lain jika perlu untuk tingkat kelas yang lebih tinggi
+               
+                if ($tingkat_kelas == 3) {
+                    // Update status siswa menjadi "Tidak Aktif"
+                    $update_status_query = "UPDATE siswa 
+                                            SET status_siswa = 'tidak aktif' 
+                                            WHERE nisn = '".$row['nisn']."'";
+                    if (!mysqli_query($koneksi, $update_status_query)) {
+                        error_log("Gagal update status siswa untuk NISN: ".$row['nisn'].". Error: " . mysqli_error($koneksi));
+                    }
+                }
             }
 
             $_SESSION['message'] = "Siswa berhasil naik kelas.";
@@ -67,6 +125,7 @@ if (isset($_POST['promote_selected'])) {
         $_SESSION['message'] = "Pilih minimal satu data untuk dipromosikan.";
     }
 }
+
 
 //digunakan untuk mencari data dan menampilkan data siswa
 $katakunci = "";

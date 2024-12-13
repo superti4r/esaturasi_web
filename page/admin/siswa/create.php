@@ -14,6 +14,17 @@ $current_date = date('Y-m-d');
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+        <form action="upload_excel.php" method="POST" enctype="multipart/form-data" class="row align-items-center mb-4">
+  <div class="col-md-9">
+    <label for="excelFile" class="form-label">Upload Data Siswa (Excel)</label>
+    <input type="file" name="file_excel" class="form-control" name="excelFile" id="excelFile" accept=".xlsx, .xls" required>
+  </div>
+  <div class="col-md-3">
+    <label class="d-none d-md-block">&nbsp;</label>
+    <button type="submit" name="upload" class="btn btn-primary w-100">Upload</button>
+  </div>
+</form>
+
           <!-- Form -->
           <form action="store.php" method="POST" enctype="multipart/form-data">
             <table cellpadding="8" class="w-100">
@@ -102,7 +113,8 @@ $current_date = date('Y-m-d');
               <tr>
                 <td colspan="3">
                   <button type="submit" name="proses" class="btn btn-success">Simpan</button>
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+                  <input class="btn btn-warning" type="reset" name="batal" value="Bersihkan">
+                  <a href="index.php" class="btn btn-danger">Batal</a>
                 </td>
               </tr>
 

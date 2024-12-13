@@ -67,7 +67,7 @@ ob_end_flush();
 ?>
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Mata Pelajaran</h1>
+    <h1>Data Pengumuman</h1>
     <a href="create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">

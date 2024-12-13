@@ -26,7 +26,8 @@ require_once '../helper/connection.php';
               <tr>
                 <td>
                   <input class="btn btn-primary" type="submit" name="proses" value="Simpan">
-                  <input class="btn btn-danger" type="reset" name="batal" value="Bersihkan">
+                  <input class="btn btn-warning" type="reset" name="batal" value="Bersihkan">
+                  <a href="index.php" class="btn btn-danger">Batal</a>
                 </td>
               </tr>
             </table>

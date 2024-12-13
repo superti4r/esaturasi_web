@@ -38,7 +38,7 @@ ob_end_flush();
 ?>
 <section class="section">
   <div class="section-header d-flex justify-content-between">
-    <h1>Data Guru</h1>
+    <h1>Data Admin</h1>
     <a href="create.php" class="btn btn-primary">Tambah Data</a>
   </div>
   <div class="row">
@@ -89,7 +89,7 @@ ob_end_flush();
                       <a href="detail.php?nik=<?php echo $data['nik']; ?>"><button class="btn btn-success btn-sm"><i class="fas fa-info-circle"></i> </button></a>
                     <?php } else { ?>
                       <a href="detail.php?nik=<?php echo $data['nik']; ?>"><button class="btn btn-success btn-sm"><i class="fas fa-info-circle"></i></button></a>
-                      <a href="edit.php?nik=<?php echo $data['nik']; ?>"><button class="btn btn-warning btn-sm"><i class="fas fa-edit fa-fw"></i></button></a>
+
                       <a href="delete.php?nik=<?php echo $data['nik']; ?>&pesan=hapus" onClick="return confirm('Apakah data yang Anda pilih akan dihapus?')"><button class="btn btn-danger btn-sm"><i class="fas fa-trash fa-fw"></i></button></a>
                     <?php } ?>
                   </td>
