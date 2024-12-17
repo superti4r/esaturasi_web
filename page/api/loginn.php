@@ -8,7 +8,7 @@ if (isset($_POST['nisn']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // Query ke database
-    $sql = "SELECT nisn, nama_siswa, kd_kelas FROM siswa WHERE nisn = '$nisn' AND password = '$password'";
+    $sql = "SELECT nisn, nama_siswa, kd_kelas, foto_profil_siswa FROM siswa WHERE nisn = '$nisn' AND password = '$password'";
     $result = mysqli_query($koneksi, $sql);
 
     if (mysqli_num_rows($result) > 0) {
