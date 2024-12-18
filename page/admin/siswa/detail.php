@@ -23,13 +23,16 @@ $data = mysqli_fetch_assoc($query);
                     
                     <div class="card-body">
                                  
-                            <div class="text-center mb-4">
-                        <?php if (!empty($data['foto_profil_siswa']) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $data['foto_profil_siswa'])): ?>
-                            <img src="<?php echo $data['foto_profil_siswa']; ?>" class="img-fluid rounded" alt="Gambar Profile" style="max-height: 200px;">
-                        <?php else: ?>
-                            <p>Tidak ada foto</p>
-                        <?php endif; ?>
-                    </div>
+                    <div class="text-center mb-4">
+              <?php
+              $foto_path = '../uploads/profilesiswa/' . $data['foto_profil_siswa'];
+              if (!empty($data['foto_profil_siswa']) && file_exists($foto_path)) {
+                  echo '<img src="' . $foto_path . '" class="img-fluid rounded" alt="Foto Profil Siswa" style="max-height: 200px;">';
+              } else {
+                  echo '<p>Tidak ada foto</p>';
+              }
+?>              
+            </div>
                                         
                         <table class="table table-bordered">
                             <tr>

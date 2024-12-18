@@ -115,9 +115,17 @@ $tanggal_lahir = isset($data['tanggal_lahir_siswa']) ? date('Y-m-d', strtotime($
             <td>Alamat</td>
             <td colspan="3"><textarea class="form-control" name="alamat" required placeholder="Contoh : Jln Brawijaya N0.10 Kab Probolinggo"><?php echo $data['alamat']; ?></textarea></td>
         </tr>
-        
-          
+         <!-- Input foto -->
+         <tr>
+            <td>Foto</td>
+            <td>
+                <img src="../uploads/profilesiswa/<?php echo $data['foto_profil_siswa']; ?>" alt="Foto Profil" width="100" height="100">
+                <input class="form-control" type="file" name="foto_profil" accept="image/*">
+                <input type="hidden" name="foto_profil_lama" value="<?php echo htmlspecialchars($data['foto_profil_siswa']); ?>">
+
+            </td>
         </tr>
+
         <tr>
     <td colspan="3">
         <button type="submit" name="kirim" class="btn btn-success">Simpan Perubahan</button>

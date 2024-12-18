@@ -52,7 +52,29 @@ if (isset($_POST['proses'])) {
       echo "<script>alert('NISN sudah terdaftar. Mohon masukkan NISN yang berbeda.'); window.history.back();</script>";
       exit();
   }
+// Proses upload foto profil
+if ($_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
+    $foto_tmp = $_FILES['foto_profil']['tmp_name'];
+    $foto_ext = pathinfo($_FILES['foto_profil']['name'], PATHINFO_EXTENSION);
+    $foto_nama = $nisn . '.' . $foto_ext; // Nama file foto berdasarkan NISN
+    $upload_dir = '../uploads/profilesiswa/';
 
+    // Membuat folder jika belum ada
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    // Pindahkan file ke folder uploads/profilesiswa
+    if (move_uploaded_file($foto_tmp, $upload_dir . $foto_nama)) {
+        $foto_profil_siswa = $foto_nama;
+    } else {
+        echo "<script>alert('Gagal mengupload foto profil.'); window.history.back();</script>";
+        exit();
+    }
+} else {
+    echo "<script>alert('Tidak ada file foto yang diupload.'); window.history.back();</script>";
+    exit();
+}
   
 
 

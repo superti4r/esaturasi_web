@@ -101,6 +101,13 @@ $current_date = date('Y-m-d');
                 </td>
               </tr>
               <tr>
+  <td>Foto Profil</td>
+  <tr>
+            <td>Foto Profil</td>
+            <td><input class="form-control" type="file" name="foto_profil" accept=".jpg, .jpeg, .png" required></td>
+        </tr>
+
+              <tr>
                 <td>Alamat</td>
                 <td colspan="3"><textarea class="form-control" name="alamat" required placeholder="Contoh : Jln Brawijaya N0.10 Kab Probolinggo"></textarea></td>
               </tr>

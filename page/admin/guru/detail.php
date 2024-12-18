@@ -20,12 +20,13 @@ $data = mysqli_fetch_assoc($query);
           <div class="card-body">
             <div class="text-center mb-4">
               <?php
-              $foto_path = $data['foto_profil_guru'];
-              if (!empty($data['foto_profil_guru']) && file_exists($foto_path)): ?>
-                <img src="<?php echo $foto_path; ?>" class="img-fluid rounded" alt="Foto Profil Guru" style="max-height: 200px;">
-              <?php else: ?>
-                <p>Tidak ada foto</p>
-              <?php endif; ?>
+              $foto_path = '../uploads/profile/' . $data['foto_profil_guru'];
+              if (!empty($data['foto_profil_guru']) && file_exists($foto_path)) {
+                  echo '<img src="' . $foto_path . '" class="img-fluid rounded" alt="Foto Profil Guru" style="max-height: 200px;">';
+              } else {
+                  echo '<p>Tidak ada foto</p>';
+              }
+?>              
             </div>
             <table class="table table-bordered">
               <tr>
