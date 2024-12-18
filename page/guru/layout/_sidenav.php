@@ -22,7 +22,7 @@
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-print"></i> <span>Laporan</span></a>
         <ul class="dropdown-menu">
           <li><a class="nav-link" href="../laporan/reportTugas.php">Laporan Tugas</a></li>
-          <li><a class="nav-link" href="../laporan/reportUjian.php">Laporan Ujian</a></li>
+         
         </ul>
       </li>
     </ul>
