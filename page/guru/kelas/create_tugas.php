@@ -4,53 +4,69 @@ require_once '../helper/config.php';
 
 $kode_mpp = isset($_GET['kode_mpp']) ? $_GET['kode_mpp'] : '';
 $kd_mapel = isset($_GET['kd_mapel']) ? $_GET['kd_mapel'] : '';
-$kd_bab = isset($_GET['kd_bab']) ? $_GET['kd_bab_kelas'] : '';
 $kd_bab_kelas = isset($_GET['kd_bab_kelas']) ? $_GET['kd_bab_kelas'] : '';
+
 // Proses penyimpanan data
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit'])) { 
     $judul_tugas = $_POST['judul_tugas'];
     $deskripsi = $_POST['deskripsi'];
     $file_tugas = $_FILES['file_tugas']['name'];
     $tgl_tugas = $_POST['tgl_tugas'];
-    $kd_bab_kelas = $_POST['kd_bab_kelas'];
     $tegat_waktu = $_POST['tegat_waktu'];
-    $kd_tugas = "";
-
+    $kd_bab_kelas = $_POST['kd_bab_kelas'];
+    
     // Direktori untuk menyimpan file upload
-    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/tugas/';
+    $uploadDir = __DIR__ . '/../uploads/tugas/';
+    
+    // Periksa apakah folder ada, jika tidak buat folder
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
     // Validasi file yang diunggah
-    $allowed_types = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    $allowed_types = [
+        'application/pdf', 
+        'image/jpeg', 
+        'image/png'
+    ];
+    
     $file_type = mime_content_type($_FILES['file_tugas']['tmp_name']);
     $file_tugas = basename($_FILES['file_tugas']['name']);
     $filePath = $uploadDir . $file_tugas;
-
+    
+    // Cek apakah tipe file valid
     if (in_array($file_type, $allowed_types)) {
-        if (move_uploaded_file($_FILES['file_tugas']['tmp_name'], $filePath)) {
-            $sql = "INSERT INTO tugas (kd_tugas, kd_bab_kelas, judul_tugas, file_tugas, deskripsi, tgl_tugas, tenggat_waktu) 
-        VALUES ('$kd_tugas', '$kd_bab_kelas', '$judul_tugas', '$file_tugas', '$deskripsi', '$tgl_tugas', '$tegat_waktu')";
-            if (mysqli_query($koneksi, $sql)) {
-                header("Location:tugas.php?kode_mpp=$kode_mpp&kd_mapel=$kd_mapel&kd_bab_kelas=$kd_bab_kelas&aksi=suksestambah");
-            } else {
-                echo "Gagal menambahkan data: " . mysqli_error($koneksi);
-            }
+        
+        // Cek apakah ada error saat upload file
+        if ($_FILES['file_tugas']['error'] !== UPLOAD_ERR_OK) {
+            echo "Error upload: " . $_FILES['file_tugas']['error'];
         } else {
-            echo "Gagal mengunggah file.";
+            // Pindahkan file ke folder tujuan
+            if (move_uploaded_file($_FILES['file_tugas']['tmp_name'], $filePath)) {
+                // Simpan data tugas ke database
+                $sql = "INSERT INTO tugas (kd_tugas, kd_bab_kelas, judul_tugas, file_tugas, deskripsi, tgl_tugas, tenggat_waktu) 
+                        VALUES ('', '$kd_bab_kelas', '$judul_tugas', '$file_tugas', '$deskripsi', '$tgl_tugas', '$tegat_waktu')";
+                
+                if (mysqli_query($koneksi, $sql)) {
+                    header("Location:index.php?aksi=suksestambah");
+                } else {
+                    echo "Gagal menambahkan data: " . mysqli_error($koneksi);
+                }
+            } else {
+                echo "Gagal mengunggah file ke server.";
+            }
         }
     } else {
-        echo "<script>alert('Hanya file PDF, DOCX, dan Excel yang diizinkan!'); window.location.href='tugas.php';</script>";
+        echo "<script>alert('Hanya file PDF, JPG, dan PNG yang diizinkan!'); window.location.href='tugas.php';</script>";
     }
 }
 
 if (isset($_GET['aksi'])) {
     $aksi = $_GET['aksi'];
     if ($aksi == "suksestambah") {
-      echo "<script>alert('Selamat, data berhasil ditambahkan');</script>";
+        echo "<script>alert('Selamat, data berhasil ditambahkan');</script>";
     }
-  }
+}
 ?>
 
 <section class="section">
@@ -88,7 +104,6 @@ if (isset($_GET['aksi'])) {
                         </div>
 
                         <input type="hidden" name="kd_bab_kelas" value="<?php echo htmlspecialchars($kd_bab_kelas); ?>">
-
 
                         <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
                         <a href="index.php?kode_mpp=<?php echo urlencode($kode_mpp); ?>&kd_mapel=<?php echo urlencode($kd_mapel); ?>&kd_bab_kelas=<?php echo urlencode($kd_bab_kelas); ?>" class="btn btn-light">Batal</a>
